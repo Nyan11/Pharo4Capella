@@ -5,7 +5,8 @@ Class {
 		'entities',
 		'objects',
 		'capabilities',
-		'operationalActivities'
+		'operationalActivities',
+		'operationalActivitiesExchanges'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
@@ -32,6 +33,13 @@ CapellaModel >> addOperationalActivity: aCapellaObject [
 	objects at: aCapellaObject id put: aCapellaObject
 ]
 
+{ #category : 'adding' }
+CapellaModel >> addOperationalActivityExchange: aCapellaObject [
+
+	operationalActivitiesExchanges add: aCapellaObject.
+	objects at: aCapellaObject id put: aCapellaObject
+]
+
 { #category : 'accessing' }
 CapellaModel >> capabilities [
 
@@ -51,6 +59,7 @@ CapellaModel >> initialize [
 	entities := OrderedCollection new.
 	capabilities := OrderedCollection new.
 	operationalActivities := OrderedCollection new.
+	operationalActivitiesExchanges := OrderedCollection new.
 ]
 
 { #category : 'testing' }
@@ -69,4 +78,10 @@ CapellaModel >> objectAt: anId [
 CapellaModel >> operationalActivities [
 
 	^ operationalActivities
+]
+
+{ #category : 'accessing' }
+CapellaModel >> operationalActivitiesExchanges [
+
+	^ operationalActivitiesExchanges
 ]
