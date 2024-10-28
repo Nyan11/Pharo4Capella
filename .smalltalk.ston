@@ -1,0 +1,13 @@
+SmalltalkCISpec {
+
+  #loading : [
+    SCIMetacelloLoadSpec {
+      #baseline : 'Capella',
+      #directory : 'src',
+      #platforms : [ #pharo ]
+    }
+  ],
+  #testing : {
+    #packages : [ 'Capella-Tests.*' ]
+  }
+}
