@@ -56,7 +56,8 @@ CapellaImporter >> initialize [
 		           CapellaImporterWorkerEntities new.
 		           CapellaImporterWorkerCapabilities new.
 		           CapellaImporterWorkerOperationalActivities new.
-					  CapellaImporterWorkerOperationalActivitiesExchanges new }
+		           CapellaImporterWorkerOperationalActivitiesExchanges new.
+		CapellaImporterWorkerOperationalActivitiesAllocations new }
 ]
 
 { #category : 'accessing' }
