@@ -16,28 +16,34 @@ Class {
 CapellaModel >> addCapability: aCapellaCapability [
 
 	capabilities add: aCapellaCapability.
-	objects at: aCapellaCapability id put: aCapellaCapability
+	self addObject: aCapellaCapability
 ]
 
 { #category : 'adding' }
 CapellaModel >> addEntity: aCapellaEntity [
 
 	entities add: aCapellaEntity.
-	objects at: aCapellaEntity id put: aCapellaEntity
+	self addObject: aCapellaEntity
+]
+
+{ #category : 'adding' }
+CapellaModel >> addObject: aCapellaObject [
+
+	objects at: aCapellaObject id put: aCapellaObject
 ]
 
 { #category : 'adding' }
 CapellaModel >> addOperationalActivity: aCapellaObject [
 
 	operationalActivities add: aCapellaObject.
-	objects at: aCapellaObject id put: aCapellaObject
+	self addObject: aCapellaObject
 ]
 
 { #category : 'adding' }
 CapellaModel >> addOperationalActivityExchange: aCapellaObject [
 
 	operationalActivitiesExchanges add: aCapellaObject.
-	objects at: aCapellaObject id put: aCapellaObject
+	self addObject: aCapellaObject
 ]
 
 { #category : 'accessing' }
@@ -66,6 +72,12 @@ CapellaModel >> initialize [
 CapellaModel >> isEmptyCapellaProject [
 
 	^ objects isEmpty
+]
+
+{ #category : 'accessing' }
+CapellaModel >> makeReferenceAt: anId for: anTargetId [
+
+	objects at: anId put: (objects at: anTargetId)
 ]
 
 { #category : 'accessing' }

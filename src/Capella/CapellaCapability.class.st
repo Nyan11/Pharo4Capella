@@ -3,7 +3,8 @@ Class {
 	#superclass : 'CapellaObject',
 	#instVars : [
 		'name',
-		'involvedEntities'
+		'involvedEntities',
+		'scenarios'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
@@ -15,11 +16,18 @@ CapellaCapability >> addInvolvedEntity: aCapellaEntity [
 	involvedEntities add: aCapellaEntity
 ]
 
+{ #category : 'adding' }
+CapellaCapability >> addScenario: anObject [
+
+	scenarios add: anObject
+]
+
 { #category : 'initialization' }
 CapellaCapability >> initialize [
 
 	super initialize.
-	involvedEntities := OrderedCollection new
+	involvedEntities := OrderedCollection new.
+	scenarios := OrderedCollection new.
 ]
 
 { #category : 'accessing' }
@@ -38,4 +46,10 @@ CapellaCapability >> name [
 CapellaCapability >> name: anObject [
 
 	name := anObject
+]
+
+{ #category : 'accessing' }
+CapellaCapability >> scenarios [
+
+	^ scenarios
 ]

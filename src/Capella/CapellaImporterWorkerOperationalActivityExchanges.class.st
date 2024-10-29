@@ -1,12 +1,12 @@
 Class {
-	#name : 'CapellaImporterWorkerOperationalActivitiesExchanges',
+	#name : 'CapellaImporterWorkerOperationalActivityExchanges',
 	#superclass : 'CapellaImporterWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivitiesExchanges >> addOperationalActivitiyExchangesFromNode: aXMLElement into: aCapellaModel [
+CapellaImporterWorkerOperationalActivityExchanges >> addOperationalActivitiyExchangesFromNode: aXMLElement into: aCapellaModel [
 
 	| exchange |
 	exchange := CapellaOperationalActivityExchange new.
@@ -18,7 +18,7 @@ CapellaImporterWorkerOperationalActivitiesExchanges >> addOperationalActivitiyEx
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivitiesExchanges >> createOperationalActivitiyExchangesFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalActivityExchanges >> createOperationalActivitiyExchangesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for:
@@ -31,7 +31,7 @@ CapellaImporterWorkerOperationalActivitiesExchanges >> createOperationalActiviti
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivitiesExchanges >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalActivityExchanges >> extractModelFrom: aXMLDocument into: aCapellaModel [
 
 	self
 		createOperationalActivitiyExchangesFrom: aXMLDocument
