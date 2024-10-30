@@ -9,7 +9,7 @@ Class {
 CapellaImporterWorkerOperationalActivities >> addOperationalActivityFromNode: aXMLElement into: aCapellaModel [
 
 	| entity |
-	entity := CapellaOperationalActivity new.
+	entity := CapellaFunction new.
 	entity id: (aXMLElement attributeAt: #id).
 	entity name: (aXMLElement attributeAt: #name).
 	aCapellaModel addOperationalActivity: entity

@@ -1,5 +1,5 @@
 Class {
-	#name : 'CapellaOperationalActivity',
+	#name : 'CapellaFunction',
 	#superclass : 'CapellaObject',
 	#instVars : [
 		'name',
@@ -10,26 +10,26 @@ Class {
 }
 
 { #category : 'adding' }
-CapellaOperationalActivity >> addSubFunction: anObject [
+CapellaFunction >> addSubFunction: anObject [
 
 	subFunctions add: anObject
 ]
 
 { #category : 'initialization' }
-CapellaOperationalActivity >> initialize [
+CapellaFunction >> initialize [
 
 	super initialize.
 	subFunctions := OrderedCollection new
 ]
 
 { #category : 'accessing' }
-CapellaOperationalActivity >> name [
+CapellaFunction >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaOperationalActivity >> name: anObject [
+CapellaFunction >> name: anObject [
 
 	name := anObject
 ]

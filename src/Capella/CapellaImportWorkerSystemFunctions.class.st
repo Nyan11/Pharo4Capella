@@ -27,7 +27,7 @@ CapellaImportWorkerSystemFunctions >> createSystemFunctionsFrom: aXMLElement int
 	path := XPath for: '//ownedFunctions'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
-		function := CapellaSystemMission new.
+		function := CapellaFunction new.
 		function id: (systemComponent attributeAt: #id).
 		function name: (systemComponent attributeAt: #name).
 		aCapellaModel addSystemFunction: function ]
