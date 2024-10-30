@@ -21,8 +21,6 @@ CapellaModel >> initialize [
 
 	super initialize.
 	objects := Dictionary new.
-	systemActors := OrderedCollection new.
-	systemMissions := OrderedCollection new
 ]
 
 { #category : 'testing' }

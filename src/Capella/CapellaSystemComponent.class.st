@@ -3,7 +3,8 @@ Class {
 	#superclass : 'CapellaObject',
 	#instVars : [
 		'name',
-		'componentRealizations'
+		'componentRealizations',
+		'functionalAllocations'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
@@ -19,6 +20,18 @@ CapellaSystemComponent >> componentRealizations [
 CapellaSystemComponent >> componentRealizations: anObject [
 
 	componentRealizations := anObject
+]
+
+{ #category : 'accessing' }
+CapellaSystemComponent >> functionalAllocations [
+
+	^ functionalAllocations
+]
+
+{ #category : 'accessing' }
+CapellaSystemComponent >> functionalAllocations: anObject [
+
+	functionalAllocations := anObject
 ]
 
 { #category : 'accessing' }

@@ -3,11 +3,24 @@ Class {
 	#superclass : 'CapellaObject',
 	#instVars : [
 		'name',
-		'involvments'
+		'involvments',
+		'capabilities'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
 }
+
+{ #category : 'accessing' }
+CapellaSystemMission >> capabilities [
+
+	^ capabilities
+]
+
+{ #category : 'accessing' }
+CapellaSystemMission >> capabilities: anObject [
+
+	capabilities := anObject
+]
 
 { #category : 'accessing' }
 CapellaSystemMission >> involvments [

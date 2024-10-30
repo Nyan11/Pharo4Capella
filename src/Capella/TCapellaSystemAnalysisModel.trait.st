@@ -1,17 +1,41 @@
 Trait {
 	#name : 'TCapellaSystemAnalysisModel',
 	#instVars : [
-		'systemActors',
-		'systemMissions'
+		'systemComponents',
+		'systemMissions',
+		'systemCapabilities',
+		'systemFunctions',
+		'systemFunctionalExchanges'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'adding' }
-TCapellaSystemAnalysisModel >> addSystemActor: aCapellaObject [
+TCapellaSystemAnalysisModel >> addSystemCapability: aCapellaObject [
 
-	self systemActors add: aCapellaObject.
+	self systemCapabilities add: aCapellaObject.
+	self addObject: aCapellaObject
+]
+
+{ #category : 'adding' }
+TCapellaSystemAnalysisModel >> addSystemComponent: aCapellaObject [
+
+	self systemComponents add: aCapellaObject.
+	self addObject: aCapellaObject
+]
+
+{ #category : 'adding' }
+TCapellaSystemAnalysisModel >> addSystemFunction: aCapellaObject [
+
+	self systemFunctions add: aCapellaObject.
+	self addObject: aCapellaObject
+]
+
+{ #category : 'adding' }
+TCapellaSystemAnalysisModel >> addSystemFunctionalExchange: aCapellaObject [
+
+	self systemFunctionalExchanges add: aCapellaObject.
 	self addObject: aCapellaObject
 ]
 
@@ -23,11 +47,32 @@ TCapellaSystemAnalysisModel >> addSystemMission: aCapellaObject [
 ]
 
 { #category : 'accessing' }
-TCapellaSystemAnalysisModel >> systemActors [
+TCapellaSystemAnalysisModel >> systemCapabilities [
 
-	systemActors ifNil: [
-		systemActors := OrderedCollection new ].
-	^ systemActors
+	systemCapabilities ifNil: [ systemCapabilities := OrderedCollection new ].
+	^ systemCapabilities
+]
+
+{ #category : 'accessing' }
+TCapellaSystemAnalysisModel >> systemComponents [
+
+	systemComponents ifNil: [ systemComponents := OrderedCollection new ].
+	^ systemComponents
+]
+
+{ #category : 'accessing' }
+TCapellaSystemAnalysisModel >> systemFunctionalExchanges [
+
+	systemFunctionalExchanges ifNil: [ systemFunctionalExchanges := OrderedCollection new ].
+	^ systemFunctionalExchanges
+]
+
+{ #category : 'accessing' }
+TCapellaSystemAnalysisModel >> systemFunctions [
+
+	systemFunctions ifNil: [
+		systemFunctions := OrderedCollection new ].
+	^ systemFunctions
 ]
 
 { #category : 'accessing' }

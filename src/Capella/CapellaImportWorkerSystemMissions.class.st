@@ -20,6 +20,6 @@ CapellaImportWorkerSystemMissions >> extractSystemAnalysisModelFrom: aXMLElement
 			               :realization |
 			               aCapellaModel objectAt:
 				               (realization attributeAt: #involved) allButFirst ].
-		mission involvments: involvments.
+		mission involvments: involvments asArray.
 		aCapellaModel addSystemMission: mission ]
 ]

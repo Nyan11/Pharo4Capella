@@ -1,26 +1,26 @@
 Class {
-	#name : 'CapellaImportWorkerSystemActors',
+	#name : 'CapellaImportWorkerSystemComponents',
 	#superclass : 'CapellaImportSystemAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'as yet unclassified' }
-CapellaImportWorkerSystemActors >> extractSystemAnalysisModelFrom: aXMLElement into: aCapellaModel [
+CapellaImportWorkerSystemComponents >> extractSystemAnalysisModelFrom: aXMLElement into: aCapellaModel [
 
-	| path actor realizationsPath realizations |
+	| path component realizationsPath realizations |
 	path := XPath for: '//ownedSystemComponents'.
 	realizationsPath := XPath for: 'ownedComponentRealizations'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
-		actor := CapellaSystemComponent new.
-		actor id: (systemComponent attributeAt: #id).
-		actor name: (systemComponent attributeAt: #name).
+		component := CapellaSystemComponent new.
+		component id: (systemComponent attributeAt: #id).
+		component name: (systemComponent attributeAt: #name).
 		realizations := (realizationsPath in: systemComponent) collect: [
 			                :realization |
 			                aCapellaModel objectAt:
 				                (realization attributeAt: #targetElement)
 					                allButFirst ].
-		actor componentRealizations: realizations.
-		aCapellaModel addSystemActor: actor ]
+		component componentRealizations: realizations asArray.
+		aCapellaModel addSystemComponent: component ]
 ]

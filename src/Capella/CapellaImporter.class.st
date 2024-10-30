@@ -62,8 +62,10 @@ CapellaImporter >> initialize [
 		           CapellaImporterWorkerOperationalActivityAllocations new.
 		           CapellaImporterWorkerOperationalActivityScenarios new.
 		           CapellaImporterWorkerOperationalFunctionalChains new.
-		           CapellaImportWorkerSystemActors new.
-		           CapellaImportWorkerSystemMissions new }
+		           CapellaImportWorkerSystemComponents new.
+		           CapellaImportWorkerSystemMissions new.
+		           CapellaImportWorkerSystemCapabilities new.
+		           CapellaImportWorkerSystemFunctions new }
 ]
 
 { #category : 'accessing' }

@@ -9,7 +9,7 @@ Class {
 CapellaImporterWorkerOperationalActivityAllocations >> addOperationalActivitiyExchangesFromNode: aXMLElement into: aCapellaModel [
 
 	| exchange |
-	exchange := CapellaOperationalActivityExchange new.
+	exchange := CapellaFunctionalExchange new.
 	exchange id: (aXMLElement attributeAt: #id).
 	exchange name: (aXMLElement attributeAt: #name).
 	exchange source: (aCapellaModel objectAt: (aXMLElement attributeAt: #source) allButFirst).

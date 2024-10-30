@@ -25,7 +25,7 @@ CapellaImporterWorkerOperationalCapabilities >> addCapabilityLinksFromNode: aXML
 	nodes do: [ :node | | id |
 		id := (node attributeAt: #involved).
 		id first = $# ifTrue: [ id := id allButFirst ].
-		parent addInvolvedEntity:
+		parent addInvolved:
 			(aCapellaModel objectAt: id) ]
 ]
 

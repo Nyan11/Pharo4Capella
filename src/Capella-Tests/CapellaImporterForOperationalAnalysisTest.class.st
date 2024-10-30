@@ -4353,9 +4353,9 @@ CapellaImporterForOperationalAnalysisTest >> testCapabilitiesCreated [
 
 	"entities and operationalCapabilities"
 	importer model operationalCapabilities do: [ :capa |
-		self assert: capa involvedEntities size > 0.
+		self assert: capa involved size > 0.
 		self assert:
-			(importer model operationalEntities includesAll: capa involvedEntities) ]
+			(importer model operationalEntities includesAll: capa involved) ]
 ]
 
 { #category : 'as yet unclassified' }
