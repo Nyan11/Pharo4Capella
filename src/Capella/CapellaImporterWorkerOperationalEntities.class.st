@@ -1,12 +1,12 @@
 Class {
-	#name : 'CapellaImporterWorkerEntities',
+	#name : 'CapellaImporterWorkerOperationalEntities',
 	#superclass : 'CapellaImporterWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'adding' }
-CapellaImporterWorkerEntities >> addEntityFromNode: aXMLElement into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> addEntityFromNode: aXMLElement into: aCapellaModel [
 
 	| entity |
 	entity := CapellaEntity new.
@@ -16,7 +16,7 @@ CapellaImporterWorkerEntities >> addEntityFromNode: aXMLElement into: aCapellaMo
 ]
 
 { #category : 'adding' }
-CapellaImporterWorkerEntities >> addEntityLinkFromNode: aXMLElement into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> addEntityLinkFromNode: aXMLElement into: aCapellaModel [
 
 	| path nodes parentEntity |
 	parentEntity := aCapellaModel objectAt:
@@ -29,7 +29,7 @@ CapellaImporterWorkerEntities >> addEntityLinkFromNode: aXMLElement into: aCapel
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerEntities >> createEntitiesFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> createEntitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: '//ownedEntities'.
@@ -38,7 +38,7 @@ CapellaImporterWorkerEntities >> createEntitiesFrom: aXMLDocument into: aCapella
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerEntities >> createEntityLinksFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> createEntityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: '//ownedEntities/ownedEntities/..'.
@@ -47,7 +47,7 @@ CapellaImporterWorkerEntities >> createEntityLinksFrom: aXMLDocument into: aCape
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerEntities >> createFeaturesLinksFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> createFeaturesLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: '//ownedEntities/ownedFeatures'.
@@ -59,7 +59,7 @@ CapellaImporterWorkerEntities >> createFeaturesLinksFrom: aXMLDocument into: aCa
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerEntities >> createPartsLinksFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> createPartsLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: '//ownedArchitectures[@name="Operational Analysis"]//ownedParts'.
@@ -71,7 +71,7 @@ CapellaImporterWorkerEntities >> createPartsLinksFrom: aXMLDocument into: aCapel
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerEntities >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> extractModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createEntitiesFrom: aXMLDocument into: aCapellaModel.
 	self createEntityLinksFrom: aXMLDocument into: aCapellaModel.

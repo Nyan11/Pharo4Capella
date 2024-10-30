@@ -53,12 +53,13 @@ CapellaImporter >> initialize [
 	super initialize.
 	model := CapellaModel new.
 	workers := {
-		           CapellaImporterWorkerEntities new.
-		           CapellaImporterWorkerCapabilities new.
+		           CapellaImporterWorkerOperationalEntities new.
+		           CapellaImporterWorkerOperationalCapabilities new.
 		           CapellaImporterWorkerOperationalActivities new.
 		           CapellaImporterWorkerOperationalActivityExchanges new.
 		           CapellaImporterWorkerOperationalActivityAllocations new.
-					  CapellaImporterWorkerOperationalActivityScenarios new }
+		           CapellaImporterWorkerOperationalActivityScenarios new.
+		CapellaImporterWorkerOperationalFunctionalChains new }
 ]
 
 { #category : 'accessing' }

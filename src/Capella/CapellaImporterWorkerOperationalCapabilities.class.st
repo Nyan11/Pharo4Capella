@@ -1,12 +1,12 @@
 Class {
-	#name : 'CapellaImporterWorkerCapabilities',
+	#name : 'CapellaImporterWorkerOperationalCapabilities',
 	#superclass : 'CapellaImporterWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'adding' }
-CapellaImporterWorkerCapabilities >> addCapabilityFromNode: aXMLElement into: aCapellaModel [
+CapellaImporterWorkerOperationalCapabilities >> addCapabilityFromNode: aXMLElement into: aCapellaModel [
 
 	| capability |
 	capability := CapellaCapability new.
@@ -16,7 +16,7 @@ CapellaImporterWorkerCapabilities >> addCapabilityFromNode: aXMLElement into: aC
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> addCapabilityLinksFromNode: aXMLElement into: aCapellaModel [
+CapellaImporterWorkerOperationalCapabilities >> addCapabilityLinksFromNode: aXMLElement into: aCapellaModel [
 
 	| path nodes parent |
 	parent := aCapellaModel objectAt: (aXMLElement attributeAt: #id).
@@ -30,7 +30,7 @@ CapellaImporterWorkerCapabilities >> addCapabilityLinksFromNode: aXMLElement int
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> createCapabilitiesFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalCapabilities >> createCapabilitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: '//ownedOperationalCapabilities'.
@@ -40,7 +40,7 @@ CapellaImporterWorkerCapabilities >> createCapabilitiesFrom: aXMLDocument into: 
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> createCapabilityLinksFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalCapabilities >> createCapabilityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: '//ownedOperationalCapabilities/ownedEntityOperationalCapabilityInvolvements/..'.
@@ -50,7 +50,7 @@ CapellaImporterWorkerCapabilities >> createCapabilityLinksFrom: aXMLDocument int
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalCapabilities >> extractModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createCapabilitiesFrom: aXMLDocument into: aCapellaModel.
 	self createCapabilityLinksFrom: aXMLDocument into: aCapellaModel

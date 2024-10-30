@@ -6,7 +6,8 @@ Class {
 		'objects',
 		'capabilities',
 		'operationalActivities',
-		'operationalActivitiesExchanges'
+		'operationalActivitiesExchanges',
+		'functionalChains'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
@@ -24,6 +25,13 @@ CapellaModel >> addEntity: aCapellaEntity [
 
 	entities add: aCapellaEntity.
 	self addObject: aCapellaEntity
+]
+
+{ #category : 'accessing' }
+CapellaModel >> addFunctionalChains: aCapellaObject [
+
+	functionalChains add: aCapellaObject.
+	self addObject: aCapellaObject
 ]
 
 { #category : 'adding' }
@@ -57,6 +65,12 @@ CapellaModel >> entities [
 	^ entities
 ]
 
+{ #category : 'accessing' }
+CapellaModel >> functionalChains [
+
+	^ functionalChains
+]
+
 { #category : 'initialization' }
 CapellaModel >> initialize [
 
@@ -66,6 +80,7 @@ CapellaModel >> initialize [
 	capabilities := OrderedCollection new.
 	operationalActivities := OrderedCollection new.
 	operationalActivitiesExchanges := OrderedCollection new.
+	functionalChains :=  OrderedCollection new.
 ]
 
 { #category : 'testing' }
