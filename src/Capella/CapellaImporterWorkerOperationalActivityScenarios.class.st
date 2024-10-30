@@ -1,6 +1,6 @@
 Class {
 	#name : 'CapellaImporterWorkerOperationalActivityScenarios',
-	#superclass : 'CapellaImporterWorker',
+	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
@@ -79,7 +79,7 @@ CapellaImporterWorkerOperationalActivityScenarios >> createScenariosFrom: aXMLDo
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivityScenarios >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalActivityScenarios >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createScenariosFrom: aXMLDocument into: aCapellaModel.
 	self linkScenariosAndOperationalCapabilityFrom: aXMLDocument into: aCapellaModel.

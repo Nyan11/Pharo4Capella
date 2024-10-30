@@ -1,12 +1,12 @@
 Class {
-	#name : 'CapellaImporterTest',
+	#name : 'CapellaImporterForOperationalAnalysisTest',
 	#superclass : 'TestCase',
 	#category : 'Capella-Tests',
 	#package : 'Capella-Tests'
 }
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectEmpty [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectEmpty [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -283,8 +283,8 @@ CapellaImporterTest >> projectEmpty [
 '
 ]
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectEntitiesAndAllocatedOperationalAtivities [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectEntitiesAndAllocatedOperationalAtivities [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -734,8 +734,8 @@ CapellaImporterTest >> projectEntitiesAndAllocatedOperationalAtivities [
 '
 ]
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectEntitiesAndCapabilities [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectEntitiesAndCapabilities [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -1078,8 +1078,8 @@ CapellaImporterTest >> projectEntitiesAndCapabilities [
 '
 ]
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectEntitiesAndCapabilitiesAndOperationalActivities [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectEntitiesAndCapabilitiesAndOperationalActivities [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -1453,8 +1453,8 @@ CapellaImporterTest >> projectEntitiesAndCapabilitiesAndOperationalActivities [
 '
 ]
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectEntitiesAndCapabilitiesAndOperationalActivitiesAndExchanges [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectEntitiesAndCapabilitiesAndOperationalActivitiesAndExchanges [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -1864,8 +1864,8 @@ CapellaImporterTest >> projectEntitiesAndCapabilitiesAndOperationalActivitiesAnd
 '
 ]
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectFunctionalChains [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectFunctionalChains [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -2973,8 +2973,8 @@ CapellaImporterTest >> projectFunctionalChains [
 '
 ]
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectOnlyEntities [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectOnlyEntities [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -3278,8 +3278,8 @@ CapellaImporterTest >> projectOnlyEntities [
 '
 ]
 
-{ #category : 'test data' }
-CapellaImporterTest >> projectScenarios [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> projectScenarios [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
 
@@ -4322,8 +4322,8 @@ CapellaImporterTest >> projectScenarios [
 '
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testCanLoadEmptyProject [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testCanLoadEmptyProject [
 
 	| importer |
 	importer := CapellaImporter fromString: self projectEmpty.
@@ -4331,121 +4331,140 @@ CapellaImporterTest >> testCanLoadEmptyProject [
 	
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testCanLoadProject [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testCanLoadProject [
 
 	| importer |
 	importer := CapellaImporter fromString: self projectOnlyEntities.
 	self deny: importer model isEmptyCapellaProject
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testCapabilitiesCreated [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testCapabilitiesCreated [
 
 	| importer |
 	importer := CapellaImporter fromString:
 		            self projectEntitiesAndCapabilities.
-	self assert: importer model entities size = 6.
-	self assert: importer model capabilities size = 6.
+	self assert: importer model operationalEntities size equals: 6.
+	self assert: importer model operationalCapabilities size equals: 6.
 
-	"unique entites"
-	self assert: importer model capabilities asSet size = 6.
+	"unique operationalEntities"
+	self assert: importer model operationalCapabilities asSet size equals: 6.
 
-	"entities and capabilities"
-	importer model capabilities do: [ :capa |
+	"entities and operationalCapabilities"
+	importer model operationalCapabilities do: [ :capa |
 		self assert: capa involvedEntities size > 0.
 		self assert:
-			(importer model entities includesAll: capa involvedEntities) ]
+			(importer model operationalEntities includesAll: capa involvedEntities) ]
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testEntitiesCreated [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testEntitiesCreated [
 
 	| importer parents |
 	importer := CapellaImporter fromString: self projectOnlyEntities.
-	self assert: importer model entities size = 6.
+	self assert: importer model operationalEntities size = 6.
 
-	"unique entites"
-	self assert: importer model entities asSet size = 6.
-	
-	"parent entites"
-	parents := importer model entities select: [ :each | each hasSubEntities ].
-	self assert: parents size = 2.
+	"unique operationalEntities"
+	self assert: importer model operationalEntities asSet size = 6.
+
+	"parent operationalEntities"
+	parents := importer model operationalEntities select: [ :each |
+		           each hasSubEntities ].
+	self assert: parents size = 2
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testFunctionalChains [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testFunctionalChains [
 
 	| importer |
 	importer := CapellaImporter fromString: self projectFunctionalChains.
-	self assert: importer model functionalChains size equals: 3.
+	self assert: importer model operationalFunctionalChains size equals: 3.
 
 	"unique entites"
-	self assert: importer model functionalChains asSet size equals: 3.
+	self assert: importer model operationalFunctionalChains asSet size equals: 3.
 
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testOperationalActivityAllocation [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testOperationalActivityAllocation [
 
 	| importer oa |
 	importer := CapellaImporter fromString:
-		            self
-			            projectEntitiesAndAllocatedOperationalAtivities.
-	self assert: importer model entities size equals: 6.
-	self assert: importer model capabilities size equals: 6.
+		            self projectEntitiesAndAllocatedOperationalAtivities.
+	self assert: importer model operationalEntities size equals: 6.
+	self assert: importer model operationalCapabilities size equals: 6.
 	self assert: importer model operationalActivities size equals: 13.
 
 	"unique oa"
 	self assert: importer model operationalActivities size equals: 13.
-	
-	oa := importer model entities flatCollect: #allocatedOperationActivities.
+
+	oa := importer model operationalEntities flatCollect:
+		      #allocatedOperationActivities.
 	self assert: oa size equals: 10.
 	self assert: oa asSet size equals: 10.
-	self assert: (importer model operationalActivities includesAll: oa).
+	self assert: (importer model operationalActivities includesAll: oa)
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testOperationalActivityAndExchangeCreated [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testOperationalActivityAndExchangeCreated [
 
 	| importer |
-	importer := CapellaImporter fromString:
-		            self
+	importer := CapellaImporter fromString: self
 			            projectEntitiesAndCapabilitiesAndOperationalActivitiesAndExchanges.
-	self assert: importer model entities size = 6.
-	self assert: importer model capabilities size = 6.
+	self assert: importer model operationalEntities size = 6.
+	self assert: importer model operationalCapabilities size = 6.
 	self assert: importer model operationalActivities size = 13.
 	self assert: importer model operationalActivitiesExchanges size = 12.
 
 	"unique oa"
-	self assert: importer model operationalActivitiesExchanges asSet size = 12.
-	
+	self assert:
+		importer model operationalActivitiesExchanges asSet size = 12
 ]
 
-{ #category : 'tests' }
-CapellaImporterTest >> testOperationalActivityCreated [
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testOperationalActivityCreated [
 
 	| importer |
 	importer := CapellaImporter fromString:
-		            self projectEntitiesAndCapabilitiesAndOperationalActivities.
-	self assert: importer model entities size = 6.
-	self assert: importer model capabilities size = 6.
+		            self
+			            projectEntitiesAndCapabilitiesAndOperationalActivities.
+	self assert: importer model operationalEntities size = 6.
+	self assert: importer model operationalCapabilities size = 6.
 	self assert: importer model operationalActivities size = 13.
 
 	"unique oa"
-	self assert: importer model operationalActivities size = 13.
-
-
+	self assert: importer model operationalActivities size = 13
 ]
 
 { #category : 'tests' }
-CapellaImporterTest >> testScenarios [
+CapellaImporterForOperationalAnalysisTest >> testOperationalAnalysis [
+
+	| importer scenarios |
+	importer := CapellaImporter fromString: self projectFunctionalChains.
+	self
+		assert: importer model operationalFunctionalChains size
+		equals: 3.
+	scenarios := importer model operationalCapabilities flatCollect:
+		             #scenarios.
+	self assert: scenarios size equals: 6.
+	self assert: importer model operationalEntities size equals: 6.
+	self assert: importer model operationalCapabilities size equals: 6.
+	self assert: importer model operationalActivities size equals: 13.
+	self assert: importer model operationalActivitiesExchanges size equals: 14.
+	self
+		assert: importer model operationalFunctionalChains size
+		equals: 3
+]
+
+{ #category : 'as yet unclassified' }
+CapellaImporterForOperationalAnalysisTest >> testScenarios [
 
 	| importer scenarios |
 	importer := CapellaImporter fromString: self projectScenarios.
-	scenarios := importer model capabilities flatCollect: #scenarios.
+	scenarios := importer model operationalCapabilities flatCollect: #scenarios.
 	self assert: scenarios size equals: 6.
 
 	"unique"
-	self assert: scenarios asSet size equals: 6.
+	self assert: scenarios asSet size equals: 6
 ]

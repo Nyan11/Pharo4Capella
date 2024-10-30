@@ -1,38 +1,14 @@
 Class {
 	#name : 'CapellaModel',
 	#superclass : 'Object',
+	#traits : 'TCapellaOperationalAnalysisModel + TCapellaSystemAnalysisModel',
+	#classTraits : 'TCapellaOperationalAnalysisModel classTrait + TCapellaSystemAnalysisModel classTrait',
 	#instVars : [
-		'entities',
-		'objects',
-		'capabilities',
-		'operationalActivities',
-		'operationalActivitiesExchanges',
-		'functionalChains'
+		'objects'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
 }
-
-{ #category : 'adding' }
-CapellaModel >> addCapability: aCapellaCapability [
-
-	capabilities add: aCapellaCapability.
-	self addObject: aCapellaCapability
-]
-
-{ #category : 'adding' }
-CapellaModel >> addEntity: aCapellaEntity [
-
-	entities add: aCapellaEntity.
-	self addObject: aCapellaEntity
-]
-
-{ #category : 'accessing' }
-CapellaModel >> addFunctionalChains: aCapellaObject [
-
-	functionalChains add: aCapellaObject.
-	self addObject: aCapellaObject
-]
 
 { #category : 'adding' }
 CapellaModel >> addObject: aCapellaObject [
@@ -40,53 +16,20 @@ CapellaModel >> addObject: aCapellaObject [
 	objects at: aCapellaObject id put: aCapellaObject
 ]
 
-{ #category : 'adding' }
-CapellaModel >> addOperationalActivity: aCapellaObject [
-
-	operationalActivities add: aCapellaObject.
-	self addObject: aCapellaObject
-]
-
-{ #category : 'adding' }
-CapellaModel >> addOperationalActivityExchange: aCapellaObject [
-
-	operationalActivitiesExchanges add: aCapellaObject.
-	self addObject: aCapellaObject
-]
-
-{ #category : 'accessing' }
-CapellaModel >> capabilities [
-
-	^ capabilities
-]
-
-{ #category : 'accessing' }
-CapellaModel >> entities [
-	^ entities
-]
-
-{ #category : 'accessing' }
-CapellaModel >> functionalChains [
-
-	^ functionalChains
-]
-
 { #category : 'initialization' }
 CapellaModel >> initialize [
 
 	super initialize.
 	objects := Dictionary new.
-	entities := OrderedCollection new.
-	capabilities := OrderedCollection new.
-	operationalActivities := OrderedCollection new.
-	operationalActivitiesExchanges := OrderedCollection new.
-	functionalChains :=  OrderedCollection new.
+	systemActors := OrderedCollection new.
+	systemMissions := OrderedCollection new
 ]
 
 { #category : 'testing' }
 CapellaModel >> isEmptyCapellaProject [
+	"By default there is 1 components in an empty project"
 
-	^ objects isEmpty
+	^ objects size = 1
 ]
 
 { #category : 'accessing' }
@@ -99,16 +42,4 @@ CapellaModel >> makeReferenceAt: anId for: anTargetId [
 CapellaModel >> objectAt: anId [
 
 	^ objects at: anId
-]
-
-{ #category : 'accessing' }
-CapellaModel >> operationalActivities [
-
-	^ operationalActivities
-]
-
-{ #category : 'accessing' }
-CapellaModel >> operationalActivitiesExchanges [
-
-	^ operationalActivitiesExchanges
 ]

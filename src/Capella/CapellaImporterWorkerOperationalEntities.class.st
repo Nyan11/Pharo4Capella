@@ -1,6 +1,6 @@
 Class {
 	#name : 'CapellaImporterWorkerOperationalEntities',
-	#superclass : 'CapellaImporterWorker',
+	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
@@ -12,7 +12,7 @@ CapellaImporterWorkerOperationalEntities >> addEntityFromNode: aXMLElement into:
 	entity := CapellaEntity new.
 	entity id: (aXMLElement attributeAt: #id).
 	entity name: (aXMLElement attributeAt: #name).
-	aCapellaModel addEntity: entity
+	aCapellaModel addOperationalEntity: entity
 ]
 
 { #category : 'adding' }
@@ -71,7 +71,7 @@ CapellaImporterWorkerOperationalEntities >> createPartsLinksFrom: aXMLDocument i
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalEntities >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalEntities >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createEntitiesFrom: aXMLDocument into: aCapellaModel.
 	self createEntityLinksFrom: aXMLDocument into: aCapellaModel.

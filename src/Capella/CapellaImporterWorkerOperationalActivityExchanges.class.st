@@ -1,6 +1,6 @@
 Class {
 	#name : 'CapellaImporterWorkerOperationalActivityExchanges',
-	#superclass : 'CapellaImporterWorker',
+	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
@@ -31,7 +31,7 @@ CapellaImporterWorkerOperationalActivityExchanges >> createOperationalActivitiyE
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivityExchanges >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalActivityExchanges >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	self
 		createOperationalActivitiyExchangesFrom: aXMLDocument

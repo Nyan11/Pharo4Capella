@@ -1,6 +1,6 @@
 Class {
 	#name : 'CapellaImporterWorkerOperationalCapabilities',
-	#superclass : 'CapellaImporterWorker',
+	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
@@ -12,7 +12,7 @@ CapellaImporterWorkerOperationalCapabilities >> addCapabilityFromNode: aXMLEleme
 	capability := CapellaCapability new.
 	capability id: (aXMLElement attributeAt: #id).
 	capability name: (aXMLElement attributeAt: #name).
-	aCapellaModel addCapability: capability
+	aCapellaModel addOperationalCapability: capability
 ]
 
 { #category : 'as yet unclassified' }
@@ -50,7 +50,7 @@ CapellaImporterWorkerOperationalCapabilities >> createCapabilityLinksFrom: aXMLD
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalCapabilities >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalCapabilities >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createCapabilitiesFrom: aXMLDocument into: aCapellaModel.
 	self createCapabilityLinksFrom: aXMLDocument into: aCapellaModel

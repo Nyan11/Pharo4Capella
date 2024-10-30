@@ -1,6 +1,6 @@
 Class {
 	#name : 'CapellaImporterWorkerOperationalFunctionalChains',
-	#superclass : 'CapellaImporterWorker',
+	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
@@ -12,7 +12,7 @@ CapellaImporterWorkerOperationalFunctionalChains >> addFunctionalChainFromNode: 
 	functionalChain := CapellaFunctionalChain new.
 	functionalChain id: (aXMLObject attributeAt: #id).
 	functionalChain name: (aXMLObject attributeAt: #name).
-	aCapellaModel addFunctionalChains: functionalChain.
+	aCapellaModel addOperationalFunctionalChains: functionalChain.
 	
 	path := XPath for: 'ownedFunctionalChainInvolvements'.
 	nodes := path in: aXMLObject.
@@ -36,7 +36,7 @@ CapellaImporterWorkerOperationalFunctionalChains >> addFunctionalChainFromNode: 
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalFunctionalChains >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalFunctionalChains >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: '//ownedOperationalActivities/ownedFunctionalChains'.
