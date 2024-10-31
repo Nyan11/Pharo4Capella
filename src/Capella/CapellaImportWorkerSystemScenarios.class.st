@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaImporterWorkerOperationalActivityScenarios',
-	#superclass : 'CapellaImportOperationalAnalysisWorker',
+	#name : 'CapellaImportWorkerSystemScenarios',
+	#superclass : 'CapellaImportSystemAnalysisWorker',
 	#traits : 'TCapellaImportWorkerForScenarios',
 	#classTraits : 'TCapellaImportWorkerForScenarios classTrait',
 	#category : 'Capella',
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivityScenarios >> extractOperationalAnalysisModelFrom: aXMLElement into: aCapellaModel [
+CapellaImportWorkerSystemScenarios >> extractSystemAnalysisModelFrom: aXMLElement into: aCapellaModel [
 
 	self extractScenarioModelFrom: aXMLElement into: aCapellaModel
 ]

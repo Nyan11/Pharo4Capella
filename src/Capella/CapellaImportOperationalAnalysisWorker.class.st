@@ -10,7 +10,7 @@ CapellaImportOperationalAnalysisWorker >> extractModelFrom: aXMLDocument into: a
 
 	| possibleRootElements path |
 	path := XPath for:
-		        '//ownedArchitectures[@xsi:type="org.polarsys.capella.core.data.oa:OperationalAnalysis"]'.
+		        './/ownedArchitectures[@xsi:type="org.polarsys.capella.core.data.oa:OperationalAnalysis"]'.
 	possibleRootElements := path in: aXMLDocument.
 	possibleRootElements isEmpty ifTrue: [
 		^ Error signal: 'No Operational Analysis found' ].

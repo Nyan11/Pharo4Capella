@@ -10,7 +10,7 @@ CapellaImportSystemAnalysisWorker >> extractModelFrom: aXMLDocument into: aCapel
 
 	| possibleRootElements path |
 	path := XPath for:
-		        '//ownedArchitectures[@xsi:type="org.polarsys.capella.core.data.ctx:SystemAnalysis"]'.
+		        './/ownedArchitectures[@xsi:type="org.polarsys.capella.core.data.ctx:SystemAnalysis"]'.
 	possibleRootElements := path in: aXMLDocument.
 	possibleRootElements isEmpty ifTrue: [
 		^ Error signal: 'No System Analysis found' ].

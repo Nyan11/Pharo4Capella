@@ -9,7 +9,7 @@ Class {
 CapellaImportWorkerSystemFunctions >> createSystemFunctionalExchangesFrom: aXMLElement into: aCapellaModel [
 
 	| path functionExchange |
-	path := XPath for: '//ownedFunctionalExchanges'.
+	path := XPath for: './/ownedFunctionalExchanges'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
 		functionExchange := CapellaFunctionalExchange new.
@@ -24,7 +24,7 @@ CapellaImportWorkerSystemFunctions >> createSystemFunctionalExchangesFrom: aXMLE
 CapellaImportWorkerSystemFunctions >> createSystemFunctionsFrom: aXMLElement into: aCapellaModel [
 
 	| path function |
-	path := XPath for: '//ownedFunctions'.
+	path := XPath for: './/ownedFunctions'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
 		function := CapellaFunction new.
@@ -40,20 +40,37 @@ CapellaImportWorkerSystemFunctions >> extractSystemAnalysisModelFrom: aXMLElemen
 	self
 		createSystemFunctionalExchangesFrom: aXMLElement
 		into: aCapellaModel.
-	self linkFunctionsAndSystemComponantsFrom: aXMLElement into: aCapellaModel
+	self
+		linkFunctionsAndSystemComponantsFrom: aXMLElement
+		into: aCapellaModel.
+	self linkFunctionsAndFunctionsFrom: aXMLElement into: aCapellaModel
+]
+
+{ #category : 'as yet unclassified' }
+CapellaImportWorkerSystemFunctions >> linkFunctionsAndFunctionsFrom: aXMLElement into: aCapellaModel [
+
+	| path functionsPath rootFunction subFunctions |
+	path := XPath for: './/ownedFunctions'.
+	functionsPath := XPath for: 'ownedFunctions'.
+
+	(path in: aXMLElement) do: [ :xmlFunctions |
+		rootFunction := aCapellaModel objectAt: (xmlFunctions attributeAt: #id).
+		subFunctions := (functionsPath in: xmlFunctions) collect: [ :each | aCapellaModel objectAt: (each attributeAt: #id) ].
+		rootFunction subFunctions: subFunctions asArray ]
 ]
 
 { #category : 'as yet unclassified' }
 CapellaImportWorkerSystemFunctions >> linkFunctionsAndSystemComponantsFrom: aXMLElement into: aCapellaModel [
 
 	| path allocationPath component allocationIds allocations |
-	path := XPath for: '//ownedSystemComponents'.
+	path := XPath for: './/ownedSystemComponents'.
 	allocationPath := XPath for: 'ownedFunctionalAllocation'.
 
 	(path in: aXMLElement) do: [ :xmlComponent |
 		component := aCapellaModel objectAt: (xmlComponent attributeAt: #id).
-		allocationIds := (allocationPath in: xmlComponent) collect: [ :each | (each attributeAt: #targetElement) allButFirst ].
-		allocations := (allocationIds collect: [ :each | aCapellaModel objectAt: each  ]) asArray.
-		component functionalAllocations: allocations.
-	]
+		allocationIds := (allocationPath in: xmlComponent) collect: [ :each |
+			                 (each attributeAt: #targetElement) allButFirst ].
+		allocations := (allocationIds collect: [ :each |
+			                aCapellaModel objectAt: each ]) asArray.
+		component functionalAllocations: allocations ]
 ]

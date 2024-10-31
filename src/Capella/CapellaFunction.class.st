@@ -33,3 +33,15 @@ CapellaFunction >> name: anObject [
 
 	name := anObject
 ]
+
+{ #category : 'accessing' }
+CapellaFunction >> subFunctions [
+
+	^ subFunctions
+]
+
+{ #category : 'accessing' }
+CapellaFunction >> subFunctions: anObject [
+
+	subFunctions := anObject
+]

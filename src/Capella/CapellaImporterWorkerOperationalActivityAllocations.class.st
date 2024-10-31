@@ -22,15 +22,17 @@ CapellaImporterWorkerOperationalActivityAllocations >> createOperationalActiviti
 
 	| entitiesPath entitiesXML functionsPath functionsXML |
 	entitiesPath := XPath for:
-		        '//ownedEntities/ownedFunctionalAllocation/..'.
+		                './/ownedEntities/ownedFunctionalAllocation/..'.
 	functionsPath := XPath for: 'ownedFunctionalAllocation'.
-	
+
 	entitiesXML := entitiesPath in: aXMLDocument.
-	entitiesXML do: [ :entityXML | | entity |
+	entitiesXML do: [ :entityXML |
+		| entity |
 		entity := aCapellaModel objectAt: (entityXML attributeAt: #id).
 		functionsXML := functionsPath in: entityXML.
-		functionsXML do: [ :functionXML | entity addOperationalActivity: ( aCapellaModel objectAt: (functionXML attributeAt: #targetElement) allButFirst)].
-	 ]
+		functionsXML do: [ :functionXML |
+			entity addOperationalActivity: (aCapellaModel objectAt:
+					 (functionXML attributeAt: #targetElement) allButFirst) ] ]
 ]
 
 { #category : 'as yet unclassified' }

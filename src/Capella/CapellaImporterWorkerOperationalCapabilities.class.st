@@ -33,7 +33,7 @@ CapellaImporterWorkerOperationalCapabilities >> addCapabilityLinksFromNode: aXML
 CapellaImporterWorkerOperationalCapabilities >> createCapabilitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalCapabilities'.
+	path := XPath for: './/ownedOperationalCapabilities'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addCapabilityFromNode: node into: aCapellaModel ]
@@ -43,7 +43,8 @@ CapellaImporterWorkerOperationalCapabilities >> createCapabilitiesFrom: aXMLDocu
 CapellaImporterWorkerOperationalCapabilities >> createCapabilityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalCapabilities/ownedEntityOperationalCapabilityInvolvements/..'.
+	path := XPath for:
+		        './/ownedOperationalCapabilities/ownedEntityOperationalCapabilityInvolvements/..'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addCapabilityLinksFromNode: node into: aCapellaModel ]

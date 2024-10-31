@@ -39,7 +39,8 @@ CapellaImporterWorkerOperationalFunctionalChains >> addFunctionalChainFromNode: 
 CapellaImporterWorkerOperationalFunctionalChains >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalActivities/ownedFunctionalChains'.
+	path := XPath for:
+		        './/ownedOperationalActivities/ownedFunctionalChains'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addFunctionalChainFromNode: node into: aCapellaModel ]

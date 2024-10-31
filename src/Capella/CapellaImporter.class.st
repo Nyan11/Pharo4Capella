@@ -65,7 +65,9 @@ CapellaImporter >> initialize [
 		           CapellaImportWorkerSystemComponents new.
 		           CapellaImportWorkerSystemMissions new.
 		           CapellaImportWorkerSystemCapabilities new.
-		           CapellaImportWorkerSystemFunctions new }
+		           CapellaImportWorkerSystemFunctions new.
+		           CapellaImportWorkerSystemScenarios new.
+					  CapellaImportWorkerSystemFunctionalChains new. }
 ]
 
 { #category : 'accessing' }

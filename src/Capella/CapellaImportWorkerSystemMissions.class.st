@@ -9,7 +9,7 @@ Class {
 CapellaImportWorkerSystemMissions >> extractSystemAnalysisModelFrom: aXMLElement into: aCapellaModel [
 
 	| path mission involvmentsPath involvments |
-	path := XPath for: '//ownedMissions'.
+	path := XPath for: './/ownedMissions'.
 	involvmentsPath := XPath for: 'ownedMissionInvolvements'.
 
 	(path in: aXMLElement) do: [ :systemComponent |

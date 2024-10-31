@@ -22,7 +22,7 @@ CapellaImporterWorkerOperationalActivityExchanges >> createOperationalActivitiyE
 
 	| path nodes |
 	path := XPath for:
-		        '//ownedOperationalActivities//ownedFunctionalExchanges'.
+		        './/ownedOperationalActivities//ownedFunctionalExchanges'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self

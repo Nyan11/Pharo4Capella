@@ -32,7 +32,7 @@ CapellaImporterWorkerOperationalActivities >> addOperationalActivityLinkFromNode
 CapellaImporterWorkerOperationalActivities >> createOperationalActivitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalActivities//ownedFunctions'.
+	path := XPath for: './/ownedOperationalActivities//ownedFunctions'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addOperationalActivityFromNode: node into: aCapellaModel ]
@@ -42,7 +42,8 @@ CapellaImporterWorkerOperationalActivities >> createOperationalActivitiesFrom: a
 CapellaImporterWorkerOperationalActivities >> createOperationalActivityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalActivities//ownedFunctions/ownedFunctions/..'.
+	path := XPath for:
+		        './/ownedOperationalActivities//ownedFunctions/ownedFunctions/..'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addOperationalActivityLinkFromNode: node into: aCapellaModel ]

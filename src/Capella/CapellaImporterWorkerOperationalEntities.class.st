@@ -32,7 +32,7 @@ CapellaImporterWorkerOperationalEntities >> addEntityLinkFromNode: aXMLElement i
 CapellaImporterWorkerOperationalEntities >> createEntitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedEntities'.
+	path := XPath for: './/ownedEntities'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node | self addEntityFromNode: node into: aCapellaModel ]
 ]
@@ -41,28 +41,30 @@ CapellaImporterWorkerOperationalEntities >> createEntitiesFrom: aXMLDocument int
 CapellaImporterWorkerOperationalEntities >> createEntityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedEntities/ownedEntities/..'.
+	path := XPath for: './/ownedEntities/ownedEntities/..'.
 	nodes := path in: aXMLDocument.
-	nodes do: [ :node | self addEntityLinkFromNode: node into: aCapellaModel ]
+	nodes do: [ :node |
+		self addEntityLinkFromNode: node into: aCapellaModel ]
 ]
 
 { #category : 'as yet unclassified' }
 CapellaImporterWorkerOperationalEntities >> createFeaturesLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedEntities/ownedFeatures'.
+	path := XPath for: './/ownedEntities/ownedFeatures'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		aCapellaModel
 			makeReferenceAt: (node attributeAt: #id)
-			for: (node attributeAt: #abstractType) allButFirst ].
+			for: (node attributeAt: #abstractType) allButFirst ]
 ]
 
 { #category : 'as yet unclassified' }
 CapellaImporterWorkerOperationalEntities >> createPartsLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedArchitectures[@name="Operational Analysis"]//ownedParts'.
+	path := XPath for:
+		        './/ownedParts'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		aCapellaModel

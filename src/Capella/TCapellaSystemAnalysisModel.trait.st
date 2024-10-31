@@ -5,7 +5,8 @@ Trait {
 		'systemMissions',
 		'systemCapabilities',
 		'systemFunctions',
-		'systemFunctionalExchanges'
+		'systemFunctionalExchanges',
+		'systemFunctionalChains'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
@@ -29,6 +30,13 @@ TCapellaSystemAnalysisModel >> addSystemComponent: aCapellaObject [
 TCapellaSystemAnalysisModel >> addSystemFunction: aCapellaObject [
 
 	self systemFunctions add: aCapellaObject.
+	self addObject: aCapellaObject
+]
+
+{ #category : 'adding' }
+TCapellaSystemAnalysisModel >> addSystemFunctionalChains: aCapellaObject [
+
+	self systemFunctionalChains add: aCapellaObject.
 	self addObject: aCapellaObject
 ]
 
@@ -58,6 +66,13 @@ TCapellaSystemAnalysisModel >> systemComponents [
 
 	systemComponents ifNil: [ systemComponents := OrderedCollection new ].
 	^ systemComponents
+]
+
+{ #category : 'accessing' }
+TCapellaSystemAnalysisModel >> systemFunctionalChains [
+
+	systemFunctionalChains ifNil: [ systemFunctionalChains := OrderedCollection new ].
+	^ systemFunctionalChains
 ]
 
 { #category : 'accessing' }
