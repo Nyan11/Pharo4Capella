@@ -3,16 +3,28 @@ Class {
 	#superclass : 'CapellaObject',
 	#instVars : [
 		'name',
-		'subEntities'
+		'subEntities',
+		'allocatedOperationActivities'
 	],
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'adding' }
+CapellaEntity >> addOperationalActivity: anObject [
+
+	allocatedOperationActivities add: anObject
+]
+
+{ #category : 'adding' }
 CapellaEntity >> addSubEntity: aCapellaEntity [
 
 	subEntities add: aCapellaEntity
+]
+
+{ #category : 'accessing' }
+CapellaEntity >> allocatedOperationActivities [
+	^ allocatedOperationActivities
 ]
 
 { #category : 'testing' }
@@ -26,6 +38,7 @@ CapellaEntity >> initialize [
 
 	super initialize.
 	subEntities := OrderedCollection new.
+	allocatedOperationActivities := OrderedCollection new.
 ]
 
 { #category : 'accessing' }

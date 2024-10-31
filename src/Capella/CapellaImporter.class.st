@@ -31,8 +31,10 @@ CapellaImporter class >> fromXMLDocument: aXMLDocument [
 { #category : 'building' }
 CapellaImporter >> build [
 
-	self workers do: [ :each | each extractModelFrom: self document into: self model ].
-
+	self workers do: [ :each |
+		each
+			extractModelFrom: self document
+			into: self model ]
 ]
 
 { #category : 'accessing' }
@@ -53,9 +55,19 @@ CapellaImporter >> initialize [
 	super initialize.
 	model := CapellaModel new.
 	workers := {
-		           CapellaImporterWorkerEntities new.
-		           CapellaImporterWorkerCapabilities new.
-		           CapellaImporterWorkerOperationalActivities new }.
+		           CapellaImporterWorkerOperationalEntities new.
+		           CapellaImporterWorkerOperationalCapabilities new.
+		           CapellaImporterWorkerOperationalActivities new.
+		           CapellaImporterWorkerOperationalActivityExchanges new.
+		           CapellaImporterWorkerOperationalActivityAllocations new.
+		           CapellaImporterWorkerOperationalActivityScenarios new.
+		           CapellaImporterWorkerOperationalFunctionalChains new.
+		           CapellaImportWorkerSystemComponents new.
+		           CapellaImportWorkerSystemMissions new.
+		           CapellaImportWorkerSystemCapabilities new.
+		           CapellaImportWorkerSystemFunctions new.
+		           CapellaImportWorkerSystemScenarios new.
+					  CapellaImportWorkerSystemFunctionalChains new. }
 ]
 
 { #category : 'accessing' }

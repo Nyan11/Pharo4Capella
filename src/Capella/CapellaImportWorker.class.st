@@ -1,12 +1,12 @@
 Class {
-	#name : 'CapellaImporterWorker',
+	#name : 'CapellaImportWorker',
 	#superclass : 'Object',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorker >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImportWorker >> extractModelFrom: aXMLDocument into: aCapellaModel [
 
 	self shouldBeImplemented
 ]

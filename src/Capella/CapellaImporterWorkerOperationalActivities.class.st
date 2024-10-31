@@ -1,6 +1,6 @@
 Class {
 	#name : 'CapellaImporterWorkerOperationalActivities',
-	#superclass : 'CapellaImporterWorker',
+	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
@@ -9,7 +9,7 @@ Class {
 CapellaImporterWorkerOperationalActivities >> addOperationalActivityFromNode: aXMLElement into: aCapellaModel [
 
 	| entity |
-	entity := CapellaOperationalActivity new.
+	entity := CapellaFunction new.
 	entity id: (aXMLElement attributeAt: #id).
 	entity name: (aXMLElement attributeAt: #name).
 	aCapellaModel addOperationalActivity: entity
@@ -32,7 +32,7 @@ CapellaImporterWorkerOperationalActivities >> addOperationalActivityLinkFromNode
 CapellaImporterWorkerOperationalActivities >> createOperationalActivitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalActivities//ownedFunctions'.
+	path := XPath for: './/ownedOperationalActivities//ownedFunctions'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addOperationalActivityFromNode: node into: aCapellaModel ]
@@ -42,14 +42,15 @@ CapellaImporterWorkerOperationalActivities >> createOperationalActivitiesFrom: a
 CapellaImporterWorkerOperationalActivities >> createOperationalActivityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalActivities//ownedFunctions/ownedFunctions/..'.
+	path := XPath for:
+		        './/ownedOperationalActivities//ownedFunctions/ownedFunctions/..'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addOperationalActivityLinkFromNode: node into: aCapellaModel ]
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivities >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImporterWorkerOperationalActivities >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createOperationalActivitiesFrom: aXMLDocument into: aCapellaModel.
 	self createOperationalActivityLinksFrom: aXMLDocument into: aCapellaModel
