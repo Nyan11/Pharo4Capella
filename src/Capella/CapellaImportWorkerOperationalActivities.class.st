@@ -1,12 +1,12 @@
 Class {
-	#name : 'CapellaImporterWorkerOperationalActivities',
+	#name : 'CapellaImportWorkerOperationalActivities',
 	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivities >> addOperationalActivityFromNode: aXMLElement into: aCapellaModel [
+CapellaImportWorkerOperationalActivities >> addOperationalActivityFromNode: aXMLElement into: aCapellaModel [
 
 	| entity |
 	entity := CapellaFunction new.
@@ -16,7 +16,7 @@ CapellaImporterWorkerOperationalActivities >> addOperationalActivityFromNode: aX
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivities >> addOperationalActivityLinkFromNode: aXMLElement into: aCapellaModel [
+CapellaImportWorkerOperationalActivities >> addOperationalActivityLinkFromNode: aXMLElement into: aCapellaModel [
 
 	| path nodes parentEntity |
 	parentEntity := aCapellaModel objectAt:
@@ -29,7 +29,7 @@ CapellaImporterWorkerOperationalActivities >> addOperationalActivityLinkFromNode
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivities >> createOperationalActivitiesFrom: aXMLDocument into: aCapellaModel [
+CapellaImportWorkerOperationalActivities >> createOperationalActivitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for: './/ownedOperationalActivities//ownedFunctions'.
@@ -39,7 +39,7 @@ CapellaImporterWorkerOperationalActivities >> createOperationalActivitiesFrom: a
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivities >> createOperationalActivityLinksFrom: aXMLDocument into: aCapellaModel [
+CapellaImportWorkerOperationalActivities >> createOperationalActivityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
 	path := XPath for:
@@ -50,7 +50,7 @@ CapellaImporterWorkerOperationalActivities >> createOperationalActivityLinksFrom
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerOperationalActivities >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImportWorkerOperationalActivities >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createOperationalActivitiesFrom: aXMLDocument into: aCapellaModel.
 	self createOperationalActivityLinksFrom: aXMLDocument into: aCapellaModel

@@ -55,19 +55,23 @@ CapellaImporter >> initialize [
 	super initialize.
 	model := CapellaModel new.
 	workers := {
-		           CapellaImporterWorkerOperationalEntities new.
-		           CapellaImporterWorkerOperationalCapabilities new.
-		           CapellaImporterWorkerOperationalActivities new.
-		           CapellaImporterWorkerOperationalActivityExchanges new.
-		           CapellaImporterWorkerOperationalActivityAllocations new.
-		           CapellaImporterWorkerOperationalActivityScenarios new.
-		           CapellaImporterWorkerOperationalFunctionalChains new.
+		           CapellaImportWorkerOperationalEntities new.
+		           CapellaImportWorkerOperationalCapabilities new.
+		           CapellaImportWorkerOperationalActivities new.
+		           CapellaImportWorkerOperationalActivityExchanges new.
+		           CapellaImportWorkerOperationalActivityAllocations new.
+		           CapellaImportWorkerOperationalActivityScenarios new.
+		           CapellaImportWorkerOperationalFunctionalChains new.
 		           CapellaImportWorkerSystemComponents new.
 		           CapellaImportWorkerSystemMissions new.
 		           CapellaImportWorkerSystemCapabilities new.
 		           CapellaImportWorkerSystemFunctions new.
 		           CapellaImportWorkerSystemScenarios new.
-					  CapellaImportWorkerSystemFunctionalChains new. }
+		           CapellaImportWorkerSystemFunctionalChains new.
+		           CapellaImportWorkerLogicalComponents new.
+		           CapellaImportWorkerLogicalFunctions new.
+		           CapellaImportWorkerLogicalFunctionalChains new.
+		           "CapellaImportWorkerLogicalScenarios new" }
 ]
 
 { #category : 'accessing' }

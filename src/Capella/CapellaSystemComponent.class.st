@@ -25,6 +25,7 @@ CapellaSystemComponent >> componentRealizations: anObject [
 { #category : 'accessing' }
 CapellaSystemComponent >> functionalAllocations [
 
+	functionalAllocations ifNil: [functionalAllocations :=  OrderedCollection new ].
 	^ functionalAllocations
 ]
 

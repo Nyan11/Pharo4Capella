@@ -1,8 +1,8 @@
 Class {
 	#name : 'CapellaModel',
 	#superclass : 'Object',
-	#traits : 'TCapellaOperationalAnalysisModel + TCapellaSystemAnalysisModel',
-	#classTraits : 'TCapellaOperationalAnalysisModel classTrait + TCapellaSystemAnalysisModel classTrait',
+	#traits : 'TCapellaOperationalAnalysisModel + TCapellaSystemAnalysisModel + TCapellaLogicalArchitectureModel',
+	#classTraits : 'TCapellaOperationalAnalysisModel classTrait + TCapellaSystemAnalysisModel classTrait + TCapellaLogicalArchitectureModel classTrait',
 	#instVars : [
 		'objects'
 	],
@@ -27,7 +27,7 @@ CapellaModel >> initialize [
 CapellaModel >> isEmptyCapellaProject [
 	"By default there is 1 components in an empty project"
 
-	^ objects size = 2
+	^ objects size = 4
 ]
 
 { #category : 'accessing' }

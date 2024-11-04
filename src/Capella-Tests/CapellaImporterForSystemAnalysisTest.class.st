@@ -5,7 +5,7 @@ Class {
 	#package : 'Capella-Tests'
 }
 
-{ #category : 'test data' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> projectSystemActors [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
@@ -1277,7 +1277,7 @@ CapellaImporterForSystemAnalysisTest >> projectSystemActors [
 '
 ]
 
-{ #category : 'test data' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> projectSystemCapabilities [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
@@ -2618,7 +2618,7 @@ CapellaImporterForSystemAnalysisTest >> projectSystemCapabilities [
 '
 ]
 
-{ #category : 'test data' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> projectSystemFunctions [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
@@ -4591,7 +4591,7 @@ CapellaImporterForSystemAnalysisTest >> projectSystemFunctions [
 '
 ]
 
-{ #category : 'test data' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> projectSystemMissions [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
@@ -5863,7 +5863,7 @@ CapellaImporterForSystemAnalysisTest >> projectSystemMissions [
 '
 ]
 
-{ #category : 'test data' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> projectSystemScenarios [
 
 	^ '<?xml version="1.0" encoding="UTF-8"?>
@@ -8688,7 +8688,7 @@ CapellaImporterForSystemAnalysisTest >> projectSystemScenarios [
 '
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> testOperationalAnalysis [
 
 	| importer scenarios |
@@ -8710,7 +8710,7 @@ CapellaImporterForSystemAnalysisTest >> testOperationalAnalysis [
 		equals: 3
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> testSystemActors [
 
 	| importer |
@@ -8723,7 +8723,7 @@ CapellaImporterForSystemAnalysisTest >> testSystemActors [
 		equals: 10.
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> testSystemCapabilities [
 
 	| importer |
@@ -8737,7 +8737,7 @@ CapellaImporterForSystemAnalysisTest >> testSystemCapabilities [
 		equals: 8
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> testSystemFunctions [
 
 	| importer |
@@ -8752,7 +8752,7 @@ CapellaImporterForSystemAnalysisTest >> testSystemFunctions [
 	self assert: (importer model systemComponents flatCollect: #functionalAllocations) asSet size equals: 19.
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> testSystemMissions [
 
 	| importer |
@@ -8761,7 +8761,7 @@ CapellaImporterForSystemAnalysisTest >> testSystemMissions [
 	self assert: importer model systemMissions asSet size equals: 6
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForSystemAnalysisTest >> testSystemScenarios [
 
 	| importer |

@@ -4437,7 +4437,7 @@ CapellaImporterForOperationalAnalysisTest >> testOperationalActivityCreated [
 	self assert: importer model operationalActivities size = 13
 ]
 
-{ #category : 'tests' }
+{ #category : 'as yet unclassified' }
 CapellaImporterForOperationalAnalysisTest >> testOperationalAnalysis [
 
 	| importer scenarios |
