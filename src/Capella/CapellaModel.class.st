@@ -27,7 +27,7 @@ CapellaModel >> initialize [
 CapellaModel >> isEmptyCapellaProject [
 	"By default there is 1 components in an empty project"
 
-	^ objects size = 1
+	^ objects size = 2
 ]
 
 { #category : 'accessing' }
