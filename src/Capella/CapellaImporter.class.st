@@ -69,9 +69,15 @@ CapellaImporter >> initialize [
 		           CapellaImportWorkerSystemScenarios new.
 		           CapellaImportWorkerSystemFunctionalChains new.
 		           CapellaImportWorkerLogicalComponents new.
+		           CapellaImportWorkerPhysicalComponents new.
 		           CapellaImportWorkerLogicalFunctions new.
 		           CapellaImportWorkerLogicalFunctionalChains new.
-		           "CapellaImportWorkerLogicalScenarios new" }
+		           CapellaImportWorkerLogicalCapabilities new.
+		           CapellaImportWorkerLogicalScenarios new.
+		           CapellaImportWorkerPhysicalFunctions new.
+		           CapellaImportWorkerPhysicalFunctionalChains new.
+		           CapellaImportWorkerPhysicalCapabilities new.
+		           CapellaImportWorkerPhysicalScenarios new }
 ]
 
 { #category : 'accessing' }

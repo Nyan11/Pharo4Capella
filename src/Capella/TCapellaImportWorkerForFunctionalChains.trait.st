@@ -13,11 +13,19 @@ TCapellaImportWorkerForFunctionalChains >> addFunctionalChain: functionalChain t
 { #category : 'adding' }
 TCapellaImportWorkerForFunctionalChains >> addFunctionalChainFromNode: aXMLObject into: aCapellaModel [
 
-	| functionalChain path nodes |
+	| functionalChain |
 	functionalChain := CapellaFunctionalChain new.
 	functionalChain id: (aXMLObject attributeAt: #id).
 	functionalChain name: (aXMLObject attributeAt: #name).
 	self addFunctionalChain: functionalChain toModel: aCapellaModel.
+]
+
+{ #category : 'adding' }
+TCapellaImportWorkerForFunctionalChains >> addFunctionalChainInvolvmentsFromNode: aXMLObject into: aCapellaModel [
+
+	| functionalChain path nodes |
+	functionalChain := aCapellaModel objectAt:
+		                   (aXMLObject attributeAt: #id).
 
 	path := XPath for: 'ownedFunctionalChainInvolvements'.
 	nodes := path in: aXMLObject.
@@ -32,7 +40,18 @@ TCapellaImportWorkerForFunctionalChains >> addFunctionalChainFromNode: aXMLObjec
 			(aCapellaModel objectAt: involved).
 		aCapellaModel addObject: functionalChainInvolvements.
 		functionalChain addFunctionalChainInvolvments:
-			functionalChainInvolvements ].
+			functionalChainInvolvements ]
+]
+
+{ #category : 'adding' }
+TCapellaImportWorkerForFunctionalChains >> addFunctionalChainInvolvmentsLinksFromNode: aXMLObject into: aCapellaModel [
+
+	| functionalChain path nodes |
+	functionalChain := aCapellaModel objectAt:
+		                   (aXMLObject attributeAt: #id).
+
+	path := XPath for: 'ownedFunctionalChainInvolvements'.
+	nodes := path in: aXMLObject.
 	nodes do: [ :ownedFunctionalChainInvolvements |
 		| functionalChainInvolvements source target |
 		functionalChainInvolvements := aCapellaModel objectAt:
@@ -55,5 +74,9 @@ TCapellaImportWorkerForFunctionalChains >> extractFunctionalChainsModelFrom: aXM
 	path := XPath for: './/ownedFunctionalChains'.
 	nodes := path in: aXMLElement.
 	nodes do: [ :node |
-		self addFunctionalChainFromNode: node into: aCapellaModel ]
+		self addFunctionalChainFromNode: node into: aCapellaModel ].
+	nodes do: [ :node |
+		self addFunctionalChainInvolvmentsFromNode: node into: aCapellaModel ].
+	nodes do: [ :node |
+		self addFunctionalChainInvolvmentsLinksFromNode: node into: aCapellaModel ]
 ]

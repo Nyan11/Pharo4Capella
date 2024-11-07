@@ -33,13 +33,24 @@ TCapellaImportWorkerForComponents >> addComponentsModelFrom: aXMLElement into: a
 { #category : 'as yet unclassified' }
 TCapellaImportWorkerForComponents >> addReferenceToComponentsModelFrom: aXMLElement into: aCapellaModel [
 
-	| path ref id |
-	path := XPath for: './/ownedParts'.
-
-	(path in: aXMLElement) do: [ :parts |
+	| componentPath partPath featurePath ref id |
+	partPath := XPath for: './/ownedParts'.
+	featurePath := XPath for: './ownedFeatures'.
+	componentPath := XPath for: self componentType.
+	(partPath in: aXMLElement) do: [ :parts |
 		ref := parts attributeAt: #id.
 		id := (parts attributeAt: #abstractType) allButFirst.
-		aCapellaModel makeReferenceAt: ref for: id ]
+		aCapellaModel makeReferenceAt: ref for: id ].
+
+	(componentPath in: aXMLElement) do: [ :component | 
+		id := component attributeAt: #id.
+		(featurePath in: component) do: [ :feature |
+			ref := feature attributeAt: #id.
+			self flag: #TODO.
+			"Input the class diagram as abstract type"
+			"id := (parts attributeAt: #abstractType) allButFirst."
+			aCapellaModel makeReferenceAt: ref for: id ] ].
+	
 ]
 
 { #category : 'as yet unclassified' }

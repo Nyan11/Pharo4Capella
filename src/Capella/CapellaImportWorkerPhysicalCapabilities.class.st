@@ -1,16 +1,17 @@
 Class {
-	#name : 'CapellaImportWorkerLogicalCapabilities',
-	#superclass : 'CapellaImportLogicalArchitectureWorker',
+	#name : 'CapellaImportWorkerPhysicalCapabilities',
+	#superclass : 'CapellaImportPhysicalArchitectureWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'as yet unclassified' }
-CapellaImportWorkerLogicalCapabilities >> extractCapabilityModelFrom: aXMLElement into: aCapellaModel [
+CapellaImportWorkerPhysicalCapabilities >> extractCapabilityModelFrom: aXMLElement into: aCapellaModel [
 
 	| path capability involvmentsPath involvments |
 	path := XPath for: '//ownedCapabilityRealizations'.
-	involvmentsPath := XPath for: 'ownedCapabilityRealizationInvolvements'.
+	involvmentsPath := XPath for:
+		                   'ownedCapabilityRealizationInvolvements'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
 		capability := CapellaCapability new.
@@ -21,22 +22,18 @@ CapellaImportWorkerLogicalCapabilities >> extractCapabilityModelFrom: aXMLElemen
 			               aCapellaModel objectAt:
 				               (realization attributeAt: #involved) allButFirst ].
 		capability involved: involvments asArray.
-		aCapellaModel addLogicalCapability: capability ]
+		aCapellaModel addPhysicalCapability: capability ]
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImportWorkerLogicalCapabilities >> extractLogicalArchitectureModelFrom: aXMLElement into: aCapellaModel [
+CapellaImportWorkerPhysicalCapabilities >> extractPhysicalArchitectureModelFrom: aXMLElement into: aCapellaModel [
 
-	self
-		extractCapabilityModelFrom: aXMLElement
-		into: aCapellaModel.
-	self
-		linkMissionAndCapabilitiesFrom: aXMLElement
-		into: aCapellaModel
+	self extractCapabilityModelFrom: aXMLElement into: aCapellaModel.
+	self linkMissionAndCapabilitiesFrom: aXMLElement into: aCapellaModel
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImportWorkerLogicalCapabilities >> linkMissionAndCapabilitiesFrom: aXMLElement into: aCapellaModel [
+CapellaImportWorkerPhysicalCapabilities >> linkMissionAndCapabilitiesFrom: aXMLElement into: aCapellaModel [
 
 	| missionsPath capabilitiesPath capabilityIds capabilities |
 	missionsPath := XPath for:

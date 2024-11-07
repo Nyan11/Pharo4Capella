@@ -32,22 +32,34 @@ TCapellaImportWorkerForFunctions >> createFunctionalExchangesFrom: aXMLElement i
 		functionExchange := CapellaFunctionalExchange new.
 		functionExchange id: (systemComponent attributeAt: #id).
 		functionExchange name: (systemComponent attributeAt: #name).
-		functionExchange source: (systemComponent attributeAt: #source).
-		functionExchange target: (systemComponent attributeAt: #target).
+		functionExchange source: (aCapellaModel objectAt: (systemComponent attributeAt: #source) allButFirst).
+		functionExchange target: (aCapellaModel objectAt: (systemComponent attributeAt: #target) allButFirst).
 		self addFunctionalExchange: functionExchange toModel: aCapellaModel ]
 ]
 
 { #category : 'as yet unclassified' }
 TCapellaImportWorkerForFunctions >> createFunctionsFrom: aXMLElement into: aCapellaModel [
 
-	| path function |
+	| path pathIn pathOut function |
 	path := XPath for: './/ownedFunctions'.
+	pathIn := XPath for: './inputs'.
+	pathOut := XPath for: './outputs'.
 
-	(path in: aXMLElement) do: [ :systemComponent |
+	(path in: aXMLElement) do: [ :functionXML |
+		| functionId |
+		functionId := functionXML attributeAt: #id.
 		function := CapellaFunction new.
-		function id: (systemComponent attributeAt: #id).
-		function name: (systemComponent attributeAt: #name).
-		self addFunction: function toModel: aCapellaModel ]
+		function id: functionId.
+		function name: (functionXML attributeAt: #name).
+		self addFunction: function toModel: aCapellaModel.
+		(pathIn in: functionXML) do: [ :inXML |
+			aCapellaModel
+				makeReferenceAt: (inXML attributeAt: #id)
+				for: functionId ].
+		(pathOut in: functionXML) do: [ :outXML |
+			aCapellaModel
+				makeReferenceAt: (outXML attributeAt: #id)
+				for: functionId ] ]
 ]
 
 { #category : 'as yet unclassified' }
