@@ -1,5 +1,5 @@
 Class {
-	#name : 'CapellaSystemComponent',
+	#name : 'CapellaComponent',
 	#superclass : 'CapellaObject',
 	#instVars : [
 		'name',
@@ -11,38 +11,38 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaSystemComponent >> componentRealizations [
+CapellaComponent >> componentRealizations [
 
 	^ componentRealizations
 ]
 
 { #category : 'accessing' }
-CapellaSystemComponent >> componentRealizations: anObject [
+CapellaComponent >> componentRealizations: anObject [
 
 	componentRealizations := anObject
 ]
 
 { #category : 'accessing' }
-CapellaSystemComponent >> functionalAllocations [
+CapellaComponent >> functionalAllocations [
 
 	functionalAllocations ifNil: [functionalAllocations :=  OrderedCollection new ].
 	^ functionalAllocations
 ]
 
 { #category : 'accessing' }
-CapellaSystemComponent >> functionalAllocations: anObject [
+CapellaComponent >> functionalAllocations: anObject [
 
 	functionalAllocations := anObject
 ]
 
 { #category : 'accessing' }
-CapellaSystemComponent >> name [
+CapellaComponent >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaSystemComponent >> name: anObject [
+CapellaComponent >> name: anObject [
 
 	name := anObject
 ]
