@@ -4,3 +4,15 @@
 
 # Pharo4Capella
 Import and manipulate Capella models in Pharo.
+
+## Installation
+
+In a playground copy and "Do IT":
+```st
+Metacello new
+		baseline: 'Capella';
+		repository: 'github://Nyan11/Pharo4Capella:main/src';
+		onConflictUseIncoming;
+		load.
+
+```
