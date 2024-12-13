@@ -1,22 +1,22 @@
 Class {
-	#name : 'CapellaImporterWorkerCapabilities',
-	#superclass : 'CapellaImporterWorker',
+	#name : 'CapellaImportWorkerOperationalCapabilities',
+	#superclass : 'CapellaImportOperationalAnalysisWorker',
 	#category : 'Capella',
 	#package : 'Capella'
 }
 
 { #category : 'adding' }
-CapellaImporterWorkerCapabilities >> addCapabilityFromNode: aXMLElement into: aCapellaModel [
+CapellaImportWorkerOperationalCapabilities >> addCapabilityFromNode: aXMLElement into: aCapellaModel [
 
 	| capability |
 	capability := CapellaCapability new.
 	capability id: (aXMLElement attributeAt: #id).
 	capability name: (aXMLElement attributeAt: #name).
-	aCapellaModel addCapability: capability
+	aCapellaModel addOperationalCapability: capability
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> addCapabilityLinksFromNode: aXMLElement into: aCapellaModel [
+CapellaImportWorkerOperationalCapabilities >> addCapabilityLinksFromNode: aXMLElement into: aCapellaModel [
 
 	| path nodes parent |
 	parent := aCapellaModel objectAt: (aXMLElement attributeAt: #id).
@@ -25,32 +25,33 @@ CapellaImporterWorkerCapabilities >> addCapabilityLinksFromNode: aXMLElement int
 	nodes do: [ :node | | id |
 		id := (node attributeAt: #involved).
 		id first = $# ifTrue: [ id := id allButFirst ].
-		parent addInvolvedEntity:
+		parent addInvolved:
 			(aCapellaModel objectAt: id) ]
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> createCapabilitiesFrom: aXMLDocument into: aCapellaModel [
+CapellaImportWorkerOperationalCapabilities >> createCapabilitiesFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalCapabilities'.
+	path := XPath for: './/ownedOperationalCapabilities'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addCapabilityFromNode: node into: aCapellaModel ]
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> createCapabilityLinksFrom: aXMLDocument into: aCapellaModel [
+CapellaImportWorkerOperationalCapabilities >> createCapabilityLinksFrom: aXMLDocument into: aCapellaModel [
 
 	| path nodes |
-	path := XPath for: '//ownedOperationalCapabilities/ownedEntityOperationalCapabilityInvolvements/..'.
+	path := XPath for:
+		        './/ownedOperationalCapabilities/ownedEntityOperationalCapabilityInvolvements/..'.
 	nodes := path in: aXMLDocument.
 	nodes do: [ :node |
 		self addCapabilityLinksFromNode: node into: aCapellaModel ]
 ]
 
 { #category : 'as yet unclassified' }
-CapellaImporterWorkerCapabilities >> extractModelFrom: aXMLDocument into: aCapellaModel [
+CapellaImportWorkerOperationalCapabilities >> extractOperationalAnalysisModelFrom: aXMLDocument into: aCapellaModel [
 
 	self createCapabilitiesFrom: aXMLDocument into: aCapellaModel.
 	self createCapabilityLinksFrom: aXMLDocument into: aCapellaModel
