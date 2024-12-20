@@ -25,3 +25,13 @@ CapellaTrace >> document: aDocument [
 CapellaTrace >> id: aString [ 
 	id := aString
 ]
+
+{ #category : 'testing' }
+CapellaTrace >> isCapellaComponent [
+	^ false
+]
+
+{ #category : 'testing' }
+CapellaTrace >> isCapellaFunction [
+	^ false
+]

@@ -1,8 +1,9 @@
 Class {
 	#name : 'CapellaImportPhysicalArchitectureWorker',
 	#superclass : 'CapellaImportWorker',
-	#category : 'Capella',
-	#package : 'Capella'
+	#category : 'Capella-import',
+	#package : 'Capella',
+	#tag : 'import'
 }
 
 { #category : 'as yet unclassified' }

@@ -1,8 +1,9 @@
 Class {
 	#name : 'CapellaImportWorkerSystemMissions',
 	#superclass : 'CapellaImportSystemAnalysisWorker',
-	#category : 'Capella',
-	#package : 'Capella'
+	#category : 'Capella-import',
+	#package : 'Capella',
+	#tag : 'import'
 }
 
 { #category : 'as yet unclassified' }

@@ -6,8 +6,9 @@ Class {
 		'coveredInstanceRoles',
 		'relatedAbstractFunction'
 	],
-	#category : 'Capella',
-	#package : 'Capella'
+	#category : 'Capella-import',
+	#package : 'Capella',
+	#tag : 'import'
 }
 
 { #category : 'accessing' }

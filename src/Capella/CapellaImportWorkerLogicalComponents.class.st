@@ -3,8 +3,9 @@ Class {
 	#superclass : 'CapellaImportLogicalArchitectureWorker',
 	#traits : 'TCapellaImportWorkerForComponents',
 	#classTraits : 'TCapellaImportWorkerForComponents classTrait',
-	#category : 'Capella',
-	#package : 'Capella'
+	#category : 'Capella-import',
+	#package : 'Capella',
+	#tag : 'import'
 }
 
 { #category : 'as yet unclassified' }

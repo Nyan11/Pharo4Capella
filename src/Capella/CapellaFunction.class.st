@@ -5,8 +5,9 @@ Class {
 		'name',
 		'subFunctions'
 	],
-	#category : 'Capella',
-	#package : 'Capella'
+	#category : 'Capella-import',
+	#package : 'Capella',
+	#tag : 'import'
 }
 
 { #category : 'adding' }
