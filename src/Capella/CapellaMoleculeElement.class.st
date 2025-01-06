@@ -45,6 +45,17 @@ CapellaMoleculeElement >> initialize [
 	id := self class makeNewUUID
 ]
 
+{ #category : 'instance creation' }
+CapellaMoleculeElement >> newNodeNamed: aNodeName withAttributes: anAssociationCollection [
+
+	| nodeFactory node |
+	nodeFactory := XMLNodeFactory new.
+	node := nodeFactory newElementNamed: aNodeName.
+	"node namespaceScope mapPrefix: 'xsi' to: 'XMLSchema-instance'."
+	node setAttributes: anAssociationCollection.
+	^ node
+]
+
 { #category : 'accessing' }
 CapellaMoleculeElement >> pharoObject [
 

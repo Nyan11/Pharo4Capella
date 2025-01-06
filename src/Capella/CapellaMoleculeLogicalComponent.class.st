@@ -11,6 +11,11 @@ Class {
 }
 
 { #category : 'accessing' }
+CapellaMoleculeLogicalComponent >> name [
+	^ name
+]
+
+{ #category : 'accessing' }
 CapellaMoleculeLogicalComponent >> name: aString [ 
 	name := aString
 ]

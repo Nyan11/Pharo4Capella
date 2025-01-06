@@ -5,7 +5,8 @@ Class {
 		'name',
 		'inputs',
 		'outputs',
-		'privateComponentTargetName'
+		'privateComponentTargetName',
+		'ownedFunctions'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -17,7 +18,8 @@ CapellaMoleculeLogicalFunction >> initialize [
 
 	super initialize.
 	outputs := {  }.
-	inputs := {  }
+	inputs := {  }.
+	ownedFunctions := {  }
 ]
 
 { #category : 'accessing' }
@@ -50,6 +52,18 @@ CapellaMoleculeLogicalFunction >> outputs [
 { #category : 'accessing' }
 CapellaMoleculeLogicalFunction >> outputs: aCollection [ 
 	outputs := aCollection
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeLogicalFunction >> ownedFunctions [
+
+	^ ownedFunctions
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeLogicalFunction >> ownedFunctions: aCollection [
+
+	ownedFunctions := aCollection
 ]
 
 { #category : 'as yet unclassified' }
