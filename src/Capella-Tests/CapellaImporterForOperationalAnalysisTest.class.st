@@ -4327,8 +4327,8 @@ CapellaImporterForOperationalAnalysisTest >> testCanLoadEmptyProject [
 
 	| importer |
 	importer := CapellaImporter fromString: self projectEmpty.
-	self assert: importer model isEmptyCapellaProject 
-	
+	importer inspect.
+	self assert: importer model isEmptyCapellaProject
 ]
 
 { #category : 'as yet unclassified' }

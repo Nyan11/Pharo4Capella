@@ -19,7 +19,8 @@ MolAbstractComponentImpl >> asCapellaLogicalComponent [
 		                      | function inputs |
 		                      function := CapellaMoleculeLogicalFunction new
 			                                  pharoObject: association key;
-			                                  name: 'Produced ' , association key name;
+			                                  name:
+				                                  'Consumed ' , association key name;
 			                                  privateComponentTargetName:
 				                                  association value;
 			                                  yourself.
@@ -39,7 +40,7 @@ MolAbstractComponentImpl >> asCapellaLogicalComponent [
 		                       function := CapellaMoleculeLogicalFunction
 			                                   new
 			                                   pharoObject: class;
-			                                   name: 'Consumed ' , class name;
+			                                   name: 'Produced ' , class name;
 			                                   yourself.
 		                       outputs := class methods collect: [ :m |
 			                                  CapellaMoleculeFunctionOutputPort
