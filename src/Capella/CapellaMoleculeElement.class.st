@@ -3,7 +3,9 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'pharoObject',
-		'id'
+		'id',
+		'summary',
+		'description'
 	],
 	#classInstVars : [
 		'uuidGenerator'
@@ -24,6 +26,30 @@ CapellaMoleculeElement class >> uuidGenerator [
 
 	uuidGenerator ifNil: [ uuidGenerator := UUIDGenerator new ].
 	^ uuidGenerator
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeElement >> description [
+
+	^ description
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeElement >> description: anObject [
+
+	description := anObject
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeElement >> hasDescription [
+
+	^ description isNotNil
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeElement >> hasSumarry [
+
+	^ summary isNotNil
 ]
 
 { #category : 'accessing' }
@@ -66,4 +92,35 @@ CapellaMoleculeElement >> pharoObject [
 CapellaMoleculeElement >> pharoObject: anObject [
 
 	pharoObject := anObject
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeElement >> summary [
+
+	^ summary
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeElement >> summary: anObject [
+
+	summary := anObject
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeElement >> xmlAttributes [
+
+	| attributes |
+	attributes := OrderedCollection
+		              with: 'id' -> self id printString
+		              with: 'xsi:type' -> self xsiType.
+	self hasSumarry ifTrue: [ attributes add: 'summary' -> self summary ].
+	self hasDescription ifTrue: [ attributes add: 'description' -> self description ].
+
+	^ attributes
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeElement >> xsiType [
+
+	^ self explicitRequirement
 ]

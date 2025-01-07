@@ -33,3 +33,17 @@ CapellaMoleculeComponentFunctionalAllocation >> targetElement: anObject [
 
 	targetElement := anObject
 ]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeComponentFunctionalAllocation >> xmlAttributes [
+
+	^ super xmlAttributes , {
+		  ('targetElement' -> ('#' , self targetElement id printString)).
+		  ('sourceElement' -> ('#' , self sourceElement id printString)) }
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeComponentFunctionalAllocation >> xsiType [
+
+	^ 'org.polarsys.capella.core.data.fa:ComponentFunctionalAllocation'
+]

@@ -13,6 +13,11 @@ Class {
 	#tag : 'molecule'
 }
 
+{ #category : 'visiting' }
+CapellaMoleculeLogicalFunction >> acceptVisitor: aCapellaMoleculeExportToXMLVisitor [ 
+	aCapellaMoleculeExportToXMLVisitor visitLogicalFunction: self
+]
+
 { #category : 'accessing' }
 CapellaMoleculeLogicalFunction >> initialize [
 
@@ -71,4 +76,16 @@ CapellaMoleculeLogicalFunction >> privateComponentTargetName: aString [
 
 	privateComponentTargetName := aString
 
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeLogicalFunction >> xmlAttributes [
+
+	^ super xmlAttributes , { ('name' -> self name) }
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeLogicalFunction >> xsiType [
+
+	^ 'org.polarsys.capella.core.data.la:LogicalFunction'
 ]

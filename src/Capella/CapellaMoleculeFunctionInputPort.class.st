@@ -11,6 +11,11 @@ Class {
 	#tag : 'molecule'
 }
 
+{ #category : 'visiting' }
+CapellaMoleculeFunctionInputPort >> acceptVisitor: aCapellaMoleculeExportToXMLVisitor [ 
+	aCapellaMoleculeExportToXMLVisitor visitInput: self.
+]
+
 { #category : 'accessing' }
 CapellaMoleculeFunctionInputPort >> name [
 
@@ -36,4 +41,16 @@ CapellaMoleculeFunctionInputPort >> privateName [
 { #category : 'as yet unclassified' }
 CapellaMoleculeFunctionInputPort >> privateName: aString [ 
 	privateName:= aString 
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeFunctionInputPort >> xmlAttributes [
+
+	^ super xmlAttributes , { ('name' -> self name) }
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeFunctionInputPort >> xsiType [
+
+	^ 'org.polarsys.capella.core.data.fa:FunctionInputPort'
 ]

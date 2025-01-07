@@ -11,6 +11,11 @@ Class {
 	#tag : 'molecule'
 }
 
+{ #category : 'visiting' }
+CapellaMoleculeFunctionalExchange >> acceptVisitor: aCapellaMoleculeExportToXMLVisitor [ 
+	aCapellaMoleculeExportToXMLVisitor visitFunctionalExchange: self
+]
+
 { #category : 'accessing' }
 CapellaMoleculeFunctionalExchange >> name [
 
@@ -45,4 +50,19 @@ CapellaMoleculeFunctionalExchange >> target [
 CapellaMoleculeFunctionalExchange >> target: anObject [
 
 	target := anObject
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeFunctionalExchange >> xmlAttributes [
+
+	^ super xmlAttributes , {
+		  ('name' -> self name).
+		  ('target' -> ('#' , self target id printString)).
+		  ('source' -> ('#' , self source id printString)) }
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeFunctionalExchange >> xsiType [
+
+	^ 'org.polarsys.capella.core.data.fa:FunctionalExchange'
 ]

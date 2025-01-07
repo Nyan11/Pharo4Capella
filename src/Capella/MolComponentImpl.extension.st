@@ -1,7 +1,7 @@
-Extension { #name : 'MolAbstractComponentImpl' }
+Extension { #name : 'MolComponentImpl' }
 
 { #category : '*Capella' }
-MolAbstractComponentImpl >> asCapellaLogicalComponent [
+MolComponentImpl >> asCapellaLogicalComponent [
 
 	| part component functionsIn functionsOut capellaFunctionsIn capellaFunctionsOut ownedFunctionalAllocations |
 	component := CapellaMoleculeLogicalComponent new.
@@ -20,7 +20,8 @@ MolAbstractComponentImpl >> asCapellaLogicalComponent [
 		                      function := CapellaMoleculeLogicalFunction new
 			                                  pharoObject: association key;
 			                                  name:
-				                                  'Consumed ' , association key name;
+				                                  'Consumed '
+				                                  , association key name;
 			                                  privateComponentTargetName:
 				                                  association value;
 			                                  yourself.
@@ -30,6 +31,10 @@ MolAbstractComponentImpl >> asCapellaLogicalComponent [
 				                                new
 				                                pharoObject: m;
 				                                name: m selector;
+				                                description:
+					                                ('&lt;/p>' join:
+							                                 (Character cr split:
+									                                  m sourceCode));
 				                                privateContract: association key;
 				                                privateName: association value;
 				                                yourself ].
@@ -47,6 +52,10 @@ MolAbstractComponentImpl >> asCapellaLogicalComponent [
 				                                  new
 				                                  pharoObject: m;
 				                                  name: m selector;
+				                                  description:
+					                                  ('&lt;/p>' join:
+							                                   (Character cr split:
+									                                    m sourceCode));
 				                                  privateCapellaComponent:
 					                                  component;
 				                                  yourself ].
@@ -55,7 +64,8 @@ MolAbstractComponentImpl >> asCapellaLogicalComponent [
 
 	component
 		pharoObject: self class;
-		name: self class name.
+		name: self class name;
+		summary: self componentName.
 
 	"functionalAllocations:
 	targetElement = function
@@ -71,7 +81,7 @@ MolAbstractComponentImpl >> asCapellaLogicalComponent [
 
 	part
 		pharoObject: self;
-		name: self componentName;
+		name: self class name;
 		abstractType: component.
 	^ part
 ]
