@@ -3,8 +3,8 @@ Class {
 	#superclass : 'CapellaMoleculeElement',
 	#instVars : [
 		'name',
-		'privateContract',
-		'privateName'
+		'privateComponent',
+		'privateContract'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -29,18 +29,25 @@ CapellaMoleculeFunctionInputPort >> name: anObject [
 ]
 
 { #category : 'as yet unclassified' }
-CapellaMoleculeFunctionInputPort >> privateContract: aTrait [ 
-	privateContract:=aTrait
+CapellaMoleculeFunctionInputPort >> privateComponent [
+	^ privateComponent
 ]
 
 { #category : 'accessing' }
-CapellaMoleculeFunctionInputPort >> privateName [
-	^ privateName
+CapellaMoleculeFunctionInputPort >> privateComponent: aMolGNSSGPS [ 
+	privateComponent := aMolGNSSGPS
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaMoleculeFunctionInputPort >> privateName: aString [ 
-	privateName:= aString 
+{ #category : 'accessing' }
+CapellaMoleculeFunctionInputPort >> privateContract [
+
+	^ privateContract
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeFunctionInputPort >> privateContract: anObject [
+
+	privateContract := anObject
 ]
 
 { #category : 'as yet unclassified' }

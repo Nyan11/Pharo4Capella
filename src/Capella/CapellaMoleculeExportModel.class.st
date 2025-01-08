@@ -37,7 +37,7 @@ CapellaMoleculeExportModel class >> buildCapellaProjectOfDeployedMoleculeCompone
 CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 
 	<script: 'self exportModelOfDeployedMoleculeComponents inspect'>
-	| homeServices moleculeComponents capellaComponentParts capellaComponentTypes capellaFunctions capellaParentFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary |
+	| homeServices moleculeComponents capellaComponentParts capellaComponentTypes capellaFunctions capellaParentFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary outputs inputs |
 	"1: generate the component"
 	homeServices := MolComponentManager default homeServices.
 	moleculeComponents := homeServices deployedComponents flatCollect:
@@ -60,45 +60,23 @@ CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 				                          (capellaFunctions select: [ :child |
 						                           child pharoObject = parent ]);
 			                          yourself ].
-
-	capellaFunctionalExchange := (capellaFunctions flatCollect: #inputs)
-		                             collect: [ :input |
-			                             | possibleTargets output |
-			                             possibleTargets := capellaComponentParts
-				                                                select: [ :each |
-				                                                each pharoObject
-					                                                componentName
-				                                                =
-				                                                input privateName ]
-				                                                thenCollect: [
-				                                                :each |
-				                                                each abstractType ].
-			                             possibleTargets := (possibleTargets
-				                                                 flatCollect:
-				                                                 #ownedFunctionalAllocation)
-				                                                flatCollect: [
-				                                                :each |
-				                                                each targetElement
-					                                                outputs ].
-			                             output := possibleTargets select: [
-				                                       :each |
-				                                       input pharoObject
-				                                       = each pharoObject ].
-			                             output
-				                             ifNotEmpty: [
-					                             CapellaMoleculeFunctionalExchange
-						                             new
-						                             pharoObject:
-							                             output first pharoObject;
-						                             description:
-							                             output first description;
-						                             source: output first;
-						                             name: input pharoObject selector;
-						                             target: input;
-						                             yourself ]
-				                             ifEmpty: [ nil ] ].
-	capellaFunctionalExchange := capellaFunctionalExchange select:
-		                             #isNotNil.
+	outputs := capellaFunctions flatCollect: #outputs.
+	inputs := capellaFunctions flatCollect: #inputs.
+	capellaFunctionalExchange := inputs flatCollect: [ :input |
+		                             outputs
+			                             select: [ :output |
+				                             (input privateComponent includes:
+				                             output privateComponent) and: [
+					                             input privateContract
+					                             = output privateContract ] ]
+			                             thenCollect: [ :output |
+				                             CapellaMoleculeFunctionalExchange new
+					                             pharoObject: output pharoObject;
+					                             description: output description;
+					                             source: output;
+					                             name: input pharoObject selector;
+					                             target: input;
+					                             yourself ] ].
 
 	"6: select all the Mosaic PIC from parts"
 	picsDictionary := Dictionary new.

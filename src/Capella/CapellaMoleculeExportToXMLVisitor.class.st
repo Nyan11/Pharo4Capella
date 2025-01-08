@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'xmlDocument',
-		'currentNode'
+		'currentNode',
+		'shouldExportEmptyMethods'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -289,113 +290,44 @@ CapellaMoleculeExportToXMLVisitor class >> emptyXMLProject [
 ]
 
 { #category : 'as yet unclassified' }
-CapellaMoleculeExportToXMLVisitor >> buildComponentsOn: aXMLNode [
-	"
-	1. Access the <ownedLogicalComponents>.
-	2. Add the <ownedLogicalComponents> or 'parts'.
-	3. Add the <ownedLogicalComponents> with <ownedFunctionalAllocation>
-	"
-
-	| pathLogicalComponents rootNode partBlock componentBlock |
-	pathLogicalComponents := XPath for: './/ownedLogicalComponents'.
-	rootNode := (pathLogicalComponents in: aXMLNode) first.
-
-	partBlock := [ :partModel :node |
-	             node addElementNamed: 'ownedFeatures' attributes: partModel xmlAttributes ].
-	componentBlock := [ :componentModel :node |
-	                  | componentNode |
-	                  componentNode := node
-		                                   addElementNamed:
-		                                   'ownedLogicalComponents'
-		                                   attributes: componentModel xmlAttributes.
-	                  componentModel ownedFeatures do: [ :each |
-		                  partBlock value: each value: componentNode ].
-	                  componentModel ownedLogicalComponents do: [ :each |
-		                  componentBlock value: each value: componentNode ].
-	                  componentModel ownedFunctionalAllocation do: [
-		                  :each |
-		                  componentNode
-			                  addElementNamed: 'ownedFunctionalAllocation'
-			                  attributes: each xmlAttributes ] ].
-
-	self parts do: [ :partModel |
-		partBlock value: partModel value: rootNode ].
-	self componentTypes do: [ :componentModel |
-		componentBlock value: componentModel value: rootNode ]
-]
-
-{ #category : 'as yet unclassified' }
-CapellaMoleculeExportToXMLVisitor >> buildFunctionsOn: aXMLNode [
-	"
-	1. Access the <ownedLogicalFunctions>.
-	2. Add <ownedFunctions> with <inputs> and <outputs>.
-	3. Add the <ownedFunctionalExchanges>.
-	"
-
-	| pathLogicalFunctions functionsNode functionBlock |
-	pathLogicalFunctions := XPath for: './/ownedLogicalFunctions'.
-	functionsNode := (pathLogicalFunctions in: aXMLNode) first.
-
-	functionBlock := [ :functionModel :parentNode |
-	                 | node |
-	                 node := parentNode
-		                         addElementNamed: 'ownedFunctions'
-		                         attributes: functionModel xmlAttributes.
-	                 functionModel ownedFunctions do: [ :each |
-		                 functionBlock value: each value: node ].
-	                 functionModel inputs do: [ :each |
-		                 node addElementNamed: 'inputs' attributes: each xmlAttributes ].
-	                 functionModel outputs do: [ :each |
-		                 node addElementNamed: 'outputs' attributes: each xmlAttributes ] ].
-
-	self functions do: [ :each |
-		functionBlock value: each value: functionsNode ].
-	self functionalExchanges do: [ :each |
-		functionsNode
-			addElementNamed: 'ownedFunctionalExchanges'
-			attributes: each xmlAttributes ]
-]
-
-{ #category : 'as yet unclassified' }
-CapellaMoleculeExportToXMLVisitor >> buildProject [
-	"
-	1. Access the Logical architerture of the empty project.
-	2. Access the <ownedLogicalFunctions>.
-	2.1. Add <ownedFunctions> with <inputs> and <outputs>.
-	2.2. Add the <ownedFunctionalExchanges>.
-	3. Access the <ownedLogicalComponents>.
-	3.1. Add the <ownedLogicalComponents> or 'parts'.
-	3.2. Add the <ownedLogicalComponents> with <ownedFunctionalAllocation>
-	4. Add the commentary on the second index of the document.
-	"
-
-	| logicalArchitectureNode path |
-	path := XPath for:
-		        './/ownedArchitectures[@xsi:type="org.polarsys.capella.core.data.la:LogicalArchitecture"]'.
-	logicalArchitectureNode := (path in: self project) first.
-	self buildFunctionsOn: logicalArchitectureNode.
-	self buildComponentsOn: logicalArchitectureNode.
-	self project addNodeFirst:
-		(XMLComment string: 'Capella_Version_7.0.0')
-]
-
-{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> initialize [
 
 	super initialize.
-	xmlDocument := XMLDOMParser parse: self class emptyXMLProject
+	xmlDocument := XMLDOMParser parse: self class emptyXMLProject.
+	shouldExportEmptyMethods := true
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeExportToXMLVisitor >> shouldExportEmptyMethods [
+
+	^ shouldExportEmptyMethods
+]
+
+{ #category : 'visiting' }
+CapellaMoleculeExportToXMLVisitor >> shouldExportMethod: aMethod [
+
+	self shouldExportEmptyMethods ifTrue: [ ^ true ].
+	aMethod ast body children ifEmpty: [ ^ false ].
+	aMethod ast body children size > 1 ifTrue: [ ^ true ].
+	aMethod ast body children first isMessage ifFalse: [ ^ true ].
+	^ aMethod ast body children first selector ~= #explicitRequirement
 ]
 
 { #category : 'visiting' }
 CapellaMoleculeExportToXMLVisitor >> visitFunctionalExchange: aCapellaMoleculeFunctionalExchange [
 
-	currentNode addElementNamed: 'ownedFunctionalExchanges'
-			attributes: aCapellaMoleculeFunctionalExchange xmlAttributes
+	(self shouldExportMethod:
+	aCapellaMoleculeFunctionalExchange pharoObject)ifFalse: [ ^ self ].
+	currentNode
+		addElementNamed: 'ownedFunctionalExchanges'
+		attributes: aCapellaMoleculeFunctionalExchange xmlAttributes
 ]
 
 { #category : 'visiting' }
 CapellaMoleculeExportToXMLVisitor >> visitInput: aCapellaMoleculeFunctionInputPort [
 
+	(self shouldExportMethod:
+	aCapellaMoleculeFunctionInputPort pharoObject)ifFalse: [ ^ self ].
 	currentNode
 		addElementNamed: 'inputs'
 		attributes: aCapellaMoleculeFunctionInputPort xmlAttributes
@@ -483,6 +415,8 @@ CapellaMoleculeExportToXMLVisitor >> visitModel: aCapellaMoleculeModel [
 { #category : 'visiting' }
 CapellaMoleculeExportToXMLVisitor >> visitOutput: aCapellaMoleculeFunctionOutputPort [
 
+	(self shouldExportMethod:
+		 aCapellaMoleculeFunctionOutputPort pharoObject) ifFalse: [ ^ self ].
 	currentNode
 		addElementNamed: 'outputs'
 		attributes: aCapellaMoleculeFunctionOutputPort xmlAttributes

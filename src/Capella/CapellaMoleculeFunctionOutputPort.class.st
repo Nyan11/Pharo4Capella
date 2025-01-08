@@ -3,7 +3,8 @@ Class {
 	#superclass : 'CapellaMoleculeElement',
 	#instVars : [
 		'name',
-		'privateCapellaComponent'
+		'privateComponent',
+		'privateContract'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -27,9 +28,26 @@ CapellaMoleculeFunctionOutputPort >> name: anObject [
 	name := anObject
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaMoleculeFunctionOutputPort >> privateCapellaComponent: aCapellaMoleculeLogicalComponent [ 
-	privateCapellaComponent:= aCapellaMoleculeLogicalComponent 
+{ #category : 'accessing' }
+CapellaMoleculeFunctionOutputPort >> privateComponent [
+	^ privateComponent
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeFunctionOutputPort >> privateComponent: anObject [ 
+	privateComponent := anObject
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeFunctionOutputPort >> privateContract [
+
+	^ privateContract
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeFunctionOutputPort >> privateContract: anObject [
+
+	privateContract := anObject
 ]
 
 { #category : 'accessing' }

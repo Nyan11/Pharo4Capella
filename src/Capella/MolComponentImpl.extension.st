@@ -3,85 +3,131 @@ Extension { #name : 'MolComponentImpl' }
 { #category : '*Capella' }
 MolComponentImpl >> asCapellaLogicalComponent [
 
-	| part component functionsIn functionsOut capellaFunctionsIn capellaFunctionsOut ownedFunctionalAllocations |
-	component := CapellaMoleculeLogicalComponent new.
-	part := CapellaMoleculePart new.
+	| partModel componentModel functions |
+	componentModel := CapellaMoleculeLogicalComponent new.
+	partModel := CapellaMoleculePart new.
+	functions := OrderedCollection new.
 
-	functionsOut := self class allProvidedServices
-	                , self class allProvidedParameters
-	                , self class allProducedEvents.
-	functionsIn := (self componentConnector servicesProviders
-	                , self componentConnector parametersProviders
-	                , self componentConnector eventsSubscribers)
-		               associations.
-
-	capellaFunctionsIn := functionsIn collect: [ :association |
-		                      | function inputs |
-		                      function := CapellaMoleculeLogicalFunction new
-			                                  pharoObject: association key;
-			                                  name:
-				                                  'Consumed '
-				                                  , association key name;
-			                                  privateComponentTargetName:
-				                                  association value;
-			                                  yourself.
-		                      inputs := association key methods collect: [
-			                                :m |
-			                                CapellaMoleculeFunctionInputPort
-				                                new
-				                                pharoObject: m;
-				                                name: m selector;
-				                                description:
-					                                ('&lt;/p>' join:
-							                                 (Character cr split:
-									                                  m sourceCode));
-				                                privateContract: association key;
-				                                privateName: association value;
-				                                yourself ].
-		                      function inputs: inputs.
-		                      function ].
-	capellaFunctionsOut := functionsOut collect: [ :class |
-		                       | function outputs |
-		                       function := CapellaMoleculeLogicalFunction
-			                                   new
-			                                   pharoObject: class;
-			                                   name: 'Produced ' , class name;
-			                                   yourself.
-		                       outputs := class methods collect: [ :m |
-			                                  CapellaMoleculeFunctionOutputPort
-				                                  new
-				                                  pharoObject: m;
-				                                  name: m selector;
-				                                  description:
-					                                  ('&lt;/p>' join:
-							                                   (Character cr split:
-									                                    m sourceCode));
-				                                  privateCapellaComponent:
-					                                  component;
-				                                  yourself ].
-		                       function outputs: outputs.
-		                       function ].
-
-	component
-		pharoObject: self class;
-		name: self class name;
-		summary: self componentName.
+	"consumed services & parameters: inputs -> references"
+	(self componentConnector servicesProviders
+	 , self componentConnector parametersProviders) associations do: [
+		:association |
+		| inputs privateComponent |
+		privateComponent := association key isComponentServices
+			                    ifTrue: [
+				                    MolComponentManager default locatorServices
+					                    searchServicesProviderFor: association key
+					                    named: association value ]
+			                    ifFalse: [
+				                    MolComponentManager default locatorServices
+					                    searchParametersProviderFor: association key
+					                    named: association value ].
+		inputs := association key methods flatCollect: [ :m |
+			          | methods |
+			          methods := SystemNavigation default
+				                     allReferencesTo: m selector
+				                     in: { self class }.
+			          methods collect: [ :method |
+				          CapellaMoleculeFunctionInputPort new
+					          pharoObject: method;
+					          name: method selector;
+					          description:
+						          ('&lt;/p>' join:
+								           (Character cr split: method sourceCode));
+					          privateComponent: {privateComponent};
+					          privateContract: association key;
+					          yourself ] ].
+		functions add: (CapellaMoleculeLogicalFunction new
+				 pharoObject: association key;
+				 name: 'Consumed ' , association key name;
+				 privateComponentTargetName: association value;
+				 inputs: inputs;
+				 yourself) ].
+	"provided services & parameters: outputs -> method"
+	self class allProvidedServices , self class allProvidedParameters
+		do: [ :class |
+			| outputs |
+			outputs := class methods collect: [ :m |
+				           | method |
+				           method := self class methodDict at: m selector.
+				           CapellaMoleculeFunctionOutputPort new
+					           pharoObject: method;
+					           name: m selector;
+					           description:
+						           ('&lt;/p>' join:
+								            (Character cr split: method sourceCode));
+					           privateComponent: self;
+					           privateContract: class;
+					           yourself ].
+			functions add: (CapellaMoleculeLogicalFunction new
+					 pharoObject: class;
+					 name: 'Provided ' , class name;
+					 outputs: outputs;
+					 yourself) ].
+	"produced events: outputs -> references"
+	self class allProducedEvents do: [ :class |
+		| outputs |
+		outputs := class methods flatCollect: [ :m |
+			           | methods |
+			           methods := SystemNavigation default
+				                      allReferencesTo: m selector
+				                      in: { self class }.
+			           methods collect: [ :method |
+				           CapellaMoleculeFunctionOutputPort new
+					           pharoObject: method;
+					           name: method selector;
+					           description:
+						           ('&lt;/p>' join:
+								            (Character cr split: method sourceCode));
+					           privateComponent: self;
+					           privateContract: class;
+					           yourself ] ].
+		functions add: (CapellaMoleculeLogicalFunction new
+				 pharoObject: class;
+				 name: 'Provided ' , class name;
+				 outputs: outputs;
+				 yourself) ].
+	"consumed events: inputs -> method"
+	self componentConnector eventsSubscribers associations do: [
+		:association |
+		| inputs |
+		inputs := association key methods collect: [ :m |
+			          | method |
+			          method := self class methodDict at: m selector.
+			          CapellaMoleculeFunctionInputPort new
+				          pharoObject: method;
+				          name: m selector;
+				          description:
+					          ('&lt;/p>' join:
+							           (Character cr split: method sourceCode));
+				          privateComponent:
+					          (MolComponentManager default locatorServices
+						           searchEventsSubscriberFor: association key
+						           named: association value) originators;
+				          privateContract: association key;
+				          yourself ].
+		functions add: (CapellaMoleculeLogicalFunction new
+				 pharoObject: association key;
+				 name: 'Consumed ' , association key name;
+				 privateComponentTargetName: association value;
+				 inputs: inputs;
+				 yourself) ].
 
 	"functionalAllocations:
 	targetElement = function
 	sourceElement = logicalComponent"
-	ownedFunctionalAllocations := capellaFunctionsIn
-	                              , capellaFunctionsOut collect: [ :each |
-		                              CapellaMoleculeComponentFunctionalAllocation
-			                              new
-			                              targetElement: each;
-			                              sourceElement: component;
-			                              yourself ].
-	component ownedFunctionalAllocation: ownedFunctionalAllocations.
+	componentModel
+		name: self class name;
+		ownedFunctionalAllocation: (functions collect: [ :each |
+					 CapellaMoleculeComponentFunctionalAllocation new
+						 targetElement: each;
+						 sourceElement: componentModel;
+						 yourself ]).
 
-	part
+	partModel
 		pharoObject: self;
 		name: self class name;
-		abstractType: component.
-	^ part
+		abstractType: componentModel.
+
+	^ partModel
 ]
