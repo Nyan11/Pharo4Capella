@@ -5,7 +5,8 @@ Class {
 		'xmlDocument',
 		'currentNode',
 		'shouldExportEmptyMethods',
-		'shouldExportEmptyFunctions'
+		'shouldExportEmptyFunctions',
+		'functionsThatShouldNotBeExported'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -290,13 +291,24 @@ CapellaMoleculeExportToXMLVisitor class >> emptyXMLProject [
 '
 ]
 
+{ #category : 'accessing' }
+CapellaMoleculeExportToXMLVisitor >> functionsThatShouldNotBeExported [
+
+	^ functionsThatShouldNotBeExported
+]
+
 { #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> initialize [
 
 	super initialize.
 	xmlDocument := XMLDOMParser parse: self class emptyXMLProject.
+
+	self flag: #todo. "Does not work! + BUG"
 	shouldExportEmptyMethods := true.
+
+	self flag: #todo. "Does not work! + BUG"
 	shouldExportEmptyFunctions := false.
+	functionsThatShouldNotBeExported := Set new
 ]
 
 { #category : 'accessing' }
@@ -312,10 +324,22 @@ CapellaMoleculeExportToXMLVisitor >> shouldExportEmptyMethods [
 ]
 
 { #category : 'visiting' }
-CapellaMoleculeExportToXMLVisitor >> shouldExportFunctions: aCapellaMoleculeLogicalFunction [
+CapellaMoleculeExportToXMLVisitor >> shouldExportFunction: aCapellaMoleculeLogicalFunction [
 
 	self shouldExportEmptyFunctions ifTrue: [ ^ true ].
-	^ aCapellaMoleculeLogicalFunction ownedFunctions isNotEmpty or: [ aCapellaMoleculeLogicalFunction inputs isNotEmpty or: [ aCapellaMoleculeLogicalFunction outputs isNotEmpty ] ] 
+	(self functionsThatShouldNotBeExported includes:
+		 aCapellaMoleculeLogicalFunction) ifTrue: [ ^ false ].
+
+	aCapellaMoleculeLogicalFunction inputs ifNotEmpty: [ ^ true ].
+	aCapellaMoleculeLogicalFunction outputs ifNotEmpty: [ ^ true ].
+	aCapellaMoleculeLogicalFunction ownedFunctions ifEmpty: [ self functionsThatShouldNotBeExported add:
+			aCapellaMoleculeLogicalFunction.
+		^ false ].
+	(aCapellaMoleculeLogicalFunction ownedFunctions noneSatisfy: [ :each |
+		  self shouldExportFunction: each ]) ifTrue: [ self functionsThatShouldNotBeExported add:
+			aCapellaMoleculeLogicalFunction.
+		^ false ].
+	^ true
 ]
 
 { #category : 'visiting' }
@@ -331,7 +355,7 @@ CapellaMoleculeExportToXMLVisitor >> shouldExportMethod: aMethod [
 { #category : 'visiting' }
 CapellaMoleculeExportToXMLVisitor >> visitFunctionalAllocation: aCapellaMoleculeComponentFunctionalAllocation [
 
-	(self shouldExportFunctions: aCapellaMoleculeComponentFunctionalAllocation targetElement)
+	(self shouldExportFunction: aCapellaMoleculeComponentFunctionalAllocation targetElement)
 	ifFalse: [ ^ self ].
 	currentNode
 			addElementNamed: 'ownedFunctionalAllocation'
@@ -380,7 +404,7 @@ CapellaMoleculeExportToXMLVisitor >> visitLogicalComponent: aCapellaMoleculeLogi
 CapellaMoleculeExportToXMLVisitor >> visitLogicalFunction: aCapellaMoleculeLogicalFunction [
 
 	| rootNode |
-	(self shouldExportFunctions: aCapellaMoleculeLogicalFunction) ifFalse: [ ^ self ].
+	(self shouldExportFunction: aCapellaMoleculeLogicalFunction) ifFalse: [ ^ self ].
 	rootNode := currentNode.
 	currentNode := rootNode
 		               addElementNamed: 'ownedFunctions'
@@ -416,8 +440,8 @@ CapellaMoleculeExportToXMLVisitor >> visitModel: aCapellaMoleculeModel [
 
 	"visit logicalFunction and functionalExchanges"
 	pathToLogicalFunctions := XPath for: './/ownedLogicalFunctions'.
-	currentNode := (pathToLogicalFunctions in:
-		                         logicalArchitectureNode) first.
+	currentNode := (pathToLogicalFunctions in: logicalArchitectureNode)
+		               first.
 	aCapellaMoleculeModel functions do: [ :each |
 		each acceptVisitor: self ].
 	aCapellaMoleculeModel functionalExchanges do: [ :each |
@@ -425,11 +449,11 @@ CapellaMoleculeExportToXMLVisitor >> visitModel: aCapellaMoleculeModel [
 
 	"visit parts and components"
 	pathToLogicalComponents := XPath for: './/ownedLogicalComponents'.
-	currentNode := (pathToLogicalComponents in: logicalArchitectureNode) first.
+	currentNode := (pathToLogicalComponents in: logicalArchitectureNode)
+		               first.
 	aCapellaMoleculeModel parts do: [ :each | each acceptVisitor: self ].
 	aCapellaMoleculeModel componentTypes do: [ :each |
 		each acceptVisitor: self ].
-
 
 	"Add comment"
 	self xmlDocument addNodeFirst:

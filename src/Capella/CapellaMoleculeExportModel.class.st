@@ -17,7 +17,7 @@ Class {
 CapellaMoleculeExportModel class >> buildAndCopyCapellaProjectOfDeployedMoleculeComponents [
 
 	<script:
-	'Clipboard clipboardText: self buildCapellaProjectOfDeployedMoleculeComponents asString'>
+	'Clipboard clipboardText: self buildCapellaProjectOfDeployedMoleculeComponents xmlDocument asString'>
 	
 ]
 
@@ -30,28 +30,26 @@ CapellaMoleculeExportModel class >> buildCapellaProjectOfDeployedMoleculeCompone
 	model := self exportModelOfDeployedMoleculeComponents.
 	visitor := CapellaMoleculeExportToXMLVisitor new.
 	model acceptVisitor: visitor.
-	^ visitor xmlDocument
+	^ visitor
 ]
 
 { #category : 'as yet unclassified' }
 CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 
 	<script: 'self exportModelOfDeployedMoleculeComponents inspect'>
-	| homeServices moleculeComponents capellaComponentParts capellaComponentTypes capellaFunctions capellaParentFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary outputs inputs |
+	| capellaComponentParts capellaComponentTypes capellaFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary outputs inputs capellaParentFunctions |
 	"1: generate the component"
-	homeServices := MolComponentManager default homeServices.
-	moleculeComponents := homeServices deployedComponents flatCollect:
-		                      #values.
-	capellaComponentParts := moleculeComponents collect:
-		                         #asCapellaLogicalComponent.
+	capellaComponentParts := MolComponentManager default homeServices
+		                         deployedComponents flatCollect: [ :each |
+		                         each values collect: [ :comp |
+			                         comp asCapellaLogicalComponent ] ].
 	capellaComponentTypes := capellaComponentParts collect: #abstractType.
 
 
-	"2: create the parentFunctions and the functionalExchanges"
+	"2: create the functionalExchanges"
 	capellaFunctions := (capellaComponentTypes flatCollect:
 		                     #ownedFunctionalAllocation) collect:
 		                    #targetElement.
-
 	capellaParentFunctions := (capellaFunctions collect: #pharoObject)
 		                          asSet collect: [ :parent |
 		                          CapellaMoleculeLogicalFunction new
@@ -60,15 +58,18 @@ CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 				                          (capellaFunctions select: [ :child |
 						                           child pharoObject = parent ]);
 			                          yourself ].
+
 	outputs := capellaFunctions flatCollect: #outputs.
 	inputs := capellaFunctions flatCollect: #inputs.
 	capellaFunctionalExchange := inputs flatCollect: [ :input |
 		                             outputs
 			                             select: [ :output |
 				                             (input privateComponent includes:
-				                             output privateComponent) and: [
-					                             input privateContract
-					                             = output privateContract ] ]
+					                              output privateComponent) and: [
+					                             (output privateContractMethod
+						                              intersection:
+						                              input privateContractMethod)
+						                             isNotEmpty ] ]
 			                             thenCollect: [ :output |
 				                             CapellaMoleculeFunctionalExchange new
 					                             pharoObject: output pharoObject;

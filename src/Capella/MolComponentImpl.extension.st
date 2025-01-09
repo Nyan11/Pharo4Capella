@@ -3,10 +3,11 @@ Extension { #name : 'MolComponentImpl' }
 { #category : '*Capella' }
 MolComponentImpl >> asCapellaLogicalComponent [
 
-	| partModel componentModel functions |
+	| partModel componentModel functions inputFunctions outputFunctions |
 	componentModel := CapellaMoleculeLogicalComponent new.
 	partModel := CapellaMoleculePart new.
-	functions := OrderedCollection new.
+	inputFunctions := OrderedCollection new.
+	outputFunctions := OrderedCollection new.
 
 	"
 	---------------
@@ -17,7 +18,7 @@ MolComponentImpl >> asCapellaLogicalComponent [
 	(self componentConnector servicesProviders
 	 , self componentConnector parametersProviders) associations do: [
 		:association |
-		| inputs privateComponent |
+		| inputs privateComponent inputsWithoutDuplicates |
 		privateComponent := association key isComponentServices
 			                    ifTrue: [
 				                    MolComponentManager default locatorServices
@@ -41,12 +42,23 @@ MolComponentImpl >> asCapellaLogicalComponent [
 								           (Character cr split: method sourceCode));
 					          privateComponent: { privateComponent };
 					          privateContract: association key;
+					          privateContractMethod: { m };
 					          yourself ] ].
-		functions add: (CapellaMoleculeLogicalFunction new
+		inputsWithoutDuplicates := OrderedCollection new.
+		inputs do: [ :origin |
+			inputsWithoutDuplicates
+				detect: [ :unique | origin name = unique name ]
+				ifFound: [ :unique |
+					unique privateContractMethod:
+						unique privateContractMethod , origin privateContractMethod ]
+				ifNone: [ inputsWithoutDuplicates add: origin ] ].
+		inputFunctions add: (CapellaMoleculeLogicalFunction new
 				 pharoObject: association key;
-				 name: 'Consumed ' , association key name;
+				 name:
+					 'Consumed ' , association key name , ' by ' , self class name
+					 , ' named: ' , self componentName;
 				 privateComponentTargetName: association value;
-				 inputs: inputs;
+				 inputs: inputsWithoutDuplicates;
 				 yourself) ].
 	"consumed events: inputs -> method"
 	self componentConnector eventsSubscribers associations do: [
@@ -66,10 +78,13 @@ MolComponentImpl >> asCapellaLogicalComponent [
 						           searchEventsSubscriberFor: association key
 						           named: association value) originators;
 				          privateContract: association key;
+				          privateContractMethod: { m };
 				          yourself ].
-		functions add: (CapellaMoleculeLogicalFunction new
+		inputFunctions add: (CapellaMoleculeLogicalFunction new
 				 pharoObject: association key;
-				 name: 'Consumed ' , association key name;
+				 name:
+					 'Consumed ' , association key name , ' by ' , self class name
+					 , ' named: ' , self componentName;
 				 privateComponentTargetName: association value;
 				 inputs: inputs;
 				 yourself) ].
@@ -94,15 +109,18 @@ MolComponentImpl >> asCapellaLogicalComponent [
 								            (Character cr split: method sourceCode));
 					           privateComponent: self;
 					           privateContract: class;
+					           privateContractMethod: { m };
 					           yourself ].
-			functions add: (CapellaMoleculeLogicalFunction new
+			outputFunctions add: (CapellaMoleculeLogicalFunction new
 					 pharoObject: class;
-					 name: 'Provided ' , class name;
+					 name:
+						 'Provided ' , class name , ' by ' , self class name
+						 , ' named: ' , self componentName;
 					 outputs: outputs;
 					 yourself) ].
 	"produced events: outputs -> references"
 	self class allProducedEvents do: [ :class |
-		| outputs |
+		| outputs outputsWithoutDuplicates |
 		outputs := class methods flatCollect: [ :m |
 			           | methods |
 			           methods := SystemNavigation default
@@ -117,12 +135,69 @@ MolComponentImpl >> asCapellaLogicalComponent [
 								            (Character cr split: method sourceCode));
 					           privateComponent: self;
 					           privateContract: class;
+					           privateContractMethod: { m };
 					           yourself ] ].
-		functions add: (CapellaMoleculeLogicalFunction new
+		outputsWithoutDuplicates := OrderedCollection new.
+		outputs do: [ :origin |
+			outputsWithoutDuplicates
+				detect: [ :unique | origin name = unique name ]
+				ifFound: [ :unique |
+					unique privateContractMethod:
+						unique privateContractMethod , origin privateContractMethod ]
+				ifNone: [ outputsWithoutDuplicates add: origin ] ].
+		outputFunctions add: (CapellaMoleculeLogicalFunction new
 				 pharoObject: class;
-				 name: 'Provided ' , class name;
-				 outputs: outputs;
+				 name:
+					 'Provided ' , class name , ' by ' , self class name , ' named: '
+					 , self componentName;
+				 outputs: outputsWithoutDuplicates;
 				 yourself) ].
+	functions := inputFunctions , outputFunctions.
+
+	"Input on A if B output methods reference A output method selector."
+	outputFunctions do: [ :functionA |
+		outputFunctions do: [ :functionB |
+			functionA = functionB ifFalse: [
+				functionA outputs do: [ :outputA |
+					| references |
+					references := (SystemNavigation default
+						               allReferencesTo: outputA name
+						               in: { self class }) asSet.
+					functionB outputs do: [ :outputB |
+						references
+							select: [ :method | method selector = outputB name ]
+							thenDo: [ :method |
+								functionA inputs:
+									functionA inputs , { (CapellaMoleculeFunctionInputPort new
+										 pharoObject: outputB pharoObject;
+										 name: outputA name;
+										 description: outputA description;
+										 privateComponent: { self };
+										 privateContract: outputB;
+										 privateContractMethod: outputB privateContractMethod;
+										 yourself) } ] ] ] ] ] ].
+	"Ouputs on A if B input methods reference A input method selector."
+	inputFunctions do: [ :functionA |
+		inputFunctions do: [ :functionB |
+			functionA = functionB ifFalse: [
+				functionA inputs do: [ :inputA |
+					| references |
+					references := (SystemNavigation default
+						               allReferencesTo: inputA name
+						               in: { self class }) asSet.
+					functionB inputs do: [ :inputB |
+						references
+							select: [ :method | method selector = inputB name ]
+							thenDo: [ :method |
+								functionA inputs:
+									functionA inputs , { (CapellaMoleculeFunctionOutputPort new
+										 pharoObject: inputB pharoObject;
+										 name: inputB name;
+										 description: inputB description;
+										 privateComponent: self;
+										 privateContract: inputB;
+										 privateContractMethod: inputB privateContractMethod;
+										 yourself) } ] ] ] ] ] ].
 
 	"functionalAllocations:
 	targetElement = function

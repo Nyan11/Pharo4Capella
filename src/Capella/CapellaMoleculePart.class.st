@@ -42,7 +42,9 @@ CapellaMoleculePart >> name: anObject [
 { #category : 'as yet unclassified' }
 CapellaMoleculePart >> xmlAttributes [
 
-	^ super xmlAttributes , { ('name' -> self name) . ('abstractType' -> self abstractType id printString) }
+	^ super xmlAttributes , {
+		  ('name' -> self name).
+		  ('abstractType' -> ('#' , self abstractType id printString)) }
 ]
 
 { #category : 'as yet unclassified' }
