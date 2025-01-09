@@ -10,6 +10,11 @@ Class {
 	#tag : 'molecule'
 }
 
+{ #category : 'visiting' }
+CapellaMoleculeComponentFunctionalAllocation >> acceptVisitor: aCapellaMoleculeExportToXMLVisitor [ 
+	aCapellaMoleculeExportToXMLVisitor visitFunctionalAllocation: self.
+]
+
 { #category : 'accessing' }
 CapellaMoleculeComponentFunctionalAllocation >> sourceElement [
 

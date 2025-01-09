@@ -8,6 +8,11 @@ MolComponentImpl >> asCapellaLogicalComponent [
 	partModel := CapellaMoleculePart new.
 	functions := OrderedCollection new.
 
+	"
+	---------------
+	     INPUTS
+	---------------
+	"
 	"consumed services & parameters: inputs -> references"
 	(self componentConnector servicesProviders
 	 , self componentConnector parametersProviders) associations do: [
@@ -34,7 +39,7 @@ MolComponentImpl >> asCapellaLogicalComponent [
 					          description:
 						          ('&lt;/p>' join:
 								           (Character cr split: method sourceCode));
-					          privateComponent: {privateComponent};
+					          privateComponent: { privateComponent };
 					          privateContract: association key;
 					          yourself ] ].
 		functions add: (CapellaMoleculeLogicalFunction new
@@ -43,13 +48,44 @@ MolComponentImpl >> asCapellaLogicalComponent [
 				 privateComponentTargetName: association value;
 				 inputs: inputs;
 				 yourself) ].
+	"consumed events: inputs -> method"
+	self componentConnector eventsSubscribers associations do: [
+		:association |
+		| inputs |
+		inputs := association key methods collect: [ :m |
+			          | method |
+			          method := self class lookupSelector: m selector.
+			          CapellaMoleculeFunctionInputPort new
+				          pharoObject: method;
+				          name: m selector;
+				          description:
+					          ('&lt;/p>' join:
+							           (Character cr split: method sourceCode));
+				          privateComponent:
+					          (MolComponentManager default locatorServices
+						           searchEventsSubscriberFor: association key
+						           named: association value) originators;
+				          privateContract: association key;
+				          yourself ].
+		functions add: (CapellaMoleculeLogicalFunction new
+				 pharoObject: association key;
+				 name: 'Consumed ' , association key name;
+				 privateComponentTargetName: association value;
+				 inputs: inputs;
+				 yourself) ].
+
+	"
+	---------------
+	    OUTPUTS
+	---------------
+	"
 	"provided services & parameters: outputs -> method"
 	self class allProvidedServices , self class allProvidedParameters
 		do: [ :class |
 			| outputs |
 			outputs := class methods collect: [ :m |
 				           | method |
-				           method := self class methodDict at: m selector.
+				           method := self class lookupSelector: m selector.
 				           CapellaMoleculeFunctionOutputPort new
 					           pharoObject: method;
 					           name: m selector;
@@ -86,31 +122,6 @@ MolComponentImpl >> asCapellaLogicalComponent [
 				 pharoObject: class;
 				 name: 'Provided ' , class name;
 				 outputs: outputs;
-				 yourself) ].
-	"consumed events: inputs -> method"
-	self componentConnector eventsSubscribers associations do: [
-		:association |
-		| inputs |
-		inputs := association key methods collect: [ :m |
-			          | method |
-			          method := self class methodDict at: m selector.
-			          CapellaMoleculeFunctionInputPort new
-				          pharoObject: method;
-				          name: m selector;
-				          description:
-					          ('&lt;/p>' join:
-							           (Character cr split: method sourceCode));
-				          privateComponent:
-					          (MolComponentManager default locatorServices
-						           searchEventsSubscriberFor: association key
-						           named: association value) originators;
-				          privateContract: association key;
-				          yourself ].
-		functions add: (CapellaMoleculeLogicalFunction new
-				 pharoObject: association key;
-				 name: 'Consumed ' , association key name;
-				 privateComponentTargetName: association value;
-				 inputs: inputs;
 				 yourself) ].
 
 	"functionalAllocations:

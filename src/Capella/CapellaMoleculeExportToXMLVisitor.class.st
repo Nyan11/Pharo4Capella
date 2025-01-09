@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'xmlDocument',
 		'currentNode',
-		'shouldExportEmptyMethods'
+		'shouldExportEmptyMethods',
+		'shouldExportEmptyFunctions'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -294,13 +295,27 @@ CapellaMoleculeExportToXMLVisitor >> initialize [
 
 	super initialize.
 	xmlDocument := XMLDOMParser parse: self class emptyXMLProject.
-	shouldExportEmptyMethods := true
+	shouldExportEmptyMethods := true.
+	shouldExportEmptyFunctions := false.
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeExportToXMLVisitor >> shouldExportEmptyFunctions [
+
+	^ shouldExportEmptyFunctions
 ]
 
 { #category : 'accessing' }
 CapellaMoleculeExportToXMLVisitor >> shouldExportEmptyMethods [
 
 	^ shouldExportEmptyMethods
+]
+
+{ #category : 'visiting' }
+CapellaMoleculeExportToXMLVisitor >> shouldExportFunctions: aCapellaMoleculeLogicalFunction [
+
+	self shouldExportEmptyFunctions ifTrue: [ ^ true ].
+	^ aCapellaMoleculeLogicalFunction ownedFunctions isNotEmpty or: [ aCapellaMoleculeLogicalFunction inputs isNotEmpty or: [ aCapellaMoleculeLogicalFunction outputs isNotEmpty ] ] 
 ]
 
 { #category : 'visiting' }
@@ -311,6 +326,16 @@ CapellaMoleculeExportToXMLVisitor >> shouldExportMethod: aMethod [
 	aMethod ast body children size > 1 ifTrue: [ ^ true ].
 	aMethod ast body children first isMessage ifFalse: [ ^ true ].
 	^ aMethod ast body children first selector ~= #explicitRequirement
+]
+
+{ #category : 'visiting' }
+CapellaMoleculeExportToXMLVisitor >> visitFunctionalAllocation: aCapellaMoleculeComponentFunctionalAllocation [
+
+	(self shouldExportFunctions: aCapellaMoleculeComponentFunctionalAllocation targetElement)
+	ifFalse: [ ^ self ].
+	currentNode
+			addElementNamed: 'ownedFunctionalAllocation'
+			attributes: aCapellaMoleculeComponentFunctionalAllocation xmlAttributes
 ]
 
 { #category : 'visiting' }
@@ -339,36 +364,35 @@ CapellaMoleculeExportToXMLVisitor >> visitLogicalComponent: aCapellaMoleculeLogi
 	| rootNode |
 	rootNode := currentNode.
 	currentNode := currentNode
-		                 addElementNamed: 'ownedLogicalComponents'
-		                 attributes:
-		                 aCapellaMoleculeLogicalComponent xmlAttributes.
+		               addElementNamed: 'ownedLogicalComponents'
+		               attributes:
+		               aCapellaMoleculeLogicalComponent xmlAttributes.
 	aCapellaMoleculeLogicalComponent ownedFeatures do: [ :each |
 		each acceptVisitor: self ].
 	aCapellaMoleculeLogicalComponent ownedLogicalComponents do: [ :each |
 		each acceptVisitor: self ].
 	aCapellaMoleculeLogicalComponent ownedFunctionalAllocation do: [
-		:each |
-		currentNode
-			addElementNamed: 'ownedFunctionalAllocation'
-			attributes: each xmlAttributes ].
-	currentNode := rootNode.
+		:each | each acceptVisitor: self ].
+	currentNode := rootNode
 ]
 
 { #category : 'visiting' }
 CapellaMoleculeExportToXMLVisitor >> visitLogicalFunction: aCapellaMoleculeLogicalFunction [
 
 	| rootNode |
+	(self shouldExportFunctions: aCapellaMoleculeLogicalFunction) ifFalse: [ ^ self ].
 	rootNode := currentNode.
 	currentNode := rootNode
-		        addElementNamed: 'ownedFunctions'
-		        attributes: aCapellaMoleculeLogicalFunction xmlAttributes.
+		               addElementNamed: 'ownedFunctions'
+		               attributes:
+		               aCapellaMoleculeLogicalFunction xmlAttributes.
 	aCapellaMoleculeLogicalFunction ownedFunctions do: [ :each |
 		each acceptVisitor: self ].
 	aCapellaMoleculeLogicalFunction inputs do: [ :each |
 		each acceptVisitor: self ].
 	aCapellaMoleculeLogicalFunction outputs do: [ :each |
 		each acceptVisitor: self ].
-	currentNode := rootNode.
+	currentNode := rootNode
 ]
 
 { #category : 'building' }
