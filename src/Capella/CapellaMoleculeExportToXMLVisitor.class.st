@@ -306,8 +306,7 @@ CapellaMoleculeExportToXMLVisitor >> initialize [
 	self flag: #todo. "Does not work! + BUG"
 	shouldExportEmptyMethods := true.
 
-	self flag: #todo. "Does not work! + BUG"
-	shouldExportEmptyFunctions := false.
+	shouldExportEmptyFunctions := true.
 	functionsThatShouldNotBeExported := Set new
 ]
 

@@ -3,6 +3,128 @@ Extension { #name : 'MolComponentImpl' }
 { #category : '*Capella' }
 MolComponentImpl >> asCapellaLogicalComponent [
 
+	| partModel componentModel class allSelectors traitDict traitSet allTraitMethods logicalFunctionsModel |
+	class := self class.
+	componentModel := CapellaMoleculeLogicalComponent new
+		                  pharoObject: self;
+		                  name: class name;
+		                  yourself.
+	partModel := CapellaMoleculePart new
+		             pharoObject: self;
+		             name: class name;
+		             abstractType: componentModel;
+		             yourself.
+
+
+	"Logical Functions"
+	allSelectors := class allSelectorsWithout: {
+			                ProtoObject.
+			                Object }.
+	class allProducedEvents do: [ :each |  ].
+
+	traitDict := Dictionary new.
+	traitSet := Set new.
+	traitSet addAll: class allProducedEvents.
+	traitSet addAll: class allConsumedEvents.
+	traitSet addAll: class allProvidedParameters.
+	traitSet addAll: class allUsedParameters.
+	traitSet addAll: class allProvidedServices.
+	traitSet addAll: class allUsedServices.
+	traitSet addAll: class allTraits.
+	traitSet addAll:
+		(class allSuperclasses flatCollect: [ :each | each allTraits ]).
+	traitSet do: [ :trait |
+		| selectors |
+		selectors := trait localSelectors.
+		selectors ifNotEmpty: [
+			traitDict at: trait put: trait localSelectors ] ].
+
+	allTraitMethods := traitDict flatCollect: #yourself.
+	allTraitMethods removeAllFoundIn: allSelectors.
+	allTraitMethods ifNotEmpty: [
+		traitDict at: class put: allTraitMethods ].
+
+	logicalFunctionsModel := traitDict associations collect: [ :asso |
+		                         CapellaMoleculeLogicalFunction new
+			                         pharoObject: asso key;
+			                         name:
+				                         asso key name , 'for: ' , class name
+				                         , ' named: ' , self componentName;
+			                         yourself ].
+	componentModel ownedFunctionalAllocation:
+		(logicalFunctionsModel collect: [ :each |
+			 CapellaMoleculeComponentFunctionalAllocation new
+				 targetElement: each;
+				 sourceElement: componentModel;
+				 yourself ]).
+
+	^ partModel
+]
+
+{ #category : '*Capella' }
+MolComponentImpl >> asCapellaLogicalComponentNewSystem [
+
+	| partModel componentModel class allSelectors traitDict traitSet allTraitMethods logicalFunctionsModel |
+	class := self class.
+	componentModel := CapellaMoleculeLogicalComponent new
+		                  pharoObject: self;
+		                  name: class name;
+		                  yourself.
+	partModel := CapellaMoleculePart new
+		             pharoObject: self;
+		             name: class name;
+		             abstractType: componentModel;
+		             yourself.
+
+
+	"Logical Functions"
+	allSelectors := class allSelectorsWithout: {
+			                ProtoObject.
+			                Object }.
+	class allProducedEvents do: [ :each |  ].
+
+	traitDict := Dictionary new.
+	traitSet := Set new.
+	traitSet addAll: class allProducedEvents.
+	traitSet addAll: class allConsumedEvents.
+	traitSet addAll: class allProvidedParameters.
+	traitSet addAll: class allUsedParameters.
+	traitSet addAll: class allProvidedServices.
+	traitSet addAll: class allUsedServices.
+	traitSet addAll: class allTraits.
+	traitSet addAll:
+		(class allSuperclasses flatCollect: [ :each | each allTraits ]).
+	traitSet do: [ :trait |
+		| selectors |
+		selectors := trait localSelectors.
+		selectors ifNotEmpty: [
+			traitDict at: trait put: trait localSelectors ] ].
+
+	allTraitMethods := traitDict flatCollect: #yourself.
+	allTraitMethods removeAllFoundIn: allSelectors.
+	allTraitMethods ifNotEmpty: [
+		traitDict at: class put: allTraitMethods ].
+
+	logicalFunctionsModel := traitDict associations collect: [ :asso |
+		                         CapellaMoleculeLogicalFunction new
+			                         pharoObject: asso key;
+			                         name:
+				                         asso key name , 'for: ' , class name
+				                         , ' named: ' , self componentName;
+			                         yourself ].
+	componentModel ownedFunctionalAllocation:
+		(logicalFunctionsModel collect: [ :each |
+			 CapellaMoleculeComponentFunctionalAllocation new
+				 targetElement: each;
+				 sourceElement: componentModel;
+				 yourself ]).
+
+	^ partModel
+]
+
+{ #category : '*Capella' }
+MolComponentImpl >> asCapellaLogicalComponentOldSystem [
+
 	| partModel componentModel functions inputFunctions outputFunctions |
 	componentModel := CapellaMoleculeLogicalComponent new.
 	partModel := CapellaMoleculePart new.
