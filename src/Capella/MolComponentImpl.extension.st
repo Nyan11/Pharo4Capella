@@ -176,28 +176,6 @@ MolComponentImpl >> asCapellaLogicalComponent [
 										 privateContract: outputB;
 										 privateContractMethod: outputB privateContractMethod;
 										 yourself) } ] ] ] ] ] ].
-	"Ouputs on A if B input methods reference A input method selector."
-	inputFunctions do: [ :functionA |
-		inputFunctions do: [ :functionB |
-			functionA = functionB ifFalse: [
-				functionA inputs do: [ :inputA |
-					| references |
-					references := (SystemNavigation default
-						               allReferencesTo: inputA name
-						               in: { self class }) asSet.
-					functionB inputs do: [ :inputB |
-						references
-							select: [ :method | method selector = inputB name ]
-							thenDo: [ :method |
-								functionA inputs:
-									functionA inputs , { (CapellaMoleculeFunctionOutputPort new
-										 pharoObject: inputB pharoObject;
-										 name: inputB name;
-										 description: inputB description;
-										 privateComponent: self;
-										 privateContract: inputB;
-										 privateContractMethod: inputB privateContractMethod;
-										 yourself) } ] ] ] ] ] ].
 
 	"functionalAllocations:
 	targetElement = function

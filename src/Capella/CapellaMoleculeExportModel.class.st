@@ -5,8 +5,7 @@ Class {
 		'parts',
 		'componentType',
 		'function',
-		'functionalExchange',
-		'project'
+		'functionalExchange'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -27,17 +26,143 @@ CapellaMoleculeExportModel class >> buildCapellaProjectOfDeployedMoleculeCompone
 	<script:
 	'self buildCapellaProjectOfDeployedMoleculeComponents inspect'>
 	| model visitor |
-	model := self exportModelOfDeployedMoleculeComponents.
+	"model := self exportModelOfDeployedMoleculeComponents."
+	model := self exportEnrichedModelOfDeployedMoleculeComponents.
 	visitor := CapellaMoleculeExportToXMLVisitor new.
 	model acceptVisitor: visitor.
 	^ visitor
 ]
 
 { #category : 'as yet unclassified' }
+CapellaMoleculeExportModel class >> exportBasicModelOfDeployedMoleculeComponents [
+
+	<script: 'self exportBasicModelOfDeployedMoleculeComponents inspect'>
+	| capellaComponentParts capellaComponentTypes capellaFunctions capellaFunctionalExchange outputs inputs |
+	"1: generate the componentPart"
+	capellaComponentParts := MolComponentManager default homeServices
+		                         deployedComponents flatCollect: [ :each |
+		                         each values collect: [ :comp |
+			                         comp asCapellaLogicalComponent ] ].
+
+	"2: generate the componentType"
+	capellaComponentTypes := capellaComponentParts collect: #abstractType.
+
+	"3: create the functionalExchanges"
+	capellaFunctions := (capellaComponentTypes flatCollect:
+		                     #ownedFunctionalAllocation) collect:
+		                    #targetElement.
+
+	outputs := capellaFunctions flatCollect: #outputs.
+	inputs := capellaFunctions flatCollect: #inputs.
+	capellaFunctionalExchange := inputs flatCollect: [ :input |
+		                             outputs
+			                             select: [ :output |
+				                             (input privateComponent includes:
+					                              output privateComponent) and: [
+					                             (output privateContractMethod
+						                              intersection:
+						                              input privateContractMethod)
+						                             isNotEmpty ] ]
+			                             thenCollect: [ :output |
+				                             CapellaMoleculeFunctionalExchange new
+					                             pharoObject: output pharoObject;
+					                             description: output description;
+					                             source: output;
+					                             name: input pharoObject selector;
+					                             target: input;
+					                             yourself ] ].
+
+	"4: create the model"
+	^ self new
+		  parts: capellaComponentParts;
+		  componentType: capellaComponentTypes;
+		  function: capellaFunctions;
+		  functionalExchange: capellaFunctionalExchange;
+		  yourself
+]
+
+{ #category : 'as yet unclassified' }
+CapellaMoleculeExportModel class >> exportEnrichedModelOfDeployedMoleculeComponents [
+
+	<script:
+	'self exportEnrichedModelOfDeployedMoleculeComponents inspect'>
+	| capellaModel packageDictionary packageParts |
+	capellaModel := self exportBasicModelOfDeployedMoleculeComponents.
+
+
+	packageDictionary := Dictionary new.
+	capellaModel parts do: [ :part |
+		| partPackageTag |
+		partPackageTag := part pharoObject class packageTag.
+		packageDictionary
+			at: partPackageTag package
+			ifPresent: [ :dict |
+				dict
+					at: partPackageTag name
+					ifPresent: [ :col | col add: part ]
+					ifAbsentPut: [ OrderedCollection with: part ] ]
+			ifAbsentPut: [
+				Dictionary new
+					at: partPackageTag name put: (OrderedCollection with: part);
+					yourself ] ].
+
+	"dict(key: package value: dict(key: tag value: col(parts)))"
+	packageParts := packageDictionary associations collect: [ :asso |
+		                | packageComponent tagParts |
+		                tagParts := asso value associations collect: [
+			                            :tagDict |
+			                            | tagComponent |
+			                            tagComponent := CapellaMoleculeLogicalComponent
+				                                            new
+				                                            name: tagDict key;
+				                                            pharoObject:
+					                                            tagDict key;
+				                                            ownedFeatures:
+					                                            tagDict value;
+				
+				                                            ownedLogicalComponents:
+					                                            (tagDict value
+						                                             collect:
+							                                             #abstractType);
+				                                            yourself.
+
+			                            CapellaMoleculePart new
+				                            name: tagDict key;
+				                            pharoObject: tagDict key;
+				                            summary:
+					                            'I am a tag and i can contain multiple components.';
+				                            abstractType: tagComponent;
+				                            yourself ].
+		                packageComponent := CapellaMoleculeLogicalComponent
+			                                    new
+			                                    name: asso key name;
+			                                    pharoObject: asso key;
+			                                    ownedFeatures: tagParts;
+			                                    ownedLogicalComponents:
+				                                    (tagParts collect:
+						                                     #abstractType);
+			                                    yourself.
+
+		                CapellaMoleculePart new
+			                name: asso key name;
+			                pharoObject: asso key;
+			                summary:
+				                'I am a package that contains multiple tags, each tag can contain multiple components.';
+			                abstractType: packageComponent;
+			                yourself ].
+
+	capellaModel
+		parts: packageParts;
+		componentType: (packageParts collect: #abstractType).
+
+	^ capellaModel
+]
+
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 
 	<script: 'self exportModelOfDeployedMoleculeComponents inspect'>
-	| capellaComponentParts capellaComponentTypes capellaFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary outputs inputs capellaParentFunctions |
+	| capellaComponentParts capellaComponentTypes capellaFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary outputs inputs capellaParentFunctions blElementParts blElementComponent blElementPart |
 	"1: generate the component"
 	capellaComponentParts := MolComponentManager default homeServices
 		                         deployedComponents flatCollect: [ :each |
@@ -113,6 +238,26 @@ CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 		capellaComponentParts add: part.
 		capellaComponentTypes add: component ].
 
+	"9: create the space component"
+	blElementParts := capellaComponentParts select: [ :each |
+		                  each pharoObject isKindOf: BlElement ].
+	capellaComponentParts removeAll: blElementParts.
+	capellaComponentTypes removeAll:
+		(blElementParts collect: #abstractType).
+	blElementComponent := CapellaMoleculeLogicalComponent new
+		                      name: 'Graphical elements';
+		                      ownedFeatures: blElementParts;
+		                      ownedLogicalComponents:
+			                      (blElementParts collect: #abstractType);
+		                      yourself.
+	blElementPart := CapellaMoleculePart new
+		                 name: 'Graphical elements';
+		                 abstractType: blElementComponent;
+		                 yourself.
+
+	capellaComponentParts add: blElementPart.
+	capellaComponentTypes add: blElementPart abstractType.
+
 	"9: create the model"
 	^ self new
 		  parts: capellaComponentParts;
@@ -168,9 +313,4 @@ CapellaMoleculeExportModel >> parts [
 { #category : 'as yet unclassified' }
 CapellaMoleculeExportModel >> parts: aCollection [ 
 	parts:= aCollection 
-]
-
-{ #category : 'as yet unclassified' }
-CapellaMoleculeExportModel >> project [
-	^ project
 ]

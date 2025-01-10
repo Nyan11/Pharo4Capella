@@ -1,6 +1,6 @@
 Class {
 	#name : 'CapellaMoleculeExportToXMLVisitor',
-	#superclass : 'Object',
+	#superclass : 'CapellaMoleculeAbstractVisitor',
 	#instVars : [
 		'xmlDocument',
 		'currentNode',
@@ -291,7 +291,7 @@ CapellaMoleculeExportToXMLVisitor class >> emptyXMLProject [
 '
 ]
 
-{ #category : 'accessing' }
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> functionsThatShouldNotBeExported [
 
 	^ functionsThatShouldNotBeExported
@@ -311,19 +311,19 @@ CapellaMoleculeExportToXMLVisitor >> initialize [
 	functionsThatShouldNotBeExported := Set new
 ]
 
-{ #category : 'accessing' }
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> shouldExportEmptyFunctions [
 
 	^ shouldExportEmptyFunctions
 ]
 
-{ #category : 'accessing' }
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> shouldExportEmptyMethods [
 
 	^ shouldExportEmptyMethods
 ]
 
-{ #category : 'visiting' }
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> shouldExportFunction: aCapellaMoleculeLogicalFunction [
 
 	self shouldExportEmptyFunctions ifTrue: [ ^ true ].
@@ -342,7 +342,7 @@ CapellaMoleculeExportToXMLVisitor >> shouldExportFunction: aCapellaMoleculeLogic
 	^ true
 ]
 
-{ #category : 'visiting' }
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> shouldExportMethod: aMethod [
 
 	self shouldExportEmptyMethods ifTrue: [ ^ true ].
@@ -419,7 +419,7 @@ CapellaMoleculeExportToXMLVisitor >> visitLogicalFunction: aCapellaMoleculeLogic
 	currentNode := rootNode
 ]
 
-{ #category : 'building' }
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> visitModel: aCapellaMoleculeModel [
 	"
 	1. Access the Logical architerture of the empty project.
@@ -477,7 +477,7 @@ CapellaMoleculeExportToXMLVisitor >> visitPart: aCapellaMoleculePart [
 		             attributes: aCapellaMoleculePart xmlAttributes
 ]
 
-{ #category : 'accessing' }
+{ #category : 'as yet unclassified' }
 CapellaMoleculeExportToXMLVisitor >> xmlDocument [
 
 	^ xmlDocument
