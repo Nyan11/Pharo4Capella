@@ -352,10 +352,16 @@ CapellaMoleculeExportToXMLVisitor >> shouldExportMethod: aMethod [
 ]
 
 { #category : 'visiting' }
-CapellaMoleculeExportToXMLVisitor >> visitDataClass: aCapellaDataClass [ 
-	currentNode
-		addElementNamed: 'ownedClasses'
-		attributes: aCapellaDataClass xmlAttributes
+CapellaMoleculeExportToXMLVisitor >> visitDataClass: aCapellaDataClass [
+
+	| rootNode |
+	rootNode := currentNode.
+	currentNode := rootNode
+		             addElementNamed: 'ownedClasses'
+		             attributes: aCapellaDataClass xmlAttributes.
+	aCapellaDataClass superDataClass ifNil: [ currentNode := rootNode. ^ self ].
+	aCapellaDataClass superDataClass acceptVisitor: self.
+	currentNode := rootNode
 ]
 
 { #category : 'visiting' }
@@ -370,6 +376,14 @@ CapellaMoleculeExportToXMLVisitor >> visitDataPackage: aCapellaDataPackage [
 	aCapellaDataPackage dataClasses do: [ :each |
 		each acceptVisitor: self ].
 	currentNode := rootNode
+]
+
+{ #category : 'visiting' }
+CapellaMoleculeExportToXMLVisitor >> visitDataSuperClass: aCapellaObject [
+
+	currentNode
+		               addElementNamed: 'ownedGeneralizations'
+		               attributes: aCapellaObject xmlAttributes
 ]
 
 { #category : 'visiting' }

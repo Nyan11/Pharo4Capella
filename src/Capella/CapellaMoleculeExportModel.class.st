@@ -30,7 +30,7 @@ CapellaMoleculeExportModel class >> buildCapellaProjectOfDeployedMoleculeCompone
 	"model := self exportModelOfDeployedMoleculeComponents."
 	model := self exportEnrichedModelOfDeployedMoleculeComponents.
 
-	classes := TObject withAllSubCapellaDataClasses.
+	classes := TObject withAllSubCapellaDataClasses , SmockAbstractData withAllSubCapellaDataClasses.
 	packages := (classes collect: #pharoPackage) asSet.
 	packages := packages collect: #asCapellaDataPackages.
 	classes do: [ :cls |

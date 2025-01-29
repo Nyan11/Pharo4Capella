@@ -2,7 +2,9 @@ Class {
 	#name : 'CapellaDataClass',
 	#superclass : 'CapellaMoleculeElement',
 	#instVars : [
-		'pharoPackage'
+		'pharoPackage',
+		'superDataClass',
+		'slots'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -25,6 +27,30 @@ CapellaDataClass >> pharoPackage [
 CapellaDataClass >> pharoPackage: anObject [
 
 	pharoPackage := anObject
+]
+
+{ #category : 'accessing' }
+CapellaDataClass >> slots [
+
+	^ slots
+]
+
+{ #category : 'accessing' }
+CapellaDataClass >> slots: anObject [
+
+	slots := anObject
+]
+
+{ #category : 'accessing' }
+CapellaDataClass >> superDataClass [
+
+	^ superDataClass
+]
+
+{ #category : 'accessing' }
+CapellaDataClass >> superDataClass: anObject [
+
+	superDataClass := anObject
 ]
 
 { #category : 'as yet unclassified' }
