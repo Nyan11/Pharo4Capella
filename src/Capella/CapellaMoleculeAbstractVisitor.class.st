@@ -7,6 +7,18 @@ Class {
 }
 
 { #category : 'visiting' }
+CapellaMoleculeAbstractVisitor >> visitDataClass: aCapellaDataClass [
+
+	self explicitRequirement
+]
+
+{ #category : 'visiting' }
+CapellaMoleculeAbstractVisitor >> visitDataPackage: aCapellaDataPackage [
+
+	self explicitRequirement
+]
+
+{ #category : 'visiting' }
 CapellaMoleculeAbstractVisitor >> visitFunctionalAllocation: aCapellaMoleculeComponentFunctionalAllocation [
 
 	self explicitRequirement

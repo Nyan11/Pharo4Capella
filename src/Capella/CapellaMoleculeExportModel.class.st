@@ -3,9 +3,10 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'parts',
-		'componentType',
-		'function',
-		'functionalExchange'
+		'componentTypes',
+		'functions',
+		'functionalExchanges',
+		'dataPackageAndClasses'
 	],
 	#category : 'Capella-molecule',
 	#package : 'Capella',
@@ -25,9 +26,19 @@ CapellaMoleculeExportModel class >> buildCapellaProjectOfDeployedMoleculeCompone
 
 	<script:
 	'self buildCapellaProjectOfDeployedMoleculeComponents inspect'>
-	| model visitor |
+	| model visitor classes packages |
 	"model := self exportModelOfDeployedMoleculeComponents."
 	model := self exportEnrichedModelOfDeployedMoleculeComponents.
+
+	classes := TObject withAllSubCapellaDataClasses.
+	packages := (classes collect: #pharoPackage) asSet.
+	packages := packages collect: #asCapellaDataPackages.
+	classes do: [ :cls |
+		packages do: [ :each |
+			each pharoObject = cls pharoPackage ifTrue: [
+				each addDataClass: cls ] ] ].
+	model dataPackageAndClasses: packages.
+
 	visitor := CapellaMoleculeExportToXMLVisitor new.
 	model acceptVisitor: visitor.
 	^ visitor
@@ -75,9 +86,9 @@ CapellaMoleculeExportModel class >> exportBasicModelOfDeployedMoleculeComponents
 	"4: create the model"
 	^ self new
 		  parts: capellaComponentParts;
-		  componentType: capellaComponentTypes;
-		  function: capellaFunctions;
-		  functionalExchange: capellaFunctionalExchange;
+		  componentTypes: capellaComponentTypes;
+		  functions: capellaFunctions;
+		  functionalExchanges: capellaFunctionalExchange;
 		  yourself
 ]
 
@@ -153,7 +164,7 @@ CapellaMoleculeExportModel class >> exportEnrichedModelOfDeployedMoleculeCompone
 
 	capellaModel
 		parts: packageParts;
-		componentType: (packageParts collect: #abstractType).
+		componentTypes: (packageParts collect: #abstractType).
 
 	^ capellaModel
 ]
@@ -162,7 +173,7 @@ CapellaMoleculeExportModel class >> exportEnrichedModelOfDeployedMoleculeCompone
 CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 
 	<script: 'self exportModelOfDeployedMoleculeComponents inspect'>
-	| capellaComponentParts capellaComponentTypes capellaFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary outputs inputs capellaParentFunctions blElementParts blElementComponent blElementPart |
+	| capellaComponentParts capellaComponentTypes capellaFunctions capellaFunctionalExchange allPicParts allPicComponents newPicParts picsDictionary outputs inputs capellaParentFunctions blElementParts blElementComponent blElementPart classes packages |
 	"1: generate the component"
 	capellaComponentParts := MolComponentManager default homeServices
 		                         deployedComponents flatCollect: [ :each |
@@ -258,12 +269,19 @@ CapellaMoleculeExportModel class >> exportModelOfDeployedMoleculeComponents [
 	capellaComponentParts add: blElementPart.
 	capellaComponentTypes add: blElementPart abstractType.
 
+	"10: Datas"
+	classes := TObject withAllSubCapellaDataClasses.
+	packages := (classes collect: #pharoPackage) asSet.
+	packages := packages collect: #asCapellaDataPackages.
+	classes do: [ :cls | (packages do: [ :each | (each pharoObject = cls pharoPackage) ifTrue: [ each addDataClass: cls ] ])  ].
+
 	"9: create the model"
 	^ self new
 		  parts: capellaComponentParts;
-		  componentType: capellaComponentTypes;
-		  function: capellaParentFunctions;
-		  functionalExchange: capellaFunctionalExchange;
+		  componentTypes: capellaComponentTypes;
+		  functions: capellaParentFunctions;
+		  functionalExchanges: capellaFunctionalExchange;
+		  dataPackageAndClasses: packages;
 		  yourself
 ]
 
@@ -275,34 +293,51 @@ CapellaMoleculeExportModel >> acceptVisitor: aVisitor [
 ]
 
 { #category : 'as yet unclassified' }
-CapellaMoleculeExportModel >> componentType: aCollection [ 
-	componentType:= aCollection 
-]
-
-{ #category : 'as yet unclassified' }
 CapellaMoleculeExportModel >> componentTypes [
-	^ componentType
+
+	^ componentTypes
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaMoleculeExportModel >> function: aCollection [ 
-	function:= aCollection 
+{ #category : 'accessing' }
+CapellaMoleculeExportModel >> componentTypes: aCollection [
+
+	componentTypes := aCollection
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaMoleculeExportModel >> functionalExchange: aCollection [ 
-	functionalExchange:= aCollection 
+{ #category : 'accessing' }
+CapellaMoleculeExportModel >> dataPackageAndClasses [
+
+	^ dataPackageAndClasses
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeExportModel >> dataPackageAndClasses: aCollection [
+
+	dataPackageAndClasses := aCollection
 ]
 
 { #category : 'as yet unclassified' }
 CapellaMoleculeExportModel >> functionalExchanges [
 
-	^ functionalExchange
+	^ functionalExchanges
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeExportModel >> functionalExchanges: aCollection [
+
+	functionalExchanges := aCollection
 ]
 
 { #category : 'as yet unclassified' }
 CapellaMoleculeExportModel >> functions [
-	^ function
+
+	^ functions
+]
+
+{ #category : 'accessing' }
+CapellaMoleculeExportModel >> functions: aCollection [
+
+	functions := aCollection
 ]
 
 { #category : 'as yet unclassified' }

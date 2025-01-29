@@ -352,6 +352,27 @@ CapellaMoleculeExportToXMLVisitor >> shouldExportMethod: aMethod [
 ]
 
 { #category : 'visiting' }
+CapellaMoleculeExportToXMLVisitor >> visitDataClass: aCapellaDataClass [ 
+	currentNode
+		addElementNamed: 'ownedClasses'
+		attributes: aCapellaDataClass xmlAttributes
+]
+
+{ #category : 'visiting' }
+CapellaMoleculeExportToXMLVisitor >> visitDataPackage: aCapellaDataPackage [
+
+	| rootNode |
+	rootNode := currentNode.
+	currentNode := rootNode
+		               addElementNamed: 'ownedDataPkgs'
+		               attributes:
+		               aCapellaDataPackage xmlAttributes.
+	aCapellaDataPackage dataClasses do: [ :each |
+		each acceptVisitor: self ].
+	currentNode := rootNode
+]
+
+{ #category : 'visiting' }
 CapellaMoleculeExportToXMLVisitor >> visitFunctionalAllocation: aCapellaMoleculeComponentFunctionalAllocation [
 
 	(self shouldExportFunction: aCapellaMoleculeComponentFunctionalAllocation targetElement)
@@ -431,7 +452,7 @@ CapellaMoleculeExportToXMLVisitor >> visitModel: aCapellaMoleculeModel [
 	4. Add the commentary on the first index of the document.
 	"
 
-	| logicalArchitectureNode pathToLogicalArchitecture pathToLogicalFunctions pathToLogicalComponents |
+	| logicalArchitectureNode pathToLogicalArchitecture pathToLogicalFunctions pathToLogicalComponents pathToDataPkg |
 	pathToLogicalArchitecture := XPath for:
 		                             './/ownedArchitectures[@xsi:type="org.polarsys.capella.core.data.la:LogicalArchitecture"]'.
 	logicalArchitectureNode := (pathToLogicalArchitecture in:
@@ -452,6 +473,13 @@ CapellaMoleculeExportToXMLVisitor >> visitModel: aCapellaMoleculeModel [
 		               first.
 	aCapellaMoleculeModel parts do: [ :each | each acceptVisitor: self ].
 	aCapellaMoleculeModel componentTypes do: [ :each |
+		each acceptVisitor: self ].
+
+	"visit data"
+	pathToDataPkg := XPath for: './/ownedDataPkg'.
+	currentNode := (pathToDataPkg in: logicalArchitectureNode)
+		               first.
+	aCapellaMoleculeModel dataPackageAndClasses do: [ :each |
 		each acceptVisitor: self ].
 
 	"Add comment"

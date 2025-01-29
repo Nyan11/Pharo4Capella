@@ -2,6 +2,7 @@ Extension { #name : 'MolComponentImpl' }
 
 { #category : '*Capella' }
 MolComponentImpl >> asCapellaLogicalComponent [
+	"*Capella"
 
 	| partModel componentModel class allSelectors traitDict traitSet allTraitMethods logicalFunctionsModel |
 	class := self class.
@@ -48,7 +49,7 @@ MolComponentImpl >> asCapellaLogicalComponent [
 		                         CapellaMoleculeLogicalFunction new
 			                         pharoObject: asso key;
 			                         name:
-				                         asso key name , 'for: ' , class name
+				                         asso key name , ' for: ' , class name
 				                         , ' named: ' , self componentName;
 			                         yourself ].
 	componentModel ownedFunctionalAllocation:
