@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaSystemMission',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaSystemMission',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'name',
 		'involvments',
@@ -12,37 +12,37 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaSystemMission >> capabilities [
+OldCapellaSystemMission >> capabilities [
 
 	^ capabilities
 ]
 
 { #category : 'accessing' }
-CapellaSystemMission >> capabilities: anObject [
+OldCapellaSystemMission >> capabilities: anObject [
 
 	capabilities := anObject
 ]
 
 { #category : 'accessing' }
-CapellaSystemMission >> involvments [
+OldCapellaSystemMission >> involvments [
 
 	^ involvments
 ]
 
 { #category : 'accessing' }
-CapellaSystemMission >> involvments: anObject [
+OldCapellaSystemMission >> involvments: anObject [
 
 	involvments := anObject
 ]
 
 { #category : 'accessing' }
-CapellaSystemMission >> name [
+OldCapellaSystemMission >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaSystemMission >> name: anObject [
+OldCapellaSystemMission >> name: anObject [
 
 	name := anObject
 ]

@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaCapability',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaCapability',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'name',
 		'involved',
@@ -12,19 +12,19 @@ Class {
 }
 
 { #category : 'adding' }
-CapellaCapability >> addInvolved: aCapellaEntity [
+OldCapellaCapability >> addInvolved: aCapellaEntity [
 
 	involved add: aCapellaEntity
 ]
 
 { #category : 'adding' }
-CapellaCapability >> addScenario: anObject [
+OldCapellaCapability >> addScenario: anObject [
 
 	scenarios add: anObject
 ]
 
 { #category : 'initialization' }
-CapellaCapability >> initialize [
+OldCapellaCapability >> initialize [
 
 	super initialize.
 	involved := OrderedCollection new.
@@ -32,31 +32,31 @@ CapellaCapability >> initialize [
 ]
 
 { #category : 'accessing' }
-CapellaCapability >> involved [
+OldCapellaCapability >> involved [
 
 	^ involved
 ]
 
 { #category : 'accessing' }
-CapellaCapability >> involved: aCollection [
+OldCapellaCapability >> involved: aCollection [
 
 	involved := aCollection
 ]
 
 { #category : 'accessing' }
-CapellaCapability >> name [
+OldCapellaCapability >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaCapability >> name: anObject [
+OldCapellaCapability >> name: anObject [
 
 	name := anObject
 ]
 
 { #category : 'accessing' }
-CapellaCapability >> scenarios [
+OldCapellaCapability >> scenarios [
 
 	^ scenarios
 ]

@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaFunctionalChainInvolvment',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaFunctionalChainInvolvment',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'activity',
 		'source',
@@ -12,37 +12,37 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaFunctionalChainInvolvment >> activity [
+OldCapellaFunctionalChainInvolvment >> activity [
 
 	^ activity
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChainInvolvment >> activity: anObject [
+OldCapellaFunctionalChainInvolvment >> activity: anObject [
 
 	activity := anObject
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChainInvolvment >> source [
+OldCapellaFunctionalChainInvolvment >> source [
 
 	^ source
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChainInvolvment >> source: anObject [
+OldCapellaFunctionalChainInvolvment >> source: anObject [
 
 	source := anObject
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChainInvolvment >> target [
+OldCapellaFunctionalChainInvolvment >> target [
 
 	^ target
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChainInvolvment >> target: anObject [
+OldCapellaFunctionalChainInvolvment >> target: anObject [
 
 	target := anObject
 ]

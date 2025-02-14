@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaInstance',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaInstance',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'representedInstance'
 	],
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaInstance >> representedInstance [
+OldCapellaInstance >> representedInstance [
 
 	^ representedInstance
 ]
 
 { #category : 'accessing' }
-CapellaInstance >> representedInstance: anObject [
+OldCapellaInstance >> representedInstance: anObject [
 
 	representedInstance := anObject
 ]

@@ -10,7 +10,7 @@ Class {
 CapellaImportWorkerOperationalCapabilities >> addCapabilityFromNode: aXMLElement into: aCapellaModel [
 
 	| capability |
-	capability := CapellaCapability new.
+	capability := OldCapellaCapability new.
 	capability id: (aXMLElement attributeAt: #id).
 	capability name: (aXMLElement attributeAt: #name).
 	aCapellaModel addOperationalCapability: capability

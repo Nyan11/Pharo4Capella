@@ -19,7 +19,7 @@ TCapellaImportWorkerForComponents >> addComponentsModelFrom: aXMLElement into: a
 	realizationsPath := XPath for: 'ownedComponentRealizations'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
-		component := CapellaComponent new.
+		component := OldCapellaComponent new.
 		component id: (systemComponent attributeAt: #id).
 		component name: (systemComponent attributeAt: #name).
 		realizations := (realizationsPath in: systemComponent) collect: [

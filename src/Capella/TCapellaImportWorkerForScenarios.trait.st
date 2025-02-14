@@ -9,7 +9,7 @@ Trait {
 TCapellaImportWorkerForScenarios >> addScenarioFromNode: aXMLElement into: aCapellaModel [
 
 	| scenario path nodes |
-	scenario := CapellaScenario new.
+	scenario := OldCapellaScenario new.
 	scenario id: (aXMLElement attributeAt: #id).
 	scenario name: (aXMLElement attributeAt: #name).
 	aCapellaModel addObject: scenario.
@@ -19,7 +19,7 @@ TCapellaImportWorkerForScenarios >> addScenarioFromNode: aXMLElement into: aCape
 	nodes := path in: aXMLElement.
 	nodes do: [ :node |
 		| instanceOf |
-		instanceOf := CapellaInstance new.
+		instanceOf := OldCapellaInstance new.
 		instanceOf id: (node attributeAt: #id).
 		instanceOf representedInstance: (aCapellaModel objectAt:
 				 (node attributeAt: #representedInstance) allButFirst).
@@ -30,7 +30,7 @@ TCapellaImportWorkerForScenarios >> addScenarioFromNode: aXMLElement into: aCape
 	nodes := path in: aXMLElement.
 	nodes do: [ :node |
 		| events |
-		events := CapellaEvents new.
+		events := OldCapellaEvents new.
 		events id: (node attributeAt: #id).
 		(node attributeAt: #operation) isNotEmpty ifTrue: [
 			events operation:
@@ -43,7 +43,7 @@ TCapellaImportWorkerForScenarios >> addScenarioFromNode: aXMLElement into: aCape
 	nodes := path in: aXMLElement.
 	nodes do: [ :node |
 		| interaction |
-		interaction := CapellaInteractionFragments new.
+		interaction := OldCapellaInteractionFragments new.
 		interaction id: (node attributeAt: #id).
 		interaction name: (node attributeAt: #name).
 		(Character space split: (node attributeAt: #coveredInstanceRoles))
@@ -60,7 +60,7 @@ TCapellaImportWorkerForScenarios >> addScenarioFromNode: aXMLElement into: aCape
 	nodes := path in: aXMLElement.
 	nodes do: [ :node |
 		| timeLapses |
-		timeLapses := CapellaTimeLapses new.
+		timeLapses := OldCapellaTimeLapses new.
 		timeLapses id: (node attributeAt: #id).
 		timeLapses start:
 			(aCapellaModel objectAt: (node attributeAt: #start) allButFirst).

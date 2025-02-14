@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaTimeLapses',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaTimeLapses',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'start',
 		'finish',
@@ -12,37 +12,37 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaTimeLapses >> finish [
+OldCapellaTimeLapses >> finish [
 
 	^ finish
 ]
 
 { #category : 'accessing' }
-CapellaTimeLapses >> finish: anObject [
+OldCapellaTimeLapses >> finish: anObject [
 
 	finish := anObject
 ]
 
 { #category : 'accessing' }
-CapellaTimeLapses >> relatedAbstractFunction [
+OldCapellaTimeLapses >> relatedAbstractFunction [
 
 	^ relatedAbstractFunction
 ]
 
 { #category : 'accessing' }
-CapellaTimeLapses >> relatedAbstractFunction: anObject [
+OldCapellaTimeLapses >> relatedAbstractFunction: anObject [
 
 	relatedAbstractFunction := anObject
 ]
 
 { #category : 'accessing' }
-CapellaTimeLapses >> start [
+OldCapellaTimeLapses >> start [
 
 	^ start
 ]
 
 { #category : 'accessing' }
-CapellaTimeLapses >> start: anObject [
+OldCapellaTimeLapses >> start: anObject [
 
 	start := anObject
 ]

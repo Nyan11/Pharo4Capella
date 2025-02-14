@@ -15,7 +15,7 @@ CapellaImportWorkerPhysicalCapabilities >> extractCapabilityModelFrom: aXMLEleme
 		                   'ownedCapabilityRealizationInvolvements'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
-		capability := CapellaCapability new.
+		capability := OldCapellaCapability new.
 		capability id: (systemComponent attributeAt: #id).
 		capability name: (systemComponent attributeAt: #name).
 		involvments := (involvmentsPath in: systemComponent) collect: [

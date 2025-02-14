@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaScenario',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaScenario',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'name',
 		'timeLapses',
@@ -14,31 +14,31 @@ Class {
 }
 
 { #category : 'initialization' }
-CapellaScenario >> addEvents: anObject [
+OldCapellaScenario >> addEvents: anObject [
 
 	events add: anObject
 ]
 
 { #category : 'initialization' }
-CapellaScenario >> addInstances: anObject [
+OldCapellaScenario >> addInstances: anObject [
 
 	instances add: anObject
 ]
 
 { #category : 'initialization' }
-CapellaScenario >> addInteractionFragments: anObject [
+OldCapellaScenario >> addInteractionFragments: anObject [
 
 	interactionFragments add: anObject
 ]
 
 { #category : 'initialization' }
-CapellaScenario >> addTimeLapses: anObject [
+OldCapellaScenario >> addTimeLapses: anObject [
 
 	timeLapses add: anObject
 ]
 
 { #category : 'initialization' }
-CapellaScenario >> initialize [ 
+OldCapellaScenario >> initialize [ 
 
 	super initialize.
 	timeLapses := OrderedCollection new.
@@ -48,13 +48,13 @@ CapellaScenario >> initialize [
 ]
 
 { #category : 'accessing' }
-CapellaScenario >> name [
+OldCapellaScenario >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaScenario >> name: anObject [
+OldCapellaScenario >> name: anObject [
 
 	name := anObject
 ]

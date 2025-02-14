@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaFunction',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaFunction',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'name',
 		'subFunctions'
@@ -11,38 +11,38 @@ Class {
 }
 
 { #category : 'adding' }
-CapellaFunction >> addSubFunction: anObject [
+OldCapellaFunction >> addSubFunction: anObject [
 
 	subFunctions add: anObject
 ]
 
 { #category : 'initialization' }
-CapellaFunction >> initialize [
+OldCapellaFunction >> initialize [
 
 	super initialize.
 	subFunctions := OrderedCollection new
 ]
 
 { #category : 'accessing' }
-CapellaFunction >> name [
+OldCapellaFunction >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaFunction >> name: anObject [
+OldCapellaFunction >> name: anObject [
 
 	name := anObject
 ]
 
 { #category : 'accessing' }
-CapellaFunction >> subFunctions [
+OldCapellaFunction >> subFunctions [
 
 	^ subFunctions
 ]
 
 { #category : 'accessing' }
-CapellaFunction >> subFunctions: anObject [
+OldCapellaFunction >> subFunctions: anObject [
 
 	subFunctions := anObject
 ]

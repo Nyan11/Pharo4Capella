@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaEntity',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaEntity',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'name',
 		'subEntities',
@@ -12,30 +12,30 @@ Class {
 }
 
 { #category : 'adding' }
-CapellaEntity >> addOperationalActivity: anObject [
+OldCapellaEntity >> addOperationalActivity: anObject [
 
 	allocatedOperationActivities add: anObject
 ]
 
 { #category : 'adding' }
-CapellaEntity >> addSubEntity: aCapellaEntity [
+OldCapellaEntity >> addSubEntity: aCapellaEntity [
 
 	subEntities add: aCapellaEntity
 ]
 
 { #category : 'accessing' }
-CapellaEntity >> allocatedOperationActivities [
+OldCapellaEntity >> allocatedOperationActivities [
 	^ allocatedOperationActivities
 ]
 
 { #category : 'testing' }
-CapellaEntity >> hasSubEntities [
+OldCapellaEntity >> hasSubEntities [
 
 	^ subEntities isNotEmpty
 ]
 
 { #category : 'initialization' }
-CapellaEntity >> initialize [
+OldCapellaEntity >> initialize [
 
 	super initialize.
 	subEntities := OrderedCollection new.
@@ -43,13 +43,13 @@ CapellaEntity >> initialize [
 ]
 
 { #category : 'accessing' }
-CapellaEntity >> name [
+OldCapellaEntity >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaEntity >> name: anObject [
+OldCapellaEntity >> name: anObject [
 
 	name := anObject
 ]

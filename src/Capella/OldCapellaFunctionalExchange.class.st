@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaFunctionalExchange',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaFunctionalExchange',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'source',
 		'target',
@@ -12,37 +12,37 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaFunctionalExchange >> name [
+OldCapellaFunctionalExchange >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalExchange >> name: anObject [
+OldCapellaFunctionalExchange >> name: anObject [
 
 	name := anObject
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalExchange >> source [
+OldCapellaFunctionalExchange >> source [
 
 	^ source
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalExchange >> source: anObject [
+OldCapellaFunctionalExchange >> source: anObject [
 
 	source := anObject
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalExchange >> target [
+OldCapellaFunctionalExchange >> target [
 
 	^ target
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalExchange >> target: anObject [
+OldCapellaFunctionalExchange >> target: anObject [
 
 	target := anObject
 ]

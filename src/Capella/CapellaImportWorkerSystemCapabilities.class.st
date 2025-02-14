@@ -21,7 +21,7 @@ CapellaImportWorkerSystemCapabilities >> extractSystemCapabilityModelFrom: aXMLE
 	involvmentsPath := XPath for: 'ownedCapabilityInvolvements'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
-		capability := CapellaCapability new.
+		capability := OldCapellaCapability new.
 		capability id: (systemComponent attributeAt: #id).
 		capability name: (systemComponent attributeAt: #name).
 		involvments := (involvmentsPath in: systemComponent) collect: [

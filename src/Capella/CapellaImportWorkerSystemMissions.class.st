@@ -14,7 +14,7 @@ CapellaImportWorkerSystemMissions >> extractSystemAnalysisModelFrom: aXMLElement
 	involvmentsPath := XPath for: 'ownedMissionInvolvements'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
-		mission := CapellaSystemMission new.
+		mission := OldCapellaSystemMission new.
 		mission id: (systemComponent attributeAt: #id).
 		mission name: (systemComponent attributeAt: #name).
 		involvments := (involvmentsPath in: systemComponent) collect: [

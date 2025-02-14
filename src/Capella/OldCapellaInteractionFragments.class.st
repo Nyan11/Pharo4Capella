@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaInteractionFragments',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaInteractionFragments',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'name',
 		'coveredInstanceRoles',
@@ -12,43 +12,43 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaInteractionFragments >> addCoveredInstanceRoles: anObject [
+OldCapellaInteractionFragments >> addCoveredInstanceRoles: anObject [
 	coveredInstanceRoles add: anObject
 ]
 
 { #category : 'accessing' }
-CapellaInteractionFragments >> coveredInstanceRoles [
+OldCapellaInteractionFragments >> coveredInstanceRoles [
 
 	^ coveredInstanceRoles
 ]
 
 { #category : 'accessing' }
-CapellaInteractionFragments >> initialize [
+OldCapellaInteractionFragments >> initialize [
 
 	super initialize.
 	coveredInstanceRoles := OrderedCollection new.
 ]
 
 { #category : 'accessing' }
-CapellaInteractionFragments >> name [
+OldCapellaInteractionFragments >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaInteractionFragments >> name: anObject [
+OldCapellaInteractionFragments >> name: anObject [
 
 	name := anObject
 ]
 
 { #category : 'accessing' }
-CapellaInteractionFragments >> relatedAbstractFunction [
+OldCapellaInteractionFragments >> relatedAbstractFunction [
 
 	^ relatedAbstractFunction
 ]
 
 { #category : 'accessing' }
-CapellaInteractionFragments >> relatedAbstractFunction: anObject [
+OldCapellaInteractionFragments >> relatedAbstractFunction: anObject [
 
 	relatedAbstractFunction := anObject
 ]

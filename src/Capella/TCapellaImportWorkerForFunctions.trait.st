@@ -30,7 +30,7 @@ TCapellaImportWorkerForFunctions >> createFunctionalExchangesFrom: aXMLElement i
 	path := XPath for: './/ownedFunctionalExchanges'.
 
 	(path in: aXMLElement) do: [ :systemComponent |
-		functionExchange := CapellaFunctionalExchange new.
+		functionExchange := OldCapellaFunctionalExchange new.
 		functionExchange id: (systemComponent attributeAt: #id).
 		functionExchange name: (systemComponent attributeAt: #name).
 		functionExchange source: (aCapellaModel objectAt: (systemComponent attributeAt: #source) allButFirst).
@@ -49,7 +49,7 @@ TCapellaImportWorkerForFunctions >> createFunctionsFrom: aXMLElement into: aCape
 	(path in: aXMLElement) do: [ :functionXML |
 		| functionId |
 		functionId := functionXML attributeAt: #id.
-		function := CapellaFunction new.
+		function := OldCapellaFunction new.
 		function id: functionId.
 		function name: (functionXML attributeAt: #name).
 		self addFunction: function toModel: aCapellaModel.

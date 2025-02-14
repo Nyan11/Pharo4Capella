@@ -15,7 +15,7 @@ TCapellaImportWorkerForFunctionalChains >> addFunctionalChain: functionalChain t
 TCapellaImportWorkerForFunctionalChains >> addFunctionalChainFromNode: aXMLObject into: aCapellaModel [
 
 	| functionalChain |
-	functionalChain := CapellaFunctionalChain new.
+	functionalChain := OldCapellaFunctionalChain new.
 	functionalChain id: (aXMLObject attributeAt: #id).
 	functionalChain name: (aXMLObject attributeAt: #name).
 	self addFunctionalChain: functionalChain toModel: aCapellaModel.
@@ -32,7 +32,7 @@ TCapellaImportWorkerForFunctionalChains >> addFunctionalChainInvolvmentsFromNode
 	nodes := path in: aXMLObject.
 	nodes do: [ :ownedFunctionalChainInvolvements |
 		| functionalChainInvolvements involved |
-		functionalChainInvolvements := CapellaFunctionalChainInvolvment new.
+		functionalChainInvolvements := OldCapellaFunctionalChainInvolvment new.
 		functionalChainInvolvements id:
 			(ownedFunctionalChainInvolvements attributeAt: #id).
 		involved := (ownedFunctionalChainInvolvements attributeAt: #involved)

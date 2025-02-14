@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaFunctionalChain',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaFunctionalChain',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'name',
 		'functionalChainInvolvments'
@@ -11,32 +11,32 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaFunctionalChain >> addFunctionalChainInvolvments: aCapellaObject [
+OldCapellaFunctionalChain >> addFunctionalChainInvolvments: aCapellaObject [
 
 	functionalChainInvolvments add: aCapellaObject
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChain >> functionalChainInvolvments [
+OldCapellaFunctionalChain >> functionalChainInvolvments [
 
 	^ functionalChainInvolvments
 ]
 
 { #category : 'initialization' }
-CapellaFunctionalChain >> initialize [
+OldCapellaFunctionalChain >> initialize [
 
 	super initialize.
 	functionalChainInvolvments := OrderedCollection new
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChain >> name [
+OldCapellaFunctionalChain >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-CapellaFunctionalChain >> name: anObject [
+OldCapellaFunctionalChain >> name: anObject [
 
 	name := anObject
 ]

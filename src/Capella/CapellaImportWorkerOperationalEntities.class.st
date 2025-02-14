@@ -10,7 +10,7 @@ Class {
 CapellaImportWorkerOperationalEntities >> addEntityFromNode: aXMLElement into: aCapellaModel [
 
 	| entity |
-	entity := CapellaEntity new.
+	entity := OldCapellaEntity new.
 	entity id: (aXMLElement attributeAt: #id).
 	entity name: (aXMLElement attributeAt: #name).
 	aCapellaModel addOperationalEntity: entity

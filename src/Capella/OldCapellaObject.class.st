@@ -1,5 +1,5 @@
 Class {
-	#name : 'CapellaObject',
+	#name : 'OldCapellaObject',
 	#superclass : 'Object',
 	#instVars : [
 		'id'
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaObject >> id [
+OldCapellaObject >> id [
 
 	^ id
 ]
 
 { #category : 'accessing' }
-CapellaObject >> id: anObject [
+OldCapellaObject >> id: anObject [
 
 	id := anObject
 ]

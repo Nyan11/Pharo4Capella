@@ -1,6 +1,6 @@
 Class {
-	#name : 'CapellaEvents',
-	#superclass : 'CapellaObject',
+	#name : 'OldCapellaEvents',
+	#superclass : 'OldCapellaObject',
 	#instVars : [
 		'operation'
 	],
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : 'accessing' }
-CapellaEvents >> operation [
+OldCapellaEvents >> operation [
 
 	^ operation
 ]
 
 { #category : 'accessing' }
-CapellaEvents >> operation: anObject [
+OldCapellaEvents >> operation: anObject [
 
 	operation := anObject
 ]
