@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'doneComparaison'
 	],
-	#category : 'Capella-Model',
-	#package : 'Capella-Model'
+	#category : 'Capella-Model-Core',
+	#package : 'Capella-Model',
+	#tag : 'Core'
 }
 
 { #category : 'verification' }

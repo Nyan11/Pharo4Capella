@@ -95,7 +95,7 @@ CapellaExporter >> buildArchitectureEpbsArchitecture [
 	architectureEpbsArchitecture
 		addElementNamed: #ownedPhysicalArtifactRealizations
 		withValue: ((self objectConstructor newObjectWithXsiType:
-					  'org.polarsys.capella.core.data.epbs:PhysicalArtifactRealization')
+					  'org.polarsys.capella.core.data.epbs:PhysicalArchitectureRealization')
 				 addAttributeNamed: 'sourceElement'
 				 withValue: architectureEpbsArchitecture;
 				 addAttributeNamed: 'targetElement'
@@ -160,14 +160,12 @@ CapellaExporter >> buildArchitectureLogicalArchitecture [
 		makeFunctionRealizationTarget:
 			((architectureSystemAnalysis elementsAt: #ownedFunctionPkg) first
 				 elementsAt: #ownedSystemFunctions) first
-		withSource:
-			((architectureLogicalArchitecture elementsAt: #ownedFunctionPkg)
-				 first elementsAt: #ownedLogicalFunctions) first
+		withSource: rootFunction
 		inPkg: rootFunction.
 	architectureLogicalArchitecture
 		addElementNamed: #ownedSystemAnalysisRealizations
 		withValue: ((self objectConstructor newObjectWithXsiType:
-					  'org.polarsys.capella.core.data.ctx:SystemAnalysisRealization')
+					  'org.polarsys.capella.core.data.la:SystemAnalysisRealization')
 				 addAttributeNamed: 'sourceElement'
 				 withValue: architectureLogicalArchitecture;
 				 addAttributeNamed: 'targetElement'
@@ -276,9 +274,7 @@ CapellaExporter >> buildArchitecturePhysicalArchitecture [
 		makeFunctionRealizationTarget:
 			((architectureLogicalArchitecture elementsAt: #ownedFunctionPkg)
 				 first elementsAt: #ownedLogicalFunctions) first
-		withSource:
-			((architecturePhysicalArchitecture elementsAt: #ownedFunctionPkg)
-				 first elementsAt: #ownedPhysicalFunctions) first
+		withSource: rootFunction
 		inPkg: rootFunction.
 	architecturePhysicalArchitecture
 		addElementNamed: #ownedLogicalArchitectureRealizations
@@ -353,7 +349,7 @@ CapellaExporter >> buildArchitectureSystemAnalysis [
 		makeFunctionRealizationTarget:
 			((architectureOperationalAnalysis elementsAt: #ownedFunctionPkg)
 				 first elementsAt: #ownedOperationalActivities) first
-		withSource: component
+		withSource: rootSystemFunction
 		inPkg: rootSystemFunction.
 	architectureSystemAnalysis
 		addElementNamed: #ownedOperationalAnalysisRealizations
@@ -531,10 +527,9 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgHexadecimalTypeForPacka
 		               yourself.
 	maxValue := (self objectConstructor newObjectWithXsiType:
 			             'org.polarsys.capella.core.data.information.datavalue:BinaryExpression')
-		            addAttributeNamed: 'value' withValue: 'SUB';
+		            addAttributeNamed: 'operator' withValue: 'SUB';
 		            addAttributeNamed: 'abstractType'
 		            withValue: hexadecimal;
-		            addAttributeNamed: 'name' withValue: '';
 		            yourself.
 
 

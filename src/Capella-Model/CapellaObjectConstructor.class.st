@@ -70,6 +70,7 @@ CapellaObjectConstructor >> makeNewComponentNamed: aString forPackage: aPackage 
 
 	component addAttributeNamed: 'name' withValue: aString.
 	part addAttributeNamed: 'abstractType' withValue: component.
+	part addAttributeNamed: 'name' withValue: aString.
 
 	aPackage addElementNamed: aNodeName withValue: component.
 	aPackage addElementNamed: #ownedParts withValue: part.

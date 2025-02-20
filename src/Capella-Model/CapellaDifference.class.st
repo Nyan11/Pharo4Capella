@@ -6,15 +6,16 @@ Class {
 		'object2',
 		'comparaisonObject'
 	],
-	#category : 'Capella-Model',
-	#package : 'Capella-Model'
+	#category : 'Capella-Model-Core',
+	#package : 'Capella-Model',
+	#tag : 'Core'
 }
 
 { #category : 'examples' }
 CapellaDifference class >> example [
 
 	| project1 project2 |
-	project1 := CapellaExporter new buildDefault projectObject. " exportAsXMLDocument prettyPrinted"
+	project1 := CapellaExporter new projectName: 'blackbox'; buildDefault; projectObject. " exportAsXMLDocument prettyPrinted"
 	project2 := NeoCapellaImporter new
 		            xmlString:
 			            CapellaImporterForOperationalAnalysisTest new
