@@ -28,6 +28,27 @@ CapellaDifference class >> example [
 		build
 ]
 
+{ #category : 'examples' }
+CapellaDifference class >> example2 [
+
+	| project1 project2 |
+	project1 := NeoCapellaImporter new
+		            xmlString:
+			            CapellaImporterForOperationalAnalysisTest new
+				            projectEntitiesAndAllocatedOperationalAtivities;
+		            build.
+	project2 := NeoCapellaImporter new
+		            xmlString:
+			            CapellaImporterForOperationalAnalysisTest new
+				            projectEntitiesAndCapabilities;
+		            build.
+
+	CapellaDifference new
+		object1: project1;
+		object2: project2;
+		build
+]
+
 { #category : 'building' }
 CapellaDifference >> build [
 

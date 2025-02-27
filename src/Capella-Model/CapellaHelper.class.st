@@ -7,6 +7,37 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+CapellaHelper class >> extractCommonAttributes: aCapellaObject [
+
+	| dictionary |
+	dictionary := Dictionary new.
+	aCapellaObject flattenObject do: [ :each |
+		| hash |
+		hash := (each attributes keys collect: #hash)
+			        ifEmpty: [ 0 ]
+			        ifNotEmpty: [ :col | col reduce: [ :a :b | a + b ] ].
+		dictionary
+			at: hash
+			ifPresent: [ :col | col add: each ]
+			ifAbsentPut: [ OrderedCollection with: each ] ].
+	^ dictionary
+]
+
+{ #category : 'as yet unclassified' }
+CapellaHelper class >> extractCommonAttributesAndAssociatedValues: aCapellaObject [
+
+	| dictionary temp |
+	dictionary := self extractCommonAttributes: aCapellaObject.
+	temp := dictionary values collect: [ :collection || attributes |
+attributes := Dictionary new.
+collection do: [ :each | each attributes keysAndValuesDo: [ :key : value | attributes at: key ifPresent: [ :col | col add: value ] ifAbsentPut: [ OrderedCollection with: value ] ] ].
+attributes copy keysAndValuesDo: [ :key :value | attributes at: key put: value asSet asArray  ].
+collection -> attributes ].
+	self halt.
+	
+]
+
+{ #category : 'as yet unclassified' }
 CapellaHelper class >> transformXMLString: aString [
 
 	| dictionary xsiType result |

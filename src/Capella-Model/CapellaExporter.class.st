@@ -849,3 +849,8 @@ CapellaExporter >> projectObject [
 
 	^ projectObject
 ]
+
+{ #category : 'accessing' }
+CapellaExporter >> projectObject: aCapellaGlobalObject [ 
+	projectObject := aCapellaGlobalObject
+]

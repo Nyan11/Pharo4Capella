@@ -56,6 +56,11 @@ CapellaGlobalObject >> attributeAt: aString ifAbsent: aFullBlockClosure [
 ]
 
 { #category : 'accessing' }
+CapellaGlobalObject >> attributeAt: aString ifPresent: aFullBlockClosure [ 
+	^ xmlAttributes at: aString ifPresent: aFullBlockClosure
+]
+
+{ #category : 'accessing' }
 CapellaGlobalObject >> attributeAt: aString ifPresent: aFullBlockClosure ifAbsent: aFullBlockClosure3 [ 
 	^ xmlAttributes at: aString ifPresent: aFullBlockClosure ifAbsent: aFullBlockClosure3 
 ]
@@ -162,13 +167,13 @@ CapellaGlobalObject >> xmlAttributeAssociations [
 	^ xmlAttributes associations collect: [ :each |
 		  each value class = self class
 			  ifTrue: [
-			  each key -> ('#<1s>' expandMacrosWith:
-				  (each value attributeAt: #id)) ]
+				  each key
+				  -> ('#<1s>' expandMacrosWith: (each value attributeAt: #id)) ]
 			  ifFalse: [
 				  (each value isCollection and: each value isString not)
 					  ifTrue: [
-						  each key -> (each value collect: [ :inner |
-							   '#<1s> ' expandMacrosWith: (inner value attributeAt: #id) ]) ]
+						  each key -> ((each value collect: [ :inner |
+							   '#<1s> ' expandMacrosWith: (inner value attributeAt: #id) ]) reduce: [ :a :b | a , b ]) ]
 					  ifFalse: [ each ] ] ]
 ]
 

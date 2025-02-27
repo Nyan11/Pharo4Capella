@@ -48,11 +48,12 @@ NeoCapellaImporter >> newObjectFromXMLNode: aXMLNode [
 		                            :asso |
 		                            asso value isString and: [
 			                            asso value beginsWith: '#' ] ].
+
 	object := CapellaGlobalObject new
 		          attributeDictionary: attributeDictioanry;
 		          elementDictionary: elementDictionary;
 		          yourself.
-	allReferences at: (object attributeAt: #id) put: object.
+	object attributeAt: #id ifPresent: [ :id | allReferences at: id put: object ].
 	allReferenceAssociations ifNotEmpty: [
 		allNeededResolve at: object put: allReferenceAssociations ].
 	^ object
