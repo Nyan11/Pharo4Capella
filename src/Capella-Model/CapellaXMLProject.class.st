@@ -27,8 +27,7 @@ CapellaXMLProject >> exportAsXMLDocument [
 		            yourself.
 	document configuration preservesCommentNodes: true.
 	document addElement: (XMLComment string: 'Capella_Version_7.0.0').
-	document addElement: (self root asXMLElementNamed:
-			 'org.polarsys.capella.core.data.capellamodeller:Project').
+	document addElement: (self root asXMLElement).
 	^ document
 ]
 
@@ -59,7 +58,7 @@ CapellaXMLProject >> partGroups [
 	allAssociations := allTypes
 		                   select: [ :each |
 			                   each
-				                   elementAt: 'ownedComponentRealizations'
+				                   elementsAt: 'ownedComponentRealizations'
 				                   ifPresent: [ true ]
 				                   ifAbsent: [ false ] ]
 		                   thenCollect: [ :each |

@@ -96,7 +96,7 @@ CapellaXMLCreator >> buildArchitectureEpbsArchitecture [
 							  #ownedPhysicalComponents) first;
 				 yourself).
 	architectureEpbsArchitecture
-		addElementNamed: #ownedPhysicalArtifactRealizations
+		addElementNamed: #ownedPhysicalArchitectureRealizations
 		withValue: ((self objectConstructor newObjectWithXsiType:
 					  'org.polarsys.capella.core.data.epbs:PhysicalArchitectureRealization')
 				 addAttributeNamed: 'sourceElement'
@@ -655,7 +655,7 @@ CapellaXMLCreator >> buildDefault [
 	self buildArchitectureSystemAnalysisDataPkg.
 	self buildArchitectureLogicalArchitecture.
 	self buildArchitecturePhysicalArchitecture.
-	self buildArchitectureEpbsArchitecture
+	self buildArchitectureEpbsArchitecture.
 ]
 
 { #category : 'building' }
@@ -734,6 +734,8 @@ CapellaXMLCreator >> buildProjectRoot [
 		               addAttributeNamed: 'name'
 		               withValue: self projectName;
 		               addAttributeNamed: 'xmi:version' withValue: '2.0';
+		               xmlName:
+			               'org.polarsys.capella.core.data.capellamodeller:Project';
 		               yourself.
 	projectRoot
 		addElementNamed: 'ownedExtensions'

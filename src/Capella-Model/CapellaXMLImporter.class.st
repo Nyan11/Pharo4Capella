@@ -39,29 +39,33 @@ CapellaXMLImporter >> initialize [
 { #category : 'instance creation' }
 CapellaXMLImporter >> newObjectFromXMLNode: aXMLNode [
 
-	| attributeDictioanry allElements elementDictionary allReferenceAssociations object |
+	| attributeDictioanry allElements elementDictionary allReferenceAssociations capellaObject |
+	capellaObject := CapellaXMLObject new.
+	capellaObject xmlName: aXMLNode name.
 	attributeDictioanry := aXMLNode attributeAssociations asDictionary.
 	allElements := aXMLNode elements collect: [ :each |
-		               each name -> (self newObjectFromXMLNode: each) ].
+		               (self newObjectFromXMLNode: each) ].
 	elementDictionary := Dictionary new.
-	allElements do: [ :asso |
+	allElements do: [ :element |
+		element parent: capellaObject.
 		elementDictionary
-			at: asso key
-			ifPresent: [ :col | col add: asso value ]
-			ifAbsentPut: [ OrderedCollection with: asso value ] ].
+			at: element xmlName
+			ifPresent: [ :col | col add: element ]
+			ifAbsentPut: [ OrderedCollection with: element ] ].
 	allReferenceAssociations := attributeDictioanry associations select: [
 		                            :asso |
 		                            asso value isString and: [
 			                            asso value beginsWith: '#' ] ].
 
-	object := CapellaXMLObject new
-		          attributeDictionary: attributeDictioanry;
-		          elementDictionary: elementDictionary;
-		          yourself.
-	object attributeAt: #id ifPresent: [ :id | allReferences at: id put: object ].
+	capellaObject
+		attributeDictionary: attributeDictioanry;
+		elementDictionary: elementDictionary.
+	capellaObject
+		attributeAt: #id
+		ifPresent: [ :id | allReferences at: id put: capellaObject ].
 	allReferenceAssociations ifNotEmpty: [
-		allNeededResolve at: object put: allReferenceAssociations ].
-	^ object
+		allNeededResolve at: capellaObject put: allReferenceAssociations ].
+	^ capellaObject
 ]
 
 { #category : 'as yet unclassified' }

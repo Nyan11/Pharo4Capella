@@ -1,10 +1,13 @@
 Class {
 	#name : 'CapellaXMLObject',
 	#superclass : 'Object',
+	#traits : 'TCapellaObjectWithAttributes + TCapellaObjectWithElements',
+	#classTraits : 'TCapellaObjectWithAttributes classTrait + TCapellaObjectWithElements classTrait',
 	#instVars : [
 		'xmlAttributes',
 		'xmlElements',
-		'visitorSelector'
+		'xmlName',
+		'parent'
 	],
 	#category : 'Capella-Model-Core-XML',
 	#package : 'Capella-Model',
@@ -26,10 +29,32 @@ CapellaXMLObject >> addAttributeNamed: aString withValue: aValue [
 { #category : 'adding' }
 CapellaXMLObject >> addElementNamed: aString withValue: aCapellaObject [
 
+	aCapellaObject xmlName: aString asString.
+	aCapellaObject parent: self.
 	xmlElements
 		at: aString
 		ifPresent: [ :col | col add: aCapellaObject ]
 		ifAbsentPut: [ OrderedCollection with: aCapellaObject ]
+]
+
+{ #category : 'testing' }
+CapellaXMLObject >> architectureObject [
+
+	self parent ifNil: [ ^ nil ].
+	self xmlName = 'ownedArchitectures' ifTrue: [ ^ self ].
+	^ self parent architectureObject
+]
+
+{ #category : 'converting' }
+CapellaXMLObject >> asXMLElement [
+
+	| element |
+	element := XMLElement
+		           name: self xmlName
+		           namespaces: self namespaces
+		           attributes: self xmlAttributeAssociations.
+	element addNodes: self xmlChildrenNodes.
+	^ element
 ]
 
 { #category : 'converting' }
@@ -37,27 +62,11 @@ CapellaXMLObject >> asXMLElementNamed: aString [
 
 	| element |
 	element := XMLElement
-		  name: aString
-		  namespaces: self namespaces
-		  attributes: self xmlAttributeAssociations.
+		           name: self xmlName
+		           namespaces: self namespaces
+		           attributes: self xmlAttributeAssociations.
 	element addNodes: self xmlChildrenNodes.
 	^ element
-]
-
-{ #category : 'accessing' }
-CapellaXMLObject >> attributeAt: aKey [
-
-	^ xmlAttributes at: aKey
-]
-
-{ #category : 'accessing' }
-CapellaXMLObject >> attributeAt: aString ifAbsent: aFullBlockClosure [ 
-	^ xmlAttributes at: aString ifAbsent: aFullBlockClosure
-]
-
-{ #category : 'accessing' }
-CapellaXMLObject >> attributeAt: aString ifPresent: aFullBlockClosure [ 
-	^ xmlAttributes at: aString ifPresent: aFullBlockClosure
 ]
 
 { #category : 'accessing' }
@@ -76,21 +85,15 @@ CapellaXMLObject >> attributes [
 	^ xmlAttributes
 ]
 
-{ #category : 'accessing' }
-CapellaXMLObject >> elementAt: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3 [ 
-	^ xmlElements at: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3
-]
-
 { #category : 'as yet unclassified' }
 CapellaXMLObject >> elementDictionary: aDictionary [
 
 	xmlElements := aDictionary
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaXMLObject >> elementsAt: aKey [
-
-	^ xmlElements at: aKey
+{ #category : 'accessing' }
+CapellaXMLObject >> elementsAt: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3 [ 
+	^ xmlElements at: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3
 ]
 
 { #category : 'as yet unclassified' }
@@ -114,6 +117,66 @@ CapellaXMLObject >> initialize [
 	super initialize.
 	xmlAttributes := Dictionary new.
 	xmlElements := Dictionary new
+]
+
+{ #category : 'testing' }
+CapellaXMLObject >> isEPBS [
+
+	| architecture |
+	architecture := self architectureObject.
+	architecture ifNil: [ ^ false ].
+	architecture
+		attributeAt: 'xsi:type'
+		ifPresent: [ :type | ^ type endsWith: 'EPBSArchitecture' ]
+		ifAbsent: [ ^ false ]
+]
+
+{ #category : 'testing' }
+CapellaXMLObject >> isLA [
+
+	| architecture |
+	architecture := self architectureObject.
+	architecture ifNil: [ ^ false ].
+	architecture
+		attributeAt: 'xsi:type'
+		ifPresent: [ :type | ^ type endsWith: 'LogicalArchitecture' ]
+		ifAbsent: [ ^ false ]
+]
+
+{ #category : 'testing' }
+CapellaXMLObject >> isOA [
+
+	| architecture |
+	architecture := self architectureObject.
+	architecture ifNil: [ ^ false ].
+	architecture
+		attributeAt: 'xsi:type'
+		ifPresent: [ :type | ^ type endsWith: 'OperationalAnalysis' ]
+		ifAbsent: [ ^ false ]
+]
+
+{ #category : 'testing' }
+CapellaXMLObject >> isPA [
+
+	| architecture |
+	architecture := self architectureObject.
+	architecture ifNil: [ ^ false ].
+	architecture
+		attributeAt: 'xsi:type'
+		ifPresent: [ :type | ^ type endsWith: 'PhysicalArchitecture' ]
+		ifAbsent: [ ^ false ]
+]
+
+{ #category : 'testing' }
+CapellaXMLObject >> isSA [
+
+	| architecture |
+	architecture := self architectureObject.
+	architecture ifNil: [ ^ false ].
+	architecture
+		attributeAt: 'xsi:type'
+		ifPresent: [ :type | ^ type endsWith: 'SystemAnalysis' ]
+		ifAbsent: [ ^ false ]
 ]
 
 { #category : 'accessing' }
@@ -155,15 +218,23 @@ CapellaXMLObject >> namespaces [
 ]
 
 { #category : 'accessing' }
-CapellaXMLObject >> visitorSelector [
+CapellaXMLObject >> parent [
 
-	^ visitorSelector
+	^ parent
 ]
 
 { #category : 'accessing' }
-CapellaXMLObject >> visitorSelector: anObject [
+CapellaXMLObject >> parent: anObject [
 
-	visitorSelector := anObject
+	parent := anObject
+]
+
+{ #category : 'printing' }
+CapellaXMLObject >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream << ' - '.
+	aStream << self xmlName.
 ]
 
 { #category : 'converting' }
@@ -187,6 +258,19 @@ CapellaXMLObject >> xmlChildrenNodes [
 
 	| col |
 	col := OrderedCollection new.
-	xmlElements keysAndValuesDo: [ :key :value | col addAll: (value collect: [ :each | each asXMLElementNamed: key ]) ].
+	xmlElements keysAndValuesDo: [ :key :value |
+		col addAll: (value collect: [ :each | each asXMLElement ]) ].
 	^ col
+]
+
+{ #category : 'accessing' }
+CapellaXMLObject >> xmlName [
+
+	^ xmlName
+]
+
+{ #category : 'accessing' }
+CapellaXMLObject >> xmlName: anObject [
+
+	xmlName := anObject
 ]

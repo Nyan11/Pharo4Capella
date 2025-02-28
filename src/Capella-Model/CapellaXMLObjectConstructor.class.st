@@ -131,9 +131,8 @@ CapellaXMLObjectConstructor >> newObject [
 CapellaXMLObjectConstructor >> newObjectWithXsiType: aString [
 
 	^ CapellaXMLObject new
-		  visitorSelector: ('visit<1s>:' expandMacrosWith: (':' split: aString) last);
 		  addAttributeNamed: #id withValue: self newIdValue;
-		  addAttributeNamed: #'xsi:type' withValue: aString;
+		  addAttributeNamed: #'xsi:type' withValue: aString asString;
 		  yourself
 ]
 

@@ -36,7 +36,11 @@ CapellaComparaisonStrategy >> initialize [
 { #category : 'verification' }
 CapellaComparaisonStrategy >> privateCompare: aCapellaGlobalObject1 with: aCapellaGlobalObject2 [
 
-	
+	aCapellaGlobalObject1 xmlName = aCapellaGlobalObject2 xmlName
+		ifFalse: [ ^ false ].
+	(self
+		 testEqualityBetween: aCapellaGlobalObject1 parent
+		 and: aCapellaGlobalObject2 parent) ifFalse: [ ^ false ].
 	aCapellaGlobalObject1 attributes associations
 		reject: [ :asso | asso key = #id ]
 		thenDo: [ :asso |

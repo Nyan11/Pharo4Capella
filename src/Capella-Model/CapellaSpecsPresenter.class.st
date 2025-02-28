@@ -63,7 +63,27 @@ CapellaSpecsPresenter >> newPartsTable [
 
 	| table |
 	^ table := SpTablePresenter new
-		           addColumn: (SpStringTableColumn evaluated: [ :each |
+		           addColumn:
+			           ((SpCompositeTableColumn
+				            title: 'Architectures'
+				            withAll: {
+						            (SpImageTableColumn evaluated: [ :each |
+								             each isOA
+									             ifTrue: [ CapellaLogos logoOA ]
+									             ifFalse: [ CapellaLogos logoBlank ] ]).
+						            (SpImageTableColumn evaluated: [ :each |
+								             each isSA
+									             ifTrue: [ CapellaLogos logoSA ]
+									             ifFalse: [ CapellaLogos logoBlank ] ]).
+						            (SpImageTableColumn evaluated: [ :each |
+								             each isLA
+									             ifTrue: [ CapellaLogos logoLA ]
+									             ifFalse: [ CapellaLogos logoBlank ] ]).
+						            (SpImageTableColumn evaluated: [ :each |
+								             each isPA
+									             ifTrue: [ CapellaLogos logoPA ]
+									             ifFalse: [ CapellaLogos logoBlank ] ]) }) width: 88);
+		           addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :each |
 					            each
 						            attributeAt: 'name'
 						            ifPresent: [ :n | n ]
