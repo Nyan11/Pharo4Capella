@@ -1,9 +1,9 @@
 Class {
 	#name : 'CapellaHelper',
 	#superclass : 'Object',
-	#category : 'Capella-Model-Core',
+	#category : 'Capella-Model-Core-XML',
 	#package : 'Capella-Model',
-	#tag : 'Core'
+	#tag : 'Core-XML'
 }
 
 { #category : 'as yet unclassified' }

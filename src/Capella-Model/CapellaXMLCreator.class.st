@@ -1,5 +1,5 @@
 Class {
-	#name : 'CapellaExporter',
+	#name : 'CapellaXMLCreator',
 	#superclass : 'Object',
 	#instVars : [
 		'objectConstructor',
@@ -12,42 +12,45 @@ Class {
 		'architectureLogicalArchitecture',
 		'architecturePhysicalArchitecture',
 		'modelRoot',
-		'architectureEpbsArchitecture'
+		'architectureEpbsArchitecture',
+		'projectRoot'
 	],
-	#category : 'Capella-Model-Core',
+	#category : 'Capella-Model-Core-XML',
 	#package : 'Capella-Model',
-	#tag : 'Core'
+	#tag : 'Core-XML'
 }
 
 { #category : 'accessing' }
-CapellaExporter >> allTargetedClasses [
+CapellaXMLCreator >> allTargetedClasses [
 
 	^ allTargetedClasses
 ]
 
 { #category : 'accessing' }
-CapellaExporter >> allTargetedClasses: anObject [
+CapellaXMLCreator >> allTargetedClasses: anObject [
 
 	allTargetedClasses := anObject
 ]
 
 { #category : 'accessing' }
-CapellaExporter >> allTranslatedClassesDictionary [
+CapellaXMLCreator >> allTranslatedClassesDictionary [
 
 	^ allTranslatedClassesDictionary
 ]
 
 { #category : 'building' }
-CapellaExporter >> build [
+CapellaXMLCreator >> build [
 
 	self buildDefault.
-	self buildClasses.
+	"self buildClasses.
 	self buildGeneralizations.
-	self buildProperties
+	self buildProperties"
+	projectObject name: self projectName; root: self projectRoot.
+	^ projectObject
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureEpbsArchitecture [
+CapellaXMLCreator >> buildArchitectureEpbsArchitecture [
 
 	| configPkg configItem |
 	architectureEpbsArchitecture
@@ -104,7 +107,7 @@ CapellaExporter >> buildArchitectureEpbsArchitecture [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureLogicalArchitecture [
+CapellaXMLCreator >> buildArchitectureLogicalArchitecture [
 
 	| component rootFunction |
 	rootFunction := (self objectConstructor newObjectWithXsiType:
@@ -174,7 +177,7 @@ CapellaExporter >> buildArchitectureLogicalArchitecture [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureOperationalAnalysis [
+CapellaXMLCreator >> buildArchitectureOperationalAnalysis [
 
 	architectureOperationalAnalysis
 		addElementNamed: #ownedFunctionPkg
@@ -217,7 +220,7 @@ CapellaExporter >> buildArchitectureOperationalAnalysis [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitecturePhysicalArchitecture [
+CapellaXMLCreator >> buildArchitecturePhysicalArchitecture [
 
 	| component rootFunction |
 	rootFunction := (self objectConstructor newObjectWithXsiType:
@@ -288,7 +291,7 @@ CapellaExporter >> buildArchitecturePhysicalArchitecture [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysis [
+CapellaXMLCreator >> buildArchitectureSystemAnalysis [
 
 	| component rootSystemFunction |
 	rootSystemFunction := (self objectConstructor newObjectWithXsiType:
@@ -363,7 +366,7 @@ CapellaExporter >> buildArchitectureSystemAnalysis [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkg [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkg [
 
 	| package unsignedShort |
 	package := (self objectConstructor newObjectWithXsiType:
@@ -415,7 +418,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkg [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkgBooleanTypeForPackage: package [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkgBooleanTypeForPackage: package [
 
 	| boolean |
 	boolean := (self objectConstructor newObjectWithXsiType:
@@ -443,7 +446,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgBooleanTypeForPackage: 
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkgByteTypeForPackage: package [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkgByteTypeForPackage: package [
 
 	| byte |
 	byte := (self objectConstructor newObjectWithXsiType:
@@ -473,7 +476,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgByteTypeForPackage: pac
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkgCharTypeForPackage: package withUnisgnedShortType: unsignedShort [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkgCharTypeForPackage: package withUnisgnedShortType: unsignedShort [
 
 	| char |
 	char := (self objectConstructor newObjectWithXsiType:
@@ -503,7 +506,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgCharTypeForPackage: pac
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkgFloatNamed: aString forPackage: package [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkgFloatNamed: aString forPackage: package [
 
 	package
 		addElementNamed: #ownedDataTypes
@@ -517,7 +520,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgFloatNamed: aString for
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkgHexadecimalTypeForPackage: package [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkgHexadecimalTypeForPackage: package [
 
 	| hexadecimal maxValue |
 	hexadecimal := (self objectConstructor newObjectWithXsiType:
@@ -572,7 +575,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgHexadecimalTypeForPacka
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkgSimpleTypeForPackage: package [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkgSimpleTypeForPackage: package [
 
 	package
 		addElementNamed: #ownedDataTypes
@@ -613,7 +616,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgSimpleTypeForPackage: p
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildArchitectureSystemAnalysisDataPkgUnisgnedNamed: aString forPackage: aPackage [
+CapellaXMLCreator >> buildArchitectureSystemAnalysisDataPkgUnisgnedNamed: aString forPackage: aPackage [
 
 	| unsigned |
 	unsigned := (self objectConstructor newObjectWithXsiType:
@@ -635,7 +638,7 @@ CapellaExporter >> buildArchitectureSystemAnalysisDataPkgUnisgnedNamed: aString 
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildClasses [
+CapellaXMLCreator >> buildClasses [
 
 	self allTargetedClasses do: [ :cls |
 		allTranslatedClassesDictionary at: cls put: (self objectConstructor translateClass: cls)
@@ -643,9 +646,9 @@ CapellaExporter >> buildClasses [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildDefault [
+CapellaXMLCreator >> buildDefault [
 
-	self buildProjectObject.
+	self buildProjectRoot.
 	self buildModelRootObject.
 	self buildArchitectureOperationalAnalysis.
 	self buildArchitectureSystemAnalysis.
@@ -656,7 +659,7 @@ CapellaExporter >> buildDefault [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildGeneralizations [
+CapellaXMLCreator >> buildGeneralizations [
 
 	self allTargetedClasses do: [ :cls |
 		| intersection |
@@ -669,13 +672,13 @@ CapellaExporter >> buildGeneralizations [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildModelRootObject [
+CapellaXMLCreator >> buildModelRootObject [
 
 	modelRoot := (self objectConstructor newObjectWithXsiType:
 			              'org.polarsys.capella.core.data.capellamodeller:SystemEngineering')
 		             addAttributeNamed: 'name' withValue: self projectName;
 		             yourself.
-	projectObject addElementNamed: #ownedModelRoots withValue: modelRoot.
+	projectRoot addElementNamed: #ownedModelRoots withValue: modelRoot.
 	architectureOperationalAnalysis := (self objectConstructor
 		                                    newObjectWithXsiType:
 			                                    'org.polarsys.capella.core.data.oa:OperationalAnalysis')
@@ -702,12 +705,11 @@ CapellaExporter >> buildModelRootObject [
 			                                    'Physical Architecture';
 		                                    yourself.
 	architectureEpbsArchitecture := (self objectConstructor
-		                                     newObjectWithXsiType:
-			                                     'org.polarsys.capella.core.data.epbs:EPBSArchitecture')
-		                                    addAttributeNamed: 'name'
-		                                    withValue:
-			                                    'EPBS Architecture';
-		                                    yourself.
+		                                 newObjectWithXsiType:
+			                                 'org.polarsys.capella.core.data.epbs:EPBSArchitecture')
+		                                addAttributeNamed: 'name'
+		                                withValue: 'EPBS Architecture';
+		                                yourself.
 	modelRoot
 		addElementNamed: #ownedArchitectures
 		withValue: architectureOperationalAnalysis.
@@ -726,18 +728,18 @@ CapellaExporter >> buildModelRootObject [
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildProjectObject [
+CapellaXMLCreator >> buildProjectRoot [
 
-	projectObject := self objectConstructor newObject
-		                 addAttributeNamed: 'name'
-		                 withValue: self projectName;
-		                 addAttributeNamed: 'xmi:version' withValue: '2.0';
-		                 yourself.
-	projectObject
+	projectRoot := self objectConstructor newObject
+		               addAttributeNamed: 'name'
+		               withValue: self projectName;
+		               addAttributeNamed: 'xmi:version' withValue: '2.0';
+		               yourself.
+	projectRoot
 		addElementNamed: 'ownedExtensions'
 		withValue: (self objectConstructor newObjectWithXsiType:
 				 'libraries:ModelInformation').
-	projectObject
+	projectRoot
 		addElementNamed: 'ownedEnumerationPropertyTypes'
 		withValue: ((self objectConstructor newObjectWithXsiType:
 					  'org.polarsys.capella.core.data.capellacore:EnumerationPropertyType')
@@ -773,25 +775,25 @@ CapellaExporter >> buildProjectObject [
 						  addAttributeNamed: 'name' withValue: 'REVIEWED_OK';
 						  yourself);
 				 yourself).
-	projectObject
+	projectRoot
 		addElementNamed: #keyValuePairs
 		withValue: ((self objectConstructor newObjectWithXsiType:
 					  'org.polarsys.capella.core.data.capellacore:KeyValue')
 				 addAttributeNamed: 'key' withValue: 'projectApproach';
 				 addAttributeNamed: 'value' withValue: 'SingletonComponents';
 				 yourself).
-	^ projectObject
+	^ projectRoot
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildProperties [
+CapellaXMLCreator >> buildProperties [
 	allTranslatedClassesDictionary keysAndValuesDo: [ :cls :capella | 
 		cls autometaFullDescription properties do: [ :each | self buildProperty: each fromClass: cls onCapellaObject: capella ].
 	].
 ]
 
 { #category : 'building' }
-CapellaExporter >> buildProperty: anAutometaPropertyDescription fromClass: aClass onCapellaObject: aCapellaObject [
+CapellaXMLCreator >> buildProperty: anAutometaPropertyDescription fromClass: aClass onCapellaObject: aCapellaObject [
 	| property |
 	property := self objectConstructor translateClassPropertyDescription: anAutometaPropertyDescription withTypeDictionary: self allTranslatedClassesDictionary.
 	aCapellaObject addElementNamed: #ownedFeatures withValue: property.
@@ -799,58 +801,54 @@ CapellaExporter >> buildProperty: anAutometaPropertyDescription fromClass: aClas
 
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaExporter >> exportAsXML [
-
-	XMLDocument new
-]
-
-{ #category : 'as yet unclassified' }
-CapellaExporter >> exportAsXMLDocument [
-
-	| document |
-	document := XMLDocument new encoding: 'UTF-8'; version: '1.0'; yourself.
-	document configuration preservesCommentNodes: true.
-	document addElement: (XMLComment string: 'Capella_Version_7.0.0').
-	document addElement: (self projectObject asXMLElementNamed: 'org.polarsys.capella.core.data.capellamodeller:Project').
-	^ document
-]
-
 { #category : 'initialization' }
-CapellaExporter >> initialize [
+CapellaXMLCreator >> initialize [
 
 	super initialize.
+	projectObject := CapellaXMLProject new.
 	projectName := 'Default_Capella_Project'.
-	objectConstructor := CapellaObjectConstructor new.
+	objectConstructor := CapellaXMLObjectConstructor new.
 	allTargetedClasses := {  }.
 	allTranslatedClassesDictionary := Dictionary new
 ]
 
 { #category : 'accessing' }
-CapellaExporter >> objectConstructor [
+CapellaXMLCreator >> objectConstructor [
 
 	^ objectConstructor
 ]
 
 { #category : 'as yet unclassified' }
-CapellaExporter >> projectName [
+CapellaXMLCreator >> projectName [
 
 	^ projectName
 ]
 
 { #category : 'accessing' }
-CapellaExporter >> projectName: aString [
+CapellaXMLCreator >> projectName: aString [
 
 	projectName := aString
 ]
 
 { #category : 'accessing' }
-CapellaExporter >> projectObject [
+CapellaXMLCreator >> projectObject [
 
 	^ projectObject
 ]
 
 { #category : 'accessing' }
-CapellaExporter >> projectObject: aCapellaGlobalObject [ 
+CapellaXMLCreator >> projectObject: aCapellaGlobalObject [ 
 	projectObject := aCapellaGlobalObject
+]
+
+{ #category : 'accessing' }
+CapellaXMLCreator >> projectRoot [
+
+	^ projectRoot
+]
+
+{ #category : 'accessing' }
+CapellaXMLCreator >> projectRoot: aCapellaGlobalObject [
+
+	projectRoot := aCapellaGlobalObject
 ]

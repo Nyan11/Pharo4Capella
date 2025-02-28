@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'doneComparaison'
 	],
-	#category : 'Capella-Model-Core',
+	#category : 'Capella-Model-Core-XML',
 	#package : 'Capella-Model',
-	#tag : 'Core'
+	#tag : 'Core-XML'
 }
 
 { #category : 'verification' }
@@ -52,8 +52,8 @@ CapellaComparaisonStrategy >> privateCompare: aCapellaGlobalObject1 with: aCapel
 { #category : 'verification' }
 CapellaComparaisonStrategy >> testEqualityBetween: object1 and: object2 [
 
-	((object1 isKindOf: CapellaGlobalObject) and: [
-		 object2 isKindOf: CapellaGlobalObject ]) ifTrue: [
+	((object1 isKindOf: CapellaXMLObject) and: [
+		 object2 isKindOf: CapellaXMLObject ]) ifTrue: [
 		^ self compare: object1 with: object2 ].
 	^ object1 = object2
 ]

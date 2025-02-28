@@ -1,16 +1,16 @@
 Class {
-	#name : 'CapellaObjectConstructor',
+	#name : 'CapellaXMLObjectConstructor',
 	#superclass : 'Object',
 	#instVars : [
 		'uuidGenerator'
 	],
-	#category : 'Capella-Model-Core',
+	#category : 'Capella-Model-Core-XML',
 	#package : 'Capella-Model',
-	#tag : 'Core'
+	#tag : 'Core-XML'
 }
 
 { #category : 'adding' }
-CapellaObjectConstructor >> makeComponentRealizationTarget: aCapellaTargetComponent withSource: aCapellaSourceComponent inPkg: aCapellaPkg [
+CapellaXMLObjectConstructor >> makeComponentRealizationTarget: aCapellaTargetComponent withSource: aCapellaSourceComponent inPkg: aCapellaPkg [
 
 	| object |
 	object := self newObjectWithXsiType:
@@ -28,7 +28,7 @@ CapellaObjectConstructor >> makeComponentRealizationTarget: aCapellaTargetCompon
 ]
 
 { #category : 'adding' }
-CapellaObjectConstructor >> makeFunctionRealizationTarget: aCapellaTargetFunction withSource: aCapellaSourceFunction inPkg: aCapellaPkg [
+CapellaXMLObjectConstructor >> makeFunctionRealizationTarget: aCapellaTargetFunction withSource: aCapellaSourceFunction inPkg: aCapellaPkg [
 
 	| object |
 	object := self newObjectWithXsiType:
@@ -46,7 +46,7 @@ CapellaObjectConstructor >> makeFunctionRealizationTarget: aCapellaTargetFunctio
 ]
 
 { #category : 'adding' }
-CapellaObjectConstructor >> makeGeneralization: aCapellaSubClass withSuperClass: aCapellaSuperClass [
+CapellaXMLObjectConstructor >> makeGeneralization: aCapellaSubClass withSuperClass: aCapellaSuperClass [
 
 	| object |
 	object := self newObjectWithXsiType:
@@ -60,7 +60,7 @@ CapellaObjectConstructor >> makeGeneralization: aCapellaSubClass withSuperClass:
 ]
 
 { #category : 'as yet unclassified' }
-CapellaObjectConstructor >> makeNewComponentNamed: aString forPackage: aPackage withXsiType: aXsiType withNodeName: aNodeName [
+CapellaXMLObjectConstructor >> makeNewComponentNamed: aString forPackage: aPackage withXsiType: aXsiType withNodeName: aNodeName [
 
 	| component part |
 	component := self newObjectWithXsiType: aXsiType.
@@ -79,7 +79,7 @@ CapellaObjectConstructor >> makeNewComponentNamed: aString forPackage: aPackage 
 ]
 
 { #category : 'as yet unclassified' }
-CapellaObjectConstructor >> makeNewLogicalComponentNamed: aString forPackage: aPackage [
+CapellaXMLObjectConstructor >> makeNewLogicalComponentNamed: aString forPackage: aPackage [
 
 	^ self
 		  makeNewComponentNamed: aString
@@ -90,7 +90,7 @@ CapellaObjectConstructor >> makeNewLogicalComponentNamed: aString forPackage: aP
 ]
 
 { #category : 'as yet unclassified' }
-CapellaObjectConstructor >> makeNewPhysicalComponentNamed: aString forPackage: aPackage [
+CapellaXMLObjectConstructor >> makeNewPhysicalComponentNamed: aString forPackage: aPackage [
 
 	^ self
 		  makeNewComponentNamed: aString
@@ -101,7 +101,7 @@ CapellaObjectConstructor >> makeNewPhysicalComponentNamed: aString forPackage: a
 ]
 
 { #category : 'as yet unclassified' }
-CapellaObjectConstructor >> makeNewSystemComponentNamed: aString forPackage: aPackage [
+CapellaXMLObjectConstructor >> makeNewSystemComponentNamed: aString forPackage: aPackage [
 	
 	^ self
 		  makeNewComponentNamed: aString
@@ -114,23 +114,23 @@ CapellaObjectConstructor >> makeNewSystemComponentNamed: aString forPackage: aPa
 ]
 
 { #category : 'instance creation' }
-CapellaObjectConstructor >> newIdValue [
+CapellaXMLObjectConstructor >> newIdValue [
 
 	^ (UUID nonStandardUUIDWithGenerator: self uuidGenerator) printString
 ]
 
 { #category : 'adding' }
-CapellaObjectConstructor >> newObject [
+CapellaXMLObjectConstructor >> newObject [
 
-	^ CapellaGlobalObject new
+	^ CapellaXMLObject new
 		  addAttributeNamed: #id withValue: self newIdValue;
 		  yourself
 ]
 
 { #category : 'adding' }
-CapellaObjectConstructor >> newObjectWithXsiType: aString [
+CapellaXMLObjectConstructor >> newObjectWithXsiType: aString [
 
-	^ CapellaGlobalObject new
+	^ CapellaXMLObject new
 		  visitorSelector: ('visit<1s>:' expandMacrosWith: (':' split: aString) last);
 		  addAttributeNamed: #id withValue: self newIdValue;
 		  addAttributeNamed: #'xsi:type' withValue: aString;
@@ -138,7 +138,7 @@ CapellaObjectConstructor >> newObjectWithXsiType: aString [
 ]
 
 { #category : 'adding' }
-CapellaObjectConstructor >> translateClass: aClass [
+CapellaXMLObjectConstructor >> translateClass: aClass [
 
 	| object |
 	object := self
@@ -149,7 +149,7 @@ CapellaObjectConstructor >> translateClass: aClass [
 ]
 
 { #category : 'adding' }
-CapellaObjectConstructor >> translateClassPropertyDescription: aPropertyDescription withTypeDictionary: aDictionary [
+CapellaXMLObjectConstructor >> translateClassPropertyDescription: aPropertyDescription withTypeDictionary: aDictionary [
 
 	| object maxCard minCard |
 	object := self newObjectWithXsiType:
@@ -176,7 +176,7 @@ CapellaObjectConstructor >> translateClassPropertyDescription: aPropertyDescript
 ]
 
 { #category : 'accessing' }
-CapellaObjectConstructor >> uuidGenerator [
+CapellaXMLObjectConstructor >> uuidGenerator [
 
 	uuidGenerator ifNil: [ uuidGenerator := UUIDGenerator new ].
 	^ uuidGenerator

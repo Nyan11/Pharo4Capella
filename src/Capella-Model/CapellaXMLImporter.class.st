@@ -1,5 +1,5 @@
 Class {
-	#name : 'NeoCapellaImporter',
+	#name : 'CapellaXMLImporter',
 	#superclass : 'Object',
 	#instVars : [
 		'xmlDocument',
@@ -7,24 +7,29 @@ Class {
 		'allReferences',
 		'allNeededResolve'
 	],
-	#category : 'Capella-Model-Core',
+	#category : 'Capella-Model-Core-XML',
 	#package : 'Capella-Model',
-	#tag : 'Core'
+	#tag : 'Core-XML'
 }
 
 { #category : 'building' }
-NeoCapellaImporter >> build [
+CapellaXMLImporter >> build [
 
+	| name |
+	name := ''.
 	projectObject := self newObjectFromXMLNode:
 		                 self xmlDocument nodes first.
 	allNeededResolve keysAndValuesDo: [ :capellaObject :array |
-		array do: [ :each | self resolveReference: each in: capellaObject ].
-	].
-	^ projectObject
+		array do: [ :each | self resolveReference: each in: capellaObject ] ].
+	projectObject attributeAt: 'name' ifPresent: [ :cur | name := cur ].
+	^ CapellaXMLProject new
+		  root: projectObject;
+		  name: name;
+		  yourself
 ]
 
 { #category : 'initialization' }
-NeoCapellaImporter >> initialize [
+CapellaXMLImporter >> initialize [
 
 	super initialize.
 	allReferences := Dictionary new.
@@ -32,7 +37,7 @@ NeoCapellaImporter >> initialize [
 ]
 
 { #category : 'instance creation' }
-NeoCapellaImporter >> newObjectFromXMLNode: aXMLNode [
+CapellaXMLImporter >> newObjectFromXMLNode: aXMLNode [
 
 	| attributeDictioanry allElements elementDictionary allReferenceAssociations object |
 	attributeDictioanry := aXMLNode attributeAssociations asDictionary.
@@ -49,7 +54,7 @@ NeoCapellaImporter >> newObjectFromXMLNode: aXMLNode [
 		                            asso value isString and: [
 			                            asso value beginsWith: '#' ] ].
 
-	object := CapellaGlobalObject new
+	object := CapellaXMLObject new
 		          attributeDictionary: attributeDictioanry;
 		          elementDictionary: elementDictionary;
 		          yourself.
@@ -60,7 +65,7 @@ NeoCapellaImporter >> newObjectFromXMLNode: aXMLNode [
 ]
 
 { #category : 'as yet unclassified' }
-NeoCapellaImporter >> resolveReference: anAssociation in: aCapellaGlobalObject [
+CapellaXMLImporter >> resolveReference: anAssociation in: aCapellaGlobalObject [
 
 	| allPossibleReferences reference |
 	allPossibleReferences := ' ' split: anAssociation value trimRight.
@@ -76,30 +81,30 @@ NeoCapellaImporter >> resolveReference: anAssociation in: aCapellaGlobalObject [
 ]
 
 { #category : 'accessing' }
-NeoCapellaImporter >> xmlDocument [
+CapellaXMLImporter >> xmlDocument [
 	^ xmlDocument
 ]
 
 { #category : 'accessing' }
-NeoCapellaImporter >> xmlDocument: anObject [
+CapellaXMLImporter >> xmlDocument: anObject [
 
 	xmlDocument := anObject
 ]
 
 { #category : 'accessing' }
-NeoCapellaImporter >> xmlFile: anObject [
+CapellaXMLImporter >> xmlFile: anObject [
 
 	self xmlString: anObject contents
 ]
 
 { #category : 'accessing' }
-NeoCapellaImporter >> xmlPath: anObject [
+CapellaXMLImporter >> xmlPath: anObject [
 
 	self xmlFile: anObject asFileReference
 ]
 
 { #category : 'accessing' }
-NeoCapellaImporter >> xmlString: anObject [
+CapellaXMLImporter >> xmlString: anObject [
 
 	self xmlDocument: (XMLDOMParser parse: anObject)
 ]

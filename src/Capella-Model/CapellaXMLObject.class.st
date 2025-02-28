@@ -1,30 +1,30 @@
 Class {
-	#name : 'CapellaGlobalObject',
+	#name : 'CapellaXMLObject',
 	#superclass : 'Object',
 	#instVars : [
 		'xmlAttributes',
 		'xmlElements',
 		'visitorSelector'
 	],
-	#category : 'Capella-Model-Core',
+	#category : 'Capella-Model-Core-XML',
 	#package : 'Capella-Model',
-	#tag : 'Core'
+	#tag : 'Core-XML'
 }
 
 { #category : 'visiting' }
-CapellaGlobalObject >> acceptVisitor: aCapellaVisitor [
+CapellaXMLObject >> acceptVisitor: aCapellaVisitor [
 
 	^ aCapellaVisitor perform: self visitorSelector with: self
 ]
 
 { #category : 'adding' }
-CapellaGlobalObject >> addAttributeNamed: aString withValue: aValue [
+CapellaXMLObject >> addAttributeNamed: aString withValue: aValue [
 
 	xmlAttributes at: aString put: aValue
 ]
 
 { #category : 'adding' }
-CapellaGlobalObject >> addElementNamed: aString withValue: aCapellaObject [
+CapellaXMLObject >> addElementNamed: aString withValue: aCapellaObject [
 
 	xmlElements
 		at: aString
@@ -33,7 +33,7 @@ CapellaGlobalObject >> addElementNamed: aString withValue: aCapellaObject [
 ]
 
 { #category : 'converting' }
-CapellaGlobalObject >> asXMLElementNamed: aString [
+CapellaXMLObject >> asXMLElementNamed: aString [
 
 	| element |
 	element := XMLElement
@@ -45,56 +45,61 @@ CapellaGlobalObject >> asXMLElementNamed: aString [
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> attributeAt: aKey [
+CapellaXMLObject >> attributeAt: aKey [
 
 	^ xmlAttributes at: aKey
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> attributeAt: aString ifAbsent: aFullBlockClosure [ 
+CapellaXMLObject >> attributeAt: aString ifAbsent: aFullBlockClosure [ 
 	^ xmlAttributes at: aString ifAbsent: aFullBlockClosure
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> attributeAt: aString ifPresent: aFullBlockClosure [ 
+CapellaXMLObject >> attributeAt: aString ifPresent: aFullBlockClosure [ 
 	^ xmlAttributes at: aString ifPresent: aFullBlockClosure
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> attributeAt: aString ifPresent: aFullBlockClosure ifAbsent: aFullBlockClosure3 [ 
+CapellaXMLObject >> attributeAt: aString ifPresent: aFullBlockClosure ifAbsent: aFullBlockClosure3 [ 
 	^ xmlAttributes at: aString ifPresent: aFullBlockClosure ifAbsent: aFullBlockClosure3 
 ]
 
 { #category : 'as yet unclassified' }
-CapellaGlobalObject >> attributeDictionary: aDictionary [
+CapellaXMLObject >> attributeDictionary: aDictionary [
 
 	xmlAttributes := aDictionary
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> attributes [
+CapellaXMLObject >> attributes [
 	^ xmlAttributes
 ]
 
+{ #category : 'accessing' }
+CapellaXMLObject >> elementAt: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3 [ 
+	^ xmlElements at: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3
+]
+
 { #category : 'as yet unclassified' }
-CapellaGlobalObject >> elementDictionary: aDictionary [
+CapellaXMLObject >> elementDictionary: aDictionary [
 
 	xmlElements := aDictionary
 ]
 
 { #category : 'as yet unclassified' }
-CapellaGlobalObject >> elementsAt: aKey [
+CapellaXMLObject >> elementsAt: aKey [
 
 	^ xmlElements at: aKey
 ]
 
 { #category : 'as yet unclassified' }
-CapellaGlobalObject >> flattenObject [
+CapellaXMLObject >> flattenObject [
 	^ self flattenObjectOn: OrderedCollection new.
 ]
 
 { #category : 'as yet unclassified' }
-CapellaGlobalObject >> flattenObjectOn: aCollection [
+CapellaXMLObject >> flattenObjectOn: aCollection [
 
 	(aCollection includes: self) ifTrue: [
 		Error signal: 'It is not a tree but a graph' ].
@@ -104,7 +109,7 @@ CapellaGlobalObject >> flattenObjectOn: aCollection [
 ]
 
 { #category : 'initialization' }
-CapellaGlobalObject >> initialize [
+CapellaXMLObject >> initialize [
 
 	super initialize.
 	xmlAttributes := Dictionary new.
@@ -112,7 +117,7 @@ CapellaGlobalObject >> initialize [
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> namespaces [
+CapellaXMLObject >> namespaces [
 
 	^ {
 		  ('xsi' -> 'http://www.w3.org/2001/XMLSchema-instance').
@@ -150,19 +155,19 @@ CapellaGlobalObject >> namespaces [
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> visitorSelector [
+CapellaXMLObject >> visitorSelector [
 
 	^ visitorSelector
 ]
 
 { #category : 'accessing' }
-CapellaGlobalObject >> visitorSelector: anObject [
+CapellaXMLObject >> visitorSelector: anObject [
 
 	visitorSelector := anObject
 ]
 
 { #category : 'converting' }
-CapellaGlobalObject >> xmlAttributeAssociations [
+CapellaXMLObject >> xmlAttributeAssociations [
 
 	^ xmlAttributes associations collect: [ :each |
 		  each value class = self class
@@ -178,7 +183,7 @@ CapellaGlobalObject >> xmlAttributeAssociations [
 ]
 
 { #category : 'converting' }
-CapellaGlobalObject >> xmlChildrenNodes [
+CapellaXMLObject >> xmlChildrenNodes [
 
 	| col |
 	col := OrderedCollection new.

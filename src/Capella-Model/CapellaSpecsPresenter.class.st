@@ -2,15 +2,20 @@ Class {
 	#name : 'CapellaSpecsPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'fileInput',
-		'fileButton',
 		'actorsTable',
-		'systemTable'
+		'systemTable',
+		'project'
 	],
 	#category : 'Capella-Model-UI',
 	#package : 'Capella-Model',
 	#tag : 'UI'
 }
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> actorItems [
+
+	^ self partItems select: [ :each | self isPartAnActor: each ]
+]
 
 { #category : 'accessing' }
 CapellaSpecsPresenter >> actorsTable [
@@ -21,48 +26,100 @@ CapellaSpecsPresenter >> actorsTable [
 { #category : 'layout' }
 CapellaSpecsPresenter >> defaultLayout [
 
-	^ SpBoxLayout newVertical
-		  spacing: 4;
-		  add: (SpBoxLayout newHorizontal
-				   spacing: 16;
-				   add: (SpLabelPresenter new
-						    label: 'Path to Capella file: ';
-						    yourself)
-				   expand: false;
-				   add: self fileInput;
-				   add: self fileButton expand: false)
-		  expand: false;
-		  add: (SpPanedLayout newVertical
-				   add: self actorsTable;
-				   add: self systemTable)
-		  expand: true;
+	^ SpPanedLayout newVertical
+		  add: self actorsTable;
+		  add: self systemTable;
 		  yourself
-]
-
-{ #category : 'accessing' }
-CapellaSpecsPresenter >> fileButton [
-
-	^ fileButton
-]
-
-{ #category : 'accessing' }
-CapellaSpecsPresenter >> fileInput [
-
-	^ fileInput
 ]
 
 { #category : 'initialization - deprecated' }
 CapellaSpecsPresenter >> initializePresenter [
 
 	super initializePresenter.
-	actorsTable := SpTablePresenter new.
-	systemTable := SpTablePresenter new.
-	fileInput := SpLabelPresenter new label: 'tejkdsjflkdjsklfsjdl'; yourself.
-	fileButton := SpButtonPresenter new
+	actorsTable := self newPartsTable.
+	systemTable := self newPartsTable
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> isPartAnActor: aCapellaObject [
+
+	aCapellaObject
+		attributeAt: 'abstractType'
+		ifPresent: [ :obj |
+			obj attributeAt: 'actor' ifPresent: [ ^ true ] ifAbsent: [
+				obj
+					attributeAt: 'xsi:type'
+					ifPresent: [ :type |
+					^ type = 'org.polarsys.capella.core.data.oa:Entity' ]
+					ifAbsent: [ self halt.
+						^ false ] ] ]
+		ifAbsent: [ 
+			self halt.
+			^ false ]
+]
+
+{ #category : 'initialization - deprecated' }
+CapellaSpecsPresenter >> newPartsTable [
+
+	| table |
+	^ table := SpTablePresenter new
+		           addColumn: (SpStringTableColumn evaluated: [ :each |
+					            each
+						            attributeAt: 'name'
+						            ifPresent: [ :n | n ]
+						            ifAbsent: [ '' ] ]);
+		           contextMenu: (SpMenuPresenter new
+				            addItem: [ :item |
+					            item
+						            name: 'Inspect';
+						            action: [
+							            table selectedItems do: [ :each | each inspect ] ];
+						            yourself ];
+				            yourself);
+		           yourself
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> partItems [
+
+	^ self project allObjects select: [ :each |
+		  each
+			  attributeAt: 'xsi:type'
+			  ifPresent: [ :type |
+			  type = 'org.polarsys.capella.core.data.cs:Part' ]
+			  ifAbsent: [ false ] ]
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> project [
+
+	^ project
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> project: aCapellaXMLProject [
+
+	project := aCapellaXMLProject.
+	self updatePresenter
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> systemItems [
+
+	^ self partItems select: [ :each | (self isPartAnActor: each) not ]
 ]
 
 { #category : 'accessing' }
 CapellaSpecsPresenter >> systemTable [
 
 	^ systemTable
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> updatePresenter [
+
+	super updatePresenter.
+	self project ifNil: [ ^ self ].
+	self actorsTable items: self project partGroups.
+	"self systemTable items: self systemItems"
 ]
