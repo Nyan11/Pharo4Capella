@@ -43,48 +43,6 @@ CapellaXMLProject >> name: anObject [
 	name := anObject
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaXMLProject >> partGroups [
-
-	| allParts allTypes allAssociations allGroups allGroupsWithParts |
-	allParts := allObjects select: [ :each |
-		            each
-			            attributeAt: 'xsi:type'
-			            ifPresent: [ :type |
-			            type = 'org.polarsys.capella.core.data.cs:Part' ]
-			            ifAbsent: [ false ] ].
-	allTypes := allParts collect: [ :each |
-		            each attributeAt: 'abstractType' ].
-	allAssociations := allTypes
-		                   select: [ :each |
-			                   each
-				                   elementsAt: 'ownedComponentRealizations'
-				                   ifPresent: [ true ]
-				                   ifAbsent: [ false ] ]
-		                   thenCollect: [ :each |
-			                   each
-			                   ->
-				                   ((each elementsAt: 'ownedComponentRealizations')
-					                    first attributeAt: 'targetElement') ].
-	allGroups := OrderedCollection new.
-	allAssociations do: [ :asso |
-		(allGroups select: [ :grp | grp includes: asso value ])
-			ifEmpty: [
-			allGroups add: (OrderedCollection with: asso value with: asso key) ]
-			ifNotEmpty: [ :col | col first add: asso key ] ].
-
-	allGroupsWithParts := allGroups collect: [ :grp |
-		                      grp flatCollect: [ :each |
-			                      allObjects select: [ :obj |
-				                      obj
-					                      attributeAt: 'abstractType'
-					                      ifPresent: [ :type | type = each ]
-					                      ifAbsent: [ false ] ] ] ].
-
-	^ allGroupsWithParts collect: [ :each |
-		  CapellaGroup new capellaObjects: each ]
-]
-
 { #category : 'accessing' }
 CapellaXMLProject >> root [
 

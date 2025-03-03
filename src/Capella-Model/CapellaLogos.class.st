@@ -17,14 +17,8 @@ CapellaLogos class >> logoBlank [
                   (BlFontWeightAttribute new
                      weight: 700;
                      yourself)} rope: (BlCollectionRope new
-                     collection: 'PA';
+                     collection: 'OA';
                      yourself));
-         yourself);
-   background: (BlPaintBackground new
-         paint: (BlColorPaint new
-               color: (Color r: 1.0 g: 0.6080156402737048 b: 0.08211143695014662 alpha: 1.0);
-               yourself);
-         opacity: 1.0;
          yourself);
    geometry: (BlRoundedRectangleGeometry cornerRadius: 200);
    visibility: BlVisibility hidden;
@@ -35,7 +29,49 @@ CapellaLogos class >> logoBlank [
    yourself"
 
 	| base64 |
-	base64 := 'iVBORw0KGgoAAAANSUhEUgAAABUAAAAPCAYAAAALWoRrAAAABmJLR0QA/wD/AP+gvaeTAAAAEklEQVQ4jWNgGAWjYBSMghEHAAT7AAFmgiuwAAAAAElFTkSuQmCC'.
+	base64 := 'iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABmJLR0QA/wD/AP+gvaeTAAAAFElEQVQ4jWNgGAWjYBSMglEwGAAABZAAARR2mXYAAAAASUVORK5CYII='.
+	^ Form fromBinaryStream: base64 base64Decoded readStream.
+]
+
+{ #category : 'as yet unclassified' }
+CapellaLogos class >> logoBlankStart [
+
+	"BlElement new
+   addChildren: {(BlElement new
+         background: (BlPaintBackground new
+               paint: (BlColorPaint new
+                     color: (Color r: 0.0 g: 0.0 b: 0.0 alpha: 1.0);
+                     yourself);
+               opacity: 1.0;
+               yourself);
+         constraintsDo: [:constraints |  constraints horizontal matchParent.
+            constraints vertical exact: 1.0.
+            constraints frame horizontal alignCenter.
+            constraints frame vertical alignCenter.
+            constraints padding: (BlInsets top: 6.0 right: 0.0 bottom: 0.0 left: 0.0) ];
+         id: #B;
+         yourself) . 
+      (BlElement new
+         background: (BlPaintBackground new
+               paint: (BlColorPaint new
+                     color: (Color r: 0.0 g: 0.0 b: 0.0 alpha: 1.0);
+                     yourself);
+               opacity: 1.0;
+               yourself);
+         constraintsDo: [:constraints |  constraints horizontal exact: 1.0.
+            constraints vertical matchParent.
+            constraints frame vertical alignTopAt: -0.5 ];
+         id: #A;
+         yourself)};
+   constraintsDo: [:constraints |  constraints horizontal exact: 150.0.
+      constraints vertical exact: 16.11.
+      constraints padding: (BlInsets top: 0.0 right: 0.0 bottom: 0.0 left: 6.0) ];
+   layout: BlFrameLayout new;
+   id: #A;
+   yourself"
+
+	| base64 |
+	base64 := 'iVBORw0KGgoAAAANSUhEUgAAAJYAAAAQCAYAAAD06IYnAAAABmJLR0QA/wD/AP+gvaeTAAAATUlEQVRoge3SsQ2AQBADwQNRMbVQLclTAUfkR3rNpE4cbNW70WzQ2v8+wJqERYSwiBAWEcIiQlhEHB/7OeUFy9ma7aqqe9YRAAAAAGg8ngMDEaB2Ux4AAAAASUVORK5CYII='.
 	^ Form fromBinaryStream: base64 base64Decoded readStream.
 ]
 
@@ -165,36 +201,4 @@ CapellaLogos class >> logoSA [
 	| base64 |
 	base64 := 'iVBORw0KGgoAAAANSUhEUgAAABUAAAAQCAYAAAD52jQlAAAABmJLR0QA/wD/AP+gvaeTAAACN0lEQVQ4ja2UTUhUURiGn+/MvZPizwyCZaLJGEESpa2CyHCTGS28LWoVJRUE0cL20bJop5uW6Toori360Rb9ECQWWUE/FKVO5BiZjjk5zJx7T4uZpnFuBWbv6nBezvO95z3cK5SoMu50iKHHiHGASKlfpKQYcX1FX6rBHS825Oci+sGJaotBMN1/Af1B0r/Y6PYug+aA/l2Q1pUDC6ihxUbXAVAA2vLd1QEBTHdl3OkDkKopp8eIGShYKU3m3Av0zWkwBmtfPeGzW5CaMACZCy/JXHqLrCujYmxvUYH58yLblRG/t3gzc/EV2StThHbXYh1oQN//jJlJF3w9nEDWlmFm0vjP5wN5lU+vKr22mUoBYB+NseZ8KxWjnaiWagD8iRT+u2/YPbH8gOlgCWIcVbppHdwAwNKhhyw5D9A3PhU8Lw+xutajNlaihxMBKBAJQvfXU36tHWtPHd7TOdKnHpMdeJ9LdjuBRGykJozaGsV/vYAf/x6sIBB/IYtqqabs8g7Kr+7KwUYSmLkM3pOvmGSWVNsttPsxnz6QNmmBeVbca/rkGP6bBayuesyX3AOFtkXx7syAZwif3kRoZy1mySN9YhQ9Mo19vLlAFCOuEqP6isfYx5pRTRVkr0ziPZrFPhIjfGYzeiTXp304Rqi9FquzDtUSwRudXX5TYVAAquLdEwaaftf6ymTuLTZe71AAvogDJFeDE5i0tPr1maYa3HFLSxvI0D8i+0Na2uZj7nx+wHL9j1/fD3lz4OQkNb3ZAAAAAElFTkSuQmCC'.
 	^ Form fromBinaryStream: base64 base64Decoded readStream
-]
-
-{ #category : 'as yet unclassified' }
-CapellaLogos >> logoName [
-
-	"BlTextElement new
-   text: (BlRopedText new
-         rope: (BlAttributeRope attributes: {(BlFontSizeAttribute new
-                     size: 12;
-                     yourself) . 
-                  (BlFontWeightAttribute new
-                     weight: 700;
-                     yourself)} rope: (BlCollectionRope new
-                     collection: 'OA';
-                     yourself));
-         yourself);
-   background: (BlPaintBackground new
-         paint: (BlColorPaint new
-               color: (Color r: 1.0 g: 0.8709677419354839 b: 0.176930596285435 alpha: 1.0);
-               yourself);
-         opacity: 1.0;
-         yourself);
-   geometry: (BlRoundedRectangleGeometry cornerRadius: 200);
-   constraintsDo: [:constraints |  constraints horizontal fitContent.
-      constraints vertical fitContent.
-      constraints padding: (BlInsets all: 4.0) ];
-   id: #'';
-   yourself"
-
-	| base64 |
-	base64 := 'iVBORw0KGgoAAAANSUhEUgAAABYAAAAQCAYAAAAS7Y8mAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVQ4ja2UUUhTURzGf+duo1zSpFy6enCzoMTSSQSCiXsICYRaCL3UgxBJvVlUD1EPQQQhom+RBQkGPQThJBCZiFlURJQxfRiCU3owcLq266bZzk4PV+Z1EwrbB+fl+9/zOx8f9xxBjlTkqA8l2gA/4Midb6EAggHhCfWZTbEB9JagZB9w9h9gW0jMIaRfeKYmsuB16BhQuz1oVnGExS08Ez81I64cKAAUwLEeEE1FjrUBTebpq+EE3pZpiqomqWwK0/U0ilIbcz2ZYcfhSURliN4XS7nwWhWp6dBQdJjd4XGd1qtzLCxJrlzYy+5ijRsP5nn4eCH7zdCYztpvhWuflUAwkZ9bqW6NnAo6e6PG5mduuu+4ePfyIHtKLHQ9iSKlETsQTLC/zMa5ZgejH5ZJpjJ5bC3XCIVXKSu1UnNkJwDFdo16r51oLM38Qpq0VAy90Wk4bqfxhJ3VX4rht8t/B2saSLnZk+uBNAHjn5LE4pK66iKqDhmHD47k15EHrqsuIhpL8zm0AkBcl3z8mqLcaaXcaWNwRAfgducPvC3TALweTWRrMoO/mY1b7U6EgDOXZ7l2f57G8zPEdcnNdieaZqQ7UG4j2O8h2O+h9bSDxZjk/ZdUDljQYzZ89bsI9FZQVmrl0fNFkisZeu66uH6plFB4lcj3NZpPFnOqwVgX/SUAm/8OJe4ZN2+mZhZURV5R21McYXEbHQvpB+IFwYqML3ulhWdqAmHxAoH/IM4hMnWbHiGzCvVs/gHcxtvHOLyesAAAAABJRU5ErkJggg=='.
-	^ Form fromBinaryStream: base64 base64Decoded readStream.
 ]

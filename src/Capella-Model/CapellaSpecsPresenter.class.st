@@ -2,112 +2,120 @@ Class {
 	#name : 'CapellaSpecsPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'actorsTable',
-		'systemTable',
-		'project'
+		'project',
+		'model',
+		'partsTable',
+		'functionsTable',
+		'functionalExchangesTable'
 	],
 	#category : 'Capella-Model-UI',
 	#package : 'Capella-Model',
 	#tag : 'UI'
 }
 
-{ #category : 'as yet unclassified' }
-CapellaSpecsPresenter >> actorItems [
-
-	^ self partItems select: [ :each | self isPartAnActor: each ]
-]
-
-{ #category : 'accessing' }
-CapellaSpecsPresenter >> actorsTable [
-
-	^ actorsTable
-]
-
 { #category : 'layout' }
 CapellaSpecsPresenter >> defaultLayout [
 
 	^ SpPanedLayout newVertical
-		  add: self actorsTable;
-		  add: self systemTable;
+		  add: self partsTable;
+		  add: (SpPanedLayout newVertical
+				   add: self functionsTable;
+				   add: self functionalExchangesTable;
+				   yourself);
 		  yourself
+]
+
+{ #category : 'layout' }
+CapellaSpecsPresenter >> functionalExchangesTable [
+
+	^ functionalExchangesTable
+]
+
+{ #category : 'accessing' }
+CapellaSpecsPresenter >> functionsTable [
+
+	^ functionsTable
 ]
 
 { #category : 'initialization - deprecated' }
 CapellaSpecsPresenter >> initializePresenter [
 
 	super initializePresenter.
-	actorsTable := self newPartsTable.
-	systemTable := self newPartsTable
-]
+	partsTable := self newPartsTree.
+	functionsTable := self newPartsTree.
+	functionalExchangesTable := self newPartsTree.
 
-{ #category : 'as yet unclassified' }
-CapellaSpecsPresenter >> isPartAnActor: aCapellaObject [
-
-	aCapellaObject
-		attributeAt: 'abstractType'
-		ifPresent: [ :obj |
-			obj attributeAt: 'actor' ifPresent: [ ^ true ] ifAbsent: [
-				obj
-					attributeAt: 'xsi:type'
-					ifPresent: [ :type |
-					^ type = 'org.polarsys.capella.core.data.oa:Entity' ]
-					ifAbsent: [ self halt.
-						^ false ] ] ]
-		ifAbsent: [ 
-			self halt.
-			^ false ]
+	partsTable whenSelectedItemChangedDo: [ :item |
+		item
+			ifNil: [ functionsTable roots: model functionRoots ]
+			ifNotNil: [ | roots |
+				roots := (model allFunctionsForPart: item).
+			functionsTable roots: roots.
+			functionalExchangesTable roots: (model allFunctionalExchangesForFunctions: roots) ] ].
+	functionsTable whenSelectedItemChangedDo: [ :item |
+		item
+			ifNil: [
+			functionalExchangesTable roots: model functionalExchangeRoots ]
+			ifNotNil: [
+				functionalExchangesTable roots:
+					(model allFunctionalExchangesForFunction: item) ] ]
 ]
 
 { #category : 'initialization - deprecated' }
-CapellaSpecsPresenter >> newPartsTable [
+CapellaSpecsPresenter >> newPartsTree [
 
 	| table |
-	^ table := SpTablePresenter new
+	^ table := SpTreeTablePresenter new
+		           children: [ :each | each children ];
+		           addColumn:
+			           ((SpCompositeTableColumn title: 'Name' withAll: {
+						             (SpImageTableColumn evaluated: [ :each |
+								              each isHuman
+									              ifTrue: [
+										              Smalltalk ui icons iconNamed: #userFemale ]
+									              ifFalse: [
+										              Smalltalk ui icons iconNamed: #window ] ]).
+						             (SpStringTableColumn evaluated: [ :each |
+								              each
+									              attributeAt: 'name'
+									              ifPresent: [ :n | n ]
+									              ifAbsent: [ '' ] ]) }) width: 400);
 		           addColumn:
 			           ((SpCompositeTableColumn
-				            title: 'Architectures'
-				            withAll: {
-						            (SpImageTableColumn evaluated: [ :each |
-								             each isOA
-									             ifTrue: [ CapellaLogos logoOA ]
-									             ifFalse: [ CapellaLogos logoBlank ] ]).
-						            (SpImageTableColumn evaluated: [ :each |
-								             each isSA
-									             ifTrue: [ CapellaLogos logoSA ]
-									             ifFalse: [ CapellaLogos logoBlank ] ]).
-						            (SpImageTableColumn evaluated: [ :each |
-								             each isLA
-									             ifTrue: [ CapellaLogos logoLA ]
-									             ifFalse: [ CapellaLogos logoBlank ] ]).
-						            (SpImageTableColumn evaluated: [ :each |
-								             each isPA
-									             ifTrue: [ CapellaLogos logoPA ]
-									             ifFalse: [ CapellaLogos logoBlank ] ]) }) width: 88);
-		           addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :each |
-					            each
-						            attributeAt: 'name'
-						            ifPresent: [ :n | n ]
-						            ifAbsent: [ '' ] ]);
+				             title: 'Architectures'
+				             withAll: {
+						             (SpImageTableColumn evaluated: [ :each |
+								              each isOA
+									              ifTrue: [ CapellaLogos logoOA ]
+									              ifFalse: [ CapellaLogos logoBlank ] ]).
+						             (SpImageTableColumn evaluated: [ :each |
+								              each isSA
+									              ifTrue: [ CapellaLogos logoSA ]
+									              ifFalse: [ CapellaLogos logoBlank ] ]).
+						             (SpImageTableColumn evaluated: [ :each |
+								              each isLA
+									              ifTrue: [ CapellaLogos logoLA ]
+									              ifFalse: [ CapellaLogos logoBlank ] ]).
+						             (SpImageTableColumn evaluated: [ :each |
+								              each isPA
+									              ifTrue: [ CapellaLogos logoPA ]
+									              ifFalse: [ CapellaLogos logoBlank ] ]) })
+				            width: 88);
 		           contextMenu: (SpMenuPresenter new
 				            addItem: [ :item |
 					            item
 						            name: 'Inspect';
 						            action: [
-							            table selectedItems do: [ :each | each inspect ] ];
+							            table selectedItem inspect ];
 						            yourself ];
 				            yourself);
 		           yourself
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaSpecsPresenter >> partItems [
+{ #category : 'accessing' }
+CapellaSpecsPresenter >> partsTable [
 
-	^ self project allObjects select: [ :each |
-		  each
-			  attributeAt: 'xsi:type'
-			  ifPresent: [ :type |
-			  type = 'org.polarsys.capella.core.data.cs:Part' ]
-			  ifAbsent: [ false ] ]
+	^ partsTable
 ]
 
 { #category : 'as yet unclassified' }
@@ -120,19 +128,8 @@ CapellaSpecsPresenter >> project [
 CapellaSpecsPresenter >> project: aCapellaXMLProject [
 
 	project := aCapellaXMLProject.
+	model := CapellaGlobalGroups fromXMLProject: aCapellaXMLProject.
 	self updatePresenter
-]
-
-{ #category : 'as yet unclassified' }
-CapellaSpecsPresenter >> systemItems [
-
-	^ self partItems select: [ :each | (self isPartAnActor: each) not ]
-]
-
-{ #category : 'accessing' }
-CapellaSpecsPresenter >> systemTable [
-
-	^ systemTable
 ]
 
 { #category : 'as yet unclassified' }
@@ -140,6 +137,6 @@ CapellaSpecsPresenter >> updatePresenter [
 
 	super updatePresenter.
 	self project ifNil: [ ^ self ].
-	self actorsTable items: self project partGroups.
-	"self systemTable items: self systemItems"
+	self partsTable roots: model partRoots.
+	self functionsTable roots: model functionRoots.
 ]
