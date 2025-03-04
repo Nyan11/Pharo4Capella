@@ -14,10 +14,10 @@ CapellaFunctionsGroup class >> fromXMLProject: aCappellaXMLProject [
 	allGroups do: [ :group |
 		group children:
 			(allGroups select: [ :each | self is: each aChildrenOf: group ]) ].
-	^ allGroups select: [ :each | each isRoot ]
+	^ allGroups
 ]
 
-{ #category : 'testing' }
+{ #category : 'as yet unclassified' }
 CapellaFunctionsGroup class >> is: aCapellaGroup aChildrenOf: aCapellaGroupRoot [
 
 	aCapellaGroup = aCapellaGroupRoot ifTrue: [ ^ false ].
@@ -59,8 +59,24 @@ CapellaFunctionsGroup class >> privateMakeAllGroups: aCappellaXMLProject [
 			  yourself ]
 ]
 
-{ #category : 'testing' }
-CapellaFunctionsGroup >> isHuman [
+{ #category : 'accessing' }
+CapellaFunctionsGroup >> filter: aCollection [
 
-	^ false
+	^ aCollection select: [ :each | each isFilteredByFunction: self ]
+]
+
+{ #category : 'as yet unclassified' }
+CapellaFunctionsGroup >> groupIcon [
+
+	^ Smalltalk ui icons iconNamed: #blank
+]
+
+{ #category : 'testing' }
+CapellaFunctionsGroup >> isFilteredByChain: aCapellaFunctionalChainsGroup [ 
+	^ self capellaObjects includesAny: aCapellaFunctionalChainsGroup functions .
+]
+
+{ #category : 'testing' }
+CapellaFunctionsGroup >> isFilteredByPart: aCapellaPartsGroup [ 
+	^ aCapellaPartsGroup functionalAllocations includesAny: self capellaObjects
 ]

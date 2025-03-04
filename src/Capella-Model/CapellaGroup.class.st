@@ -107,6 +107,12 @@ CapellaGroup >> isEPBS [
 ]
 
 { #category : 'testing' }
+CapellaGroup >> isFunctionalExchange [
+
+	^ false
+]
+
+{ #category : 'testing' }
 CapellaGroup >> isLA [
 
 	^ self capellaObjects anySatisfy: #isLA

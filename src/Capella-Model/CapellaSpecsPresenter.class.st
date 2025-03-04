@@ -6,7 +6,8 @@ Class {
 		'model',
 		'partsTable',
 		'functionsTable',
-		'functionalExchangesTable'
+		'functionalExchangesTable',
+		'functionalChainsTable'
 	],
 	#category : 'Capella-Model-UI',
 	#package : 'Capella-Model',
@@ -20,9 +21,18 @@ CapellaSpecsPresenter >> defaultLayout [
 		  add: self partsTable;
 		  add: (SpPanedLayout newVertical
 				   add: self functionsTable;
-				   add: self functionalExchangesTable;
+				   add: (SpPanedLayout newVertical
+						    add: self functionalExchangesTable;
+						    add: self functionalChainsTable;
+						    yourself);
 				   yourself);
 		  yourself
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSpecsPresenter >> functionalChainsTable [
+
+	^ functionalChainsTable
 ]
 
 { #category : 'layout' }
@@ -44,14 +54,17 @@ CapellaSpecsPresenter >> initializePresenter [
 	partsTable := self newPartsTree.
 	functionsTable := self newPartsTree.
 	functionalExchangesTable := self newPartsTree.
+	functionalChainsTable := self newPartsTree.
 
 	partsTable whenSelectedItemChangedDo: [ :item |
 		item
 			ifNil: [ functionsTable roots: model functionRoots ]
-			ifNotNil: [ | roots |
-				roots := (model allFunctionsForPart: item).
-			functionsTable roots: roots.
-			functionalExchangesTable roots: (model allFunctionalExchangesForFunctions: roots) ] ].
+			ifNotNil: [
+				| roots |
+				roots := model allFunctionsForPart: item.
+				functionsTable roots: roots.
+				functionalExchangesTable roots:
+					(model allFunctionalExchangesForFunctions: roots) ] ].
 	functionsTable whenSelectedItemChangedDo: [ :item |
 		item
 			ifNil: [
@@ -70,11 +83,7 @@ CapellaSpecsPresenter >> newPartsTree [
 		           addColumn:
 			           ((SpCompositeTableColumn title: 'Name' withAll: {
 						             (SpImageTableColumn evaluated: [ :each |
-								              each isHuman
-									              ifTrue: [
-										              Smalltalk ui icons iconNamed: #userFemale ]
-									              ifFalse: [
-										              Smalltalk ui icons iconNamed: #window ] ]).
+								             each groupIcon ]).
 						             (SpStringTableColumn evaluated: [ :each |
 								              each
 									              attributeAt: 'name'
@@ -105,8 +114,7 @@ CapellaSpecsPresenter >> newPartsTree [
 				            addItem: [ :item |
 					            item
 						            name: 'Inspect';
-						            action: [
-							            table selectedItem inspect ];
+						            action: [ table selectedItem inspect ];
 						            yourself ];
 				            yourself);
 		           yourself
@@ -139,4 +147,5 @@ CapellaSpecsPresenter >> updatePresenter [
 	self project ifNil: [ ^ self ].
 	self partsTable roots: model partRoots.
 	self functionsTable roots: model functionRoots.
+	self functionalChainsTable roots: model functionalChainRoots.
 ]

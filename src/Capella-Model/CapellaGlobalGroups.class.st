@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'partRoots',
 		'functionRoots',
-		'functionalExchangeRoots'
+		'functionalExchangeRoots',
+		'functionalChainRoots'
 	],
 	#category : 'Capella-Model-UI',
 	#package : 'Capella-Model',
@@ -21,6 +22,7 @@ CapellaGlobalGroups class >> fromXMLProject: aCapellaProject [
 		(CapellaFunctionsGroup fromXMLProject: aCapellaProject).
 	model functionalExchangeRoots:
 		(CapellaFunctionalExchangesGroup fromXMLProject: aCapellaProject).
+	model functionalChainRoots: (CapellaFunctionalChainsGroup fromXMLProject: aCapellaProject).
 	^ model
 ]
 
@@ -30,15 +32,24 @@ CapellaGlobalGroups >> allFunctionalExchangesForFunction: aCapellaFunctionsGroup
 	| associations collection |
 	collection := OrderedCollection new.
 	associations := functionalExchangeRoots collect: [ :each |
+		                each isOutput: nil.
 		                {
 			                each.
 			                (each attributeAt: 'source') parent.
 			                (each attributeAt: 'target') parent } ].
 	associations do: [ :each |
 		(aCapellaFunctionsGroup capellaObjects includes: (each at: 2))
-			ifTrue: [ collection add: (each at: 1) ].
+			ifTrue: [
+				collection add: ((each
+						 at: 1)
+						 isOutput: true;
+						 yourself) ].
 		(aCapellaFunctionsGroup capellaObjects includes: (each at: 3))
-			ifTrue: [ collection add: (each at: 1) ] ].
+			ifTrue: [
+				collection add: ((each
+						 at: 1)
+						 isOutput: false;
+						 yourself) ] ].
 
 	^ collection asSet asArray sorted: [ :a :b |
 		  (a attributeAt: 'name') < (b attributeAt: 'name') ]
@@ -71,6 +82,18 @@ CapellaGlobalGroups >> functionRoots [
 CapellaGlobalGroups >> functionRoots: anObject [
 
 	functionRoots := anObject
+]
+
+{ #category : 'accessing' }
+CapellaGlobalGroups >> functionalChainRoots [
+
+	^ functionalChainRoots
+]
+
+{ #category : 'accessing' }
+CapellaGlobalGroups >> functionalChainRoots: anObject [
+
+	functionalChainRoots := anObject
 ]
 
 { #category : 'accessing' }

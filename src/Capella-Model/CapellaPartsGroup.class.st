@@ -17,10 +17,10 @@ CapellaPartsGroup class >> fromXMLProject: aCappellaXMLProject [
 	allGroups do: [ :group |
 		group children:
 			(allGroups select: [ :each | self is: each aChildrenOf: group ]) ].
-	^ allGroups select: [ :each | each isRoot ]
+	^ allGroups
 ]
 
-{ #category : 'testing' }
+{ #category : 'as yet unclassified' }
 CapellaPartsGroup class >> is: aCapellaGroup aChildrenOf: aCapellaGroupRoot [
 
 	| allTypes |
@@ -77,7 +77,7 @@ CapellaPartsGroup class >> privateMakeAllGroups: aCappellaXMLProject [
 		  self new capellaObjects: each ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'as yet unclassified' }
 CapellaPartsGroup >> capellaObjects: aCollection [
 
 	| functionAllocationsFlat |
@@ -92,6 +92,12 @@ CapellaPartsGroup >> capellaObjects: aCollection [
 ]
 
 { #category : 'accessing' }
+CapellaPartsGroup >> filter: aCollection [
+
+	^ aCollection select: [ :each | each isFilteredByPart: self ]
+]
+
+{ #category : 'as yet unclassified' }
 CapellaPartsGroup >> functionalAllocationGroups [
 
 	| allFunctions allAssociations allGroups |
@@ -120,14 +126,34 @@ CapellaPartsGroup >> functionalAllocationGroups [
 			  yourself ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'as yet unclassified' }
 CapellaPartsGroup >> functionalAllocations [
 
 	^ functionalAllocations
 	                , (self children flatCollect: #functionalAllocations).
 ]
 
+{ #category : 'as yet unclassified' }
+CapellaPartsGroup >> groupIcon [
+
+	self isHuman
+		  ifTrue: [ ^ Smalltalk ui icons iconNamed: #userFemale ]
+		  ifFalse: [ ^ Smalltalk ui icons iconNamed: #window ]
+]
+
 { #category : 'testing' }
+CapellaPartsGroup >> isFilteredByChain: aCapellaFunctionalChainsGroup [ 
+	^ self functionalAllocations includesAny: aCapellaFunctionalChainsGroup functions.
+]
+
+{ #category : 'testing' }
+CapellaPartsGroup >> isFilteredByFunction: aCapellaFunctionsGroup [
+
+	^ self functionalAllocations includesAny:
+		aCapellaFunctionsGroup capellaObjects
+]
+
+{ #category : 'as yet unclassified' }
 CapellaPartsGroup >> isHuman [
 
 	| types |
