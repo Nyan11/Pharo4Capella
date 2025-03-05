@@ -77,6 +77,11 @@ CapellaFunctionsGroup >> isFilteredByChain: aCapellaFunctionalChainsGroup [
 ]
 
 { #category : 'testing' }
+CapellaFunctionsGroup >> isFilteredByExchange: aCapellaFunctionalExchangesGroup [ 
+	^ self capellaObjects includesAny: aCapellaFunctionalExchangesGroup functions.
+]
+
+{ #category : 'testing' }
 CapellaFunctionsGroup >> isFilteredByPart: aCapellaPartsGroup [ 
 	^ aCapellaPartsGroup functionalAllocations includesAny: self capellaObjects
 ]

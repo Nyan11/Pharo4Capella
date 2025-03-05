@@ -79,6 +79,11 @@ CapellaFunctionalExchangesGroup >> groupIcon [
 ]
 
 { #category : 'testing' }
+CapellaFunctionalExchangesGroup >> isFilteredByChain: aCapellaFunctionalChainsGroup [ 
+	^ self functions includesAny: aCapellaFunctionalChainsGroup functions.
+]
+
+{ #category : 'testing' }
 CapellaFunctionalExchangesGroup >> isFilteredByFunction: aCapellaFunctionsGroup [ 
 	^ self functions includesAny: aCapellaFunctionsGroup capellaObjects .
 ]

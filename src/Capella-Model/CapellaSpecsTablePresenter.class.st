@@ -4,10 +4,9 @@ Class {
 	#instVars : [
 		'table',
 		'buttons',
+		'filtersPresenter',
 		'parentPresenter',
-		'model',
-		'filter',
-		'isUpdatating'
+		'model'
 	],
 	#category : 'Capella-Model-UI',
 	#package : 'Capella-Model',
@@ -47,32 +46,14 @@ CapellaSpecsTablePresenter >> defaultLayout [
 		  spacing: 4;
 		  add: self buttons width: 100;
 		  add: self table expand: true;
+		  add: self filtersPresenter expand: false;
 		  yourself
 ]
 
-{ #category : 'accessing' }
-CapellaSpecsTablePresenter >> filter [
+{ #category : 'layout' }
+CapellaSpecsTablePresenter >> filtersPresenter [
 
-	^ filter
-]
-
-{ #category : 'accessing' }
-CapellaSpecsTablePresenter >> filter: anObject [
-
-	filter := anObject
-]
-
-{ #category : 'accessing' }
-CapellaSpecsTablePresenter >> filteredModel [
-
-	self filter ifNil: [
-		| previous |
-		previous := self previousTable.
-		previous ifNil: [ ^ model ].
-		previous filteredModel ifNil: [ ^ model ].
-		^ previous filteredModel flatCollect: [ :each |
-			each filter: model ]].
-	^ self filter filter: model
+	^ filtersPresenter
 ]
 
 { #category : 'initialization - deprecated' }
@@ -82,21 +63,30 @@ CapellaSpecsTablePresenter >> initializeButtons [
 ]
 
 { #category : 'initialization - deprecated' }
+CapellaSpecsTablePresenter >> initializeFiltersPresenter [
+
+	filtersPresenter := CapellaSpecsFiltersPresenter new.
+]
+
+{ #category : 'initialization - deprecated' }
 CapellaSpecsTablePresenter >> initializePresenter [
 
 	self initializeTable.
 	self initializeButtons.
-	buttons moveUp action: [ self filter: nil. self actionMoveUp ].
-	buttons moveDown action: [ self filter: nil. self actionMoveDown ].
+	self initializeFiltersPresenter.
+
+	buttons moveUp action: [ self actionMoveUp ].
+	buttons moveDown action: [ self actionMoveDown ].
 	buttons unselect action: [ table unselectAll ].
-	table whenSelectedItemChangedDo: [ :selection |
-		self updateSelection: selection ]
+	table whenSelectionChangedDo: [ :selection |
+		self updateSelection: selection selectedItems ]
 ]
 
 { #category : 'instance creation' }
 CapellaSpecsTablePresenter >> initializeTable [
 
 	table := SpTablePresenter new
+		         beMultipleSelection;
 		         addColumn:
 			         ((SpCompositeTableColumn title: 'Name' withAll: {
 						           (SpImageTableColumn evaluated: [ :each |
@@ -151,13 +141,6 @@ CapellaSpecsTablePresenter >> isLast [
 	^ self parentPresenter tables last = self
 ]
 
-{ #category : 'initialization - deprecated' }
-CapellaSpecsTablePresenter >> isUpdatating [
-
-	isUpdatating ifNil: [ isUpdatating := false ].
-	^ isUpdatating
-]
-
 { #category : 't - labeled icon' }
 CapellaSpecsTablePresenter >> labelText: aString [
 
@@ -167,6 +150,7 @@ CapellaSpecsTablePresenter >> labelText: aString [
 { #category : 'accessing' }
 CapellaSpecsTablePresenter >> model [
 
+	model ifNil: [ ^ {  } ].
 	^ model
 ]
 
@@ -174,16 +158,6 @@ CapellaSpecsTablePresenter >> model [
 CapellaSpecsTablePresenter >> model: anObject [
 
 	model := anObject
-]
-
-{ #category : 'initialization - deprecated' }
-CapellaSpecsTablePresenter >> nextTable [
-
-	| index |
-	self parentPresenter ifNil: [ ^ nil ].
-	self isLast ifTrue: [ ^ nil ].
-	index := self parentPresenter tables indexOf: self.
-	^ self parentPresenter tables at: index + 1.
 ]
 
 { #category : 'accessing' }
@@ -199,30 +173,10 @@ CapellaSpecsTablePresenter >> parentPresenter: anObject [
 	self updatePresenter
 ]
 
-{ #category : 'as yet unclassified' }
-CapellaSpecsTablePresenter >> previousTable [
-
-	| index |
-	self parentPresenter ifNil: [ ^ nil ].
-	self isFirst ifTrue: [ ^ nil ].
-	index := self parentPresenter tables indexOf: self.
-	^ self parentPresenter tables at: index - 1
-]
-
 { #category : 'accessing' }
 CapellaSpecsTablePresenter >> table [
 
 	^ table
-]
-
-{ #category : 'initialization - deprecated' }
-CapellaSpecsTablePresenter >> updateFilterWith: aSelection [
-
-	self filter: aSelection.
-	self updatePresenter.
-	self nextTable ifNil: [ ^ self ].
-	self nextTable updateFilterWith: table selectedItem.
-
 ]
 
 { #category : 'accessing' }
@@ -234,16 +188,14 @@ CapellaSpecsTablePresenter >> updatePresenter [
 	self isLast
 		ifTrue: [ self buttons moveDown enabled: false ]
 		ifFalse: [ self buttons moveDown enabled: true ].
-	self filteredModel ifNil: [ self table items: {  } ] ifNotNil: [ :fm | self table items: fm ]
-	
+
+	self parentPresenter ifNil: [ self table items: self model. ^ self ].
+	self table items: (self parentPresenter filteredModelFor: self).
 ]
 
 { #category : 'initialization - deprecated' }
 CapellaSpecsTablePresenter >> updateSelection: aSelection [
 
-	| nextTable |
 	self parentPresenter ifNil: [ ^ self ].
-	nextTable := self nextTable.
-	nextTable ifNil: [ ^ self ].
-	nextTable updateFilterWith: aSelection
+	self parentPresenter addFilter: aSelection for: self
 ]

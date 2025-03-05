@@ -89,6 +89,11 @@ CapellaFunctionalChainsGroup >> initialize [
 ]
 
 { #category : 'testing' }
+CapellaFunctionalChainsGroup >> isFilteredByExchange: aCapellaFunctionalExchangesGroup [ 
+	^ self functions includesAny: aCapellaFunctionalExchangesGroup functions.
+]
+
+{ #category : 'testing' }
 CapellaFunctionalChainsGroup >> isFilteredByFunction: aCapellaFunctionsGroup [ 
 	^ aCapellaFunctionsGroup capellaObjects includesAny: self functions
 ]
