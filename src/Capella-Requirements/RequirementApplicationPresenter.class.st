@@ -84,9 +84,8 @@ RequirementApplicationPresenter >> initializeMenuPresenter [
 					                 name: 'Install all breakpoints';
 					                 icon: (Smalltalk ui icons iconNamed: #bug);
 					                 action: [
-						                 self repositoryModel installAllBreakpoints
-							                 inspect.
-						                 self updateTestIcons ] ] ]
+						self installBreakpoints.
+						                 ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -95,6 +94,19 @@ RequirementApplicationPresenter >> initializePresenters [
 	self initializeMenuPresenter.
 	requirementPresenter := RequirementPresenter new.
 	repositoryPresenter := RequirementsRepositoryPresenter new.
+]
+
+{ #category : 'initialization' }
+RequirementApplicationPresenter >> installBreakpoints [
+
+	| breakpoints |
+	breakpoints := self repositoryModel installAllBreakpoints.
+	breakpoints do: [ :each |
+		each announcer
+			when: RequirementBreakpointHit
+			do: [ self updateTestIcons ]
+			for: self ].
+		self updateTestIcons
 ]
 
 { #category : 'layout' }

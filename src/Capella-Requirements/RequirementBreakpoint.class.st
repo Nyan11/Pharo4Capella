@@ -5,7 +5,8 @@ Class {
 		'expectedResultBlock',
 		'isSuccess',
 		'isFailure',
-		'requirementBreakpoints'
+		'requirementBreakpoints',
+		'announcer'
 	],
 	#classInstVars : [
 		'requirementBreakpoints'
@@ -23,11 +24,18 @@ RequirementBreakpoint class >> all [
 ]
 
 { #category : 'api' }
+RequirementBreakpoint >> announcer [
+
+	^ announcer ifNil: [ announcer := Announcer new ]
+]
+
+{ #category : 'api' }
 RequirementBreakpoint >> breakInContext: aContext node: aNode [
 
 	(self expectedResultBlock value: aContext receiver)
 		ifTrue: [ isSuccess := true ]
-		ifFalse: [ isFailure := true ]
+		ifFalse: [ isFailure := true ].
+	self announcer announce: (RequirementBreakpointHit new breakpoint: self; yourself).
 ]
 
 { #category : 'links' }
@@ -55,7 +63,8 @@ RequirementBreakpoint >> initialize [
 
 	super initialize.
 	isFailure := false.
-	isSuccess := false
+	isSuccess := false.
+	announcer := Announcer new
 ]
 
 { #category : 'testing' }
