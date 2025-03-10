@@ -1,9 +1,9 @@
 Class {
 	#name : 'RequirementRealistExample',
 	#superclass : 'Object',
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Examples',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Examples'
 }
 
 { #category : 'examples' }
@@ -22,7 +22,9 @@ RequirementRealistExample >> req1 [
 		  description: 'A car have 4 wheels.';
 		  addNewTestCase: [ :testCase |
 			  testCase
-				  addStep: (RequirementRealistExampleCar requirementVeriedOnCall: #yourself)
+				  addStep:
+					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
+							   #initialize)
 				  withExpectedResult: [ :obj | obj wheels size = 4 ] ];
 		  yourself
 ]
@@ -30,7 +32,7 @@ RequirementRealistExample >> req1 [
 { #category : 'as yet unclassified' }
 RequirementRealistExample >> requirementsRepository [
 
-	^ RequirementRepository new
+	^ RequirementsRepository new
 		  pragmaSelector: #requirementRealistExample;
 		  yourself
 ]

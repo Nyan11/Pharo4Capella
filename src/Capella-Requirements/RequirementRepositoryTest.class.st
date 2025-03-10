@@ -1,9 +1,9 @@
 Class {
 	#name : 'RequirementRepositoryTest',
 	#superclass : 'TestCase',
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Test-Cases',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Test-Cases'
 }
 
 { #category : 'tests' }
@@ -46,7 +46,7 @@ RequirementRepositoryTest >> mockRequirement3 [
 RequirementRepositoryTest >> testPragmaSelector [
 
 	| requirementBuilder |
-	requirementBuilder := RequirementRepository new
+	requirementBuilder := RequirementsRepository new
 		                      pragmaSelector: #requirementTestCase1;
 		                      yourself.
 	self
@@ -58,7 +58,7 @@ RequirementRepositoryTest >> testPragmaSelector [
 RequirementRepositoryTest >> testUpdateRequirements [
 
 	| requirementBuilder |
-	requirementBuilder := RequirementRepository new
+	requirementBuilder := RequirementsRepository new
 		                      pragmaSelector: #requirementTestCase1;
 		                      yourself.
 	self assert: requirementBuilder requirements size equals: 3.

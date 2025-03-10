@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'wheels'
 	],
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Examples',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Examples'
 }
 
 { #category : 'initialization' }

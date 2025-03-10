@@ -1,17 +1,17 @@
 Class {
-	#name : 'RequirementTestCaseStepMethod',
+	#name : 'RequirementTestCaseStepAfterCall',
 	#superclass : 'Object',
 	#instVars : [
 		'targetClass',
 		'targetMethod'
 	],
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Model'
 }
 
 { #category : 'adding' }
-RequirementTestCaseStepMethod >> addRequirementDebugPointWithExpectedResult: aFullBlockClosure [
+RequirementTestCaseStepAfterCall >> addRequirementDebugPointWithExpectedResult: aFullBlockClosure [
 
 	| ast breakpoint |
 	ast := self targetMethod ast.
@@ -21,29 +21,40 @@ RequirementTestCaseStepMethod >> addRequirementDebugPointWithExpectedResult: aFu
 		              yourself.
 	breakpoint condition: (breakpoint generateConditionBlockFrom:
 			 ('self class = <1s>' expandMacrosWith: self targetClass name)).
-	breakpoint install
+	breakpoint install.
+	^ breakpoint
+]
+
+{ #category : 'printing' }
+RequirementTestCaseStepAfterCall >> printOn: aStream [
+
+	aStream << 'After: ('.
+	self targetClass printOn: aStream.
+	aStream << ' >> '.
+	self targetMethod selector printOn: aStream.
+	aStream << ')'
 ]
 
 { #category : 'accessing' }
-RequirementTestCaseStepMethod >> targetClass [
+RequirementTestCaseStepAfterCall >> targetClass [
 
 	^ targetClass
 ]
 
 { #category : 'accessing' }
-RequirementTestCaseStepMethod >> targetClass: anObject [
+RequirementTestCaseStepAfterCall >> targetClass: anObject [
 
 	targetClass := anObject
 ]
 
 { #category : 'accessing' }
-RequirementTestCaseStepMethod >> targetMethod [
+RequirementTestCaseStepAfterCall >> targetMethod [
 
 	^ targetMethod
 ]
 
 { #category : 'accessing' }
-RequirementTestCaseStepMethod >> targetMethod: anObject [
+RequirementTestCaseStepAfterCall >> targetMethod: anObject [
 
 	targetMethod := anObject
 ]

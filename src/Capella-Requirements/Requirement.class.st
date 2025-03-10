@@ -9,9 +9,9 @@ Class {
 		'repository',
 		'testCases'
 	],
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Model'
 }
 
 { #category : 'adding' }
@@ -21,6 +21,17 @@ Requirement >> addNewTestCase: aBlock [
 	testCase := RequirementTestCase new verifies: self; yourself.
 	aBlock value: testCase.
 	testCases add: testCase.
+]
+
+{ #category : 'adding' }
+Requirement >> addRequirementDebugPoint [
+
+	^ self testCases flatCollect: [ :each | each addRequirementDebugPoint ]
+]
+
+{ #category : 'as yet unclassified' }
+Requirement >> allTestCaseSteps [
+	^ self testCases flatCollect: [ :each | each steps ].
 ]
 
 { #category : 'accessing' }
@@ -50,11 +61,67 @@ Requirement >> description: anObject [
 	description := anObject asRequirementDescription
 ]
 
+{ #category : 'testing' }
+Requirement >> hasAllTestCaseBreakpointsSuccess [
+
+	self testCases ifEmpty: [ ^ false ].
+	^ self testCases allSatisfy: [ :each |
+		  each hasAllTestCaseBreakpointsSuccess ]
+]
+
+{ #category : 'testing' }
+Requirement >> hasTestCaseBreakpointsFaillure [
+
+	self testCases ifEmpty: [ ^ false ].
+	^ self testCases anySatisfy: [ :each |
+		  each hasTestCaseBreakpointsFaillure ]
+]
+
+{ #category : 'testing' }
+Requirement >> hasTestCaseBreakpointsInstalled [
+
+	self testCases ifEmpty: [ ^ false ].
+	^ self testCases anySatisfy: [ :each | each hasTestCaseBreakpointsInstalled ]
+]
+
+{ #category : 'testing' }
+Requirement >> hasTestCases [
+
+	self testCases ifEmpty: [ ^ false ].
+	^ self testCases anySatisfy: [ :each | each hasTestCases ]
+]
+
 { #category : 'initialization' }
 Requirement >> initialize [
 
 	super initialize.
 	testCases := OrderedCollection new.
+]
+
+{ #category : 'as yet unclassified' }
+Requirement >> inspectionRequirement [
+
+	<inspectorPresentationOrder: 0 title: 'Requirement'>
+	^ RequirementPresenter new requirementModel: self; yourself.
+]
+
+{ #category : 'testing' }
+Requirement >> isSimilarTo: aRequirement [
+
+	self == aRequirement ifTrue: [ ^ true ].
+	self title = aRequirement title ifFalse: [ ^ false ].
+	self description ifNil: [ ^ aRequirement description isNil ].
+	aRequirement description ifNil: [ ^ false ].
+	^ self description isSimilarTo: aRequirement description
+]
+
+{ #category : 'printing' }
+Requirement >> printAsDescription [
+
+	| stream |
+	stream := WriteStream on: String empty.
+	self printAsDescriptionOn: stream.
+	^ stream contents
 ]
 
 { #category : 'printing' }
@@ -96,6 +163,12 @@ Requirement >> space [
 Requirement >> space: anObject [
 
 	space := anObject
+]
+
+{ #category : 'adding' }
+Requirement >> testCases [
+
+	^ testCases
 ]
 
 { #category : 'accessing' }

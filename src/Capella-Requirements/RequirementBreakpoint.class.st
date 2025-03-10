@@ -2,18 +2,40 @@ Class {
 	#name : 'RequirementBreakpoint',
 	#superclass : 'Breakpoint',
 	#instVars : [
-		'expectedResultBlock'
+		'expectedResultBlock',
+		'isSuccess',
+		'isFailure',
+		'requirementBreakpoints'
 	],
-	#category : 'Capella-Requirements-New',
+	#classInstVars : [
+		'requirementBreakpoints'
+	],
+	#category : 'Capella-Requirements-Technical',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Technical'
 }
+
+{ #category : 'accessing' }
+RequirementBreakpoint class >> all [
+
+	^ requirementBreakpoints ifNil: [
+		  requirementBreakpoints := OrderedCollection new ]
+]
 
 { #category : 'api' }
 RequirementBreakpoint >> breakInContext: aContext node: aNode [
 
-	self remove.
-	(self expectedResultBlock value: aContext receiver) ifTrue: [ self halt ] ifFalse: [ self halt ]
+	(self expectedResultBlock value: aContext receiver)
+		ifTrue: [ isSuccess := true ]
+		ifFalse: [ isFailure := true ]
+]
+
+{ #category : 'links' }
+RequirementBreakpoint >> breakLink [
+
+	^ super breakLink
+		  control: #after;
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -26,4 +48,30 @@ RequirementBreakpoint >> expectedResultBlock [
 RequirementBreakpoint >> expectedResultBlock: anObject [
 
 	expectedResultBlock := anObject
+]
+
+{ #category : 'initialization' }
+RequirementBreakpoint >> initialize [
+
+	super initialize.
+	isFailure := false.
+	isSuccess := false
+]
+
+{ #category : 'testing' }
+RequirementBreakpoint >> isFailure [
+
+	^ isFailure
+]
+
+{ #category : 'testing' }
+RequirementBreakpoint >> isInstalled [
+
+	^ self class all includes: self
+]
+
+{ #category : 'testing' }
+RequirementBreakpoint >> isSuccess [
+
+	^ isSuccess
 ]

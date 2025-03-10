@@ -1,39 +1,73 @@
 Class {
-	#name : 'RequirementRepository',
+	#name : 'RequirementsRepository',
 	#superclass : 'Object',
 	#instVars : [
 		'pragmaSelector',
 		'spaces',
 		'requirements',
-		'uuidGenerator'
+		'uuidGenerator',
+		'installedBreakpoints'
 	],
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Model'
 }
 
+{ #category : 'adding' }
+RequirementsRepository >> addRequirementDebugPoint [
+
+	^ self requirements flatCollect: [ :each | each addRequirementDebugPoint ]
+]
+
+{ #category : 'as yet unclassified' }
+RequirementsRepository >> allTestCaseSteps [
+
+	^ self requirements flatCollect: [ :each | each allTestCaseSteps ].
+]
+
 { #category : 'initialization' }
-RequirementRepository >> defaultSpace [
+RequirementsRepository >> defaultSpace [
 
 	^ self spaces at: nil ifAbsent: [ ^ {  } ]
 ]
 
+{ #category : 'as yet unclassified' }
+RequirementsRepository >> findSimilarRequirements: aRequirement [
+
+	^ self requirements select: [ :each | each isSimilarTo: aRequirement ]
+]
+
 { #category : 'initialization' }
-RequirementRepository >> initialize [
+RequirementsRepository >> initialize [
 
 	"We do not need to initialize spaces dictionray or requirements collection. They will be created in #updateRequirements called in #pragmaSector:"
 	super initialize.
 	uuidGenerator := UUIDGenerator new
 ]
 
+{ #category : 'as yet unclassified' }
+RequirementsRepository >> inspectionRequirementsRepository [
+
+	<inspectorPresentationOrder: 0 title: 'Requirements Repository'>
+	^ RequirementsRepositoryPresenter new
+		  repositoryModel: self;
+		  yourself
+]
+
+{ #category : 'as yet unclassified' }
+RequirementsRepository >> installAllBreakpoints [
+
+	^ installedBreakpoints := self addRequirementDebugPoint.
+]
+
 { #category : 'accessing' }
-RequirementRepository >> pragmaSelector [
+RequirementsRepository >> pragmaSelector [
 
 	^ pragmaSelector
 ]
 
 { #category : 'accessing' }
-RequirementRepository >> pragmaSelector: anObject [
+RequirementsRepository >> pragmaSelector: anObject [
 
 	pragmaSelector ifNotNil: [
 		RequirementImmutableObjectError signal:
@@ -43,33 +77,33 @@ RequirementRepository >> pragmaSelector: anObject [
 ]
 
 { #category : 'as yet unclassified' }
-RequirementRepository >> randomUUID [
+RequirementsRepository >> randomUUID [
 
 	^ (UUID nonStandardUUIDWithGenerator: self uuidGenerator) printString
 ]
 
 { #category : 'accessing' }
-RequirementRepository >> requirements [
+RequirementsRepository >> requirements [
 
 	^ requirements
 ]
 
 { #category : 'initialization' }
-RequirementRepository >> spaceNamed: aString [
+RequirementsRepository >> spaceNamed: aString [
 
 	^ self spaces at: aString
 ]
 
 { #category : 'accessing' }
-RequirementRepository >> spaces [
+RequirementsRepository >> spaces [
 
 	^ spaces
 ]
 
 { #category : 'as yet unclassified' }
-RequirementRepository >> updateRequirements [
+RequirementsRepository >> updateRequirements [
 
-	| pragmas oldRequirement allDuplicatedRequirement |
+	| pragmas oldRequirement allDuplicatedRequirement descriptions |
 	"Collect requirements.""If ID is nil, provide a random ID"
 	oldRequirement := requirements.
 	pragmas := Pragma allNamed: self pragmaSelector.
@@ -78,9 +112,8 @@ RequirementRepository >> updateRequirements [
 		                requirement := p method valueWithReceiver:
 			                               p methodClass instanceSide basicNew.
 		                requirement definedId ifNil: [
-			                requirement definedId: self randomUUID.
-							 ].
-							requirement repository: self.
+			                requirement definedId: self randomUUID ].
+		                requirement repository: self.
 		                requirement ].
 
 	"Verify that all requirements have a unique ID."
@@ -98,12 +131,17 @@ RequirementRepository >> updateRequirements [
 			ifPresent: [ :col | col add: each ]
 			ifAbsentPut: [ OrderedCollection with: each ] ].
 
+	"Fix the description"
+	descriptions := requirements collect: [ :each | each description ] thenSelect: [ :each |
+		each isNotNil and: [ each requirements isNotEmpty ] ].
+	descriptions do: [ :each | each fixWithRepository: self ].
+
 	oldRequirement ifNil: [ ^ requirements ].
 	^ requirements difference: oldRequirement
 ]
 
 { #category : 'as yet unclassified' }
-RequirementRepository >> uuidGenerator [
+RequirementsRepository >> uuidGenerator [
 
 	^ uuidGenerator
 ]

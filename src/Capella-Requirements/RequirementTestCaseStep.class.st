@@ -3,24 +3,27 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'testMethod',
-		'expectedResult'
+		'expectedResult',
+		'breakpoint'
 	],
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Model'
 }
-
-{ #category : 'adding' }
-RequirementTestCaseStep >> addBreakpoint [
-
-	^ self addDebugPoint: BreakDebugPoint new.
-]
 
 { #category : 'adding' }
 RequirementTestCaseStep >> addRequirementDebugPoint [
 
-	self testMethod addRequirementDebugPointWithExpectedResult: self expectedResult 
+	breakpoint ifNotNil: [ ^ self ].
+	^ breakpoint := self testMethod
+		                addRequirementDebugPointWithExpectedResult:
+		                self expectedResult
+]
 
+{ #category : 'adding' }
+RequirementTestCaseStep >> breakpoint [
+
+	^ breakpoint
 ]
 
 { #category : 'accessing' }
@@ -33,6 +36,20 @@ RequirementTestCaseStep >> expectedResult [
 RequirementTestCaseStep >> expectedResult: anObject [
 
 	expectedResult := anObject
+]
+
+{ #category : 'testing' }
+RequirementTestCaseStep >> isBreakpointInstalled [
+
+	^ self breakpoint isNotNil.
+]
+
+{ #category : 'removing' }
+RequirementTestCaseStep >> removeBreakpoint [
+
+	self breakpoint ifNil: [ ^ self ].
+	self breakpoint isInstalled ifFalse: [ ^ self ].
+	self breakpoint remove
 ]
 
 { #category : 'accessing' }

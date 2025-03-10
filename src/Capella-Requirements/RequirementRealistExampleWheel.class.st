@@ -1,7 +1,7 @@
 Class {
 	#name : 'RequirementRealistExampleWheel',
 	#superclass : 'Object',
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Examples',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Examples'
 }

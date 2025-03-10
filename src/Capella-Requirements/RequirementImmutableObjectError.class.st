@@ -1,7 +1,7 @@
 Class {
 	#name : 'RequirementImmutableObjectError',
 	#superclass : 'RequirementError',
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Technical',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Technical'
 }

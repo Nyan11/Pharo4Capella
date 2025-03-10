@@ -5,9 +5,9 @@ Class {
 		'descriptionWithMacros',
 		'requirements'
 	],
-	#category : 'Capella-Requirements-New',
+	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
-	#tag : 'New'
+	#tag : 'Model'
 }
 
 { #category : 'converting' }
@@ -26,6 +26,20 @@ RequirementDescription >> descriptionWithMacros [
 RequirementDescription >> descriptionWithMacros: anObject [
 
 	descriptionWithMacros := anObject
+]
+
+{ #category : 'as yet unclassified' }
+RequirementDescription >> fixWithRepository: aRepository [
+
+	self requirements: (self requirements collect: [ :req |
+			 (aRepository findSimilarRequirements: req) first ])
+]
+
+{ #category : 'testing' }
+RequirementDescription >> isSimilarTo: aDescription [
+
+	self == aDescription ifTrue: [ ^ true ].
+	^ self descriptionWithMacros = aDescription descriptionWithMacros
 ]
 
 { #category : 'printing' }
