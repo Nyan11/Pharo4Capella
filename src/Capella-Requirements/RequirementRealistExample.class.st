@@ -43,6 +43,10 @@ RequirementRealistExample >> req2 [
 					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
 							   #initialize)
 				  withExpectedResult: [ :obj | obj isStarted not ];
+				addStep:
+					  (RequirementRealistExampleCar requirementVerifiedBeforeCall:
+							   #insertKey)
+				  withExpectedResult: [ :obj | obj hasKey not ];
 				  addStep:
 					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
 							   #insertKey)

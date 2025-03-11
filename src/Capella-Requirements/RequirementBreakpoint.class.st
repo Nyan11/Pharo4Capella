@@ -2,7 +2,8 @@ Class {
 	#name : 'RequirementBreakpoint',
 	#superclass : 'Breakpoint',
 	#instVars : [
-		'concernedRequirementSteps'
+		'concernedRequirementSteps',
+		'isAfterCall'
 	],
 	#classInstVars : [
 		'requirementBreakpoints'
@@ -28,9 +29,12 @@ RequirementBreakpoint >> breakInContext: aContext node: aNode [
 { #category : 'links' }
 RequirementBreakpoint >> breakLink [
 
-	^ super breakLink
-		  control: #after;
-		  yourself
+	self isAfterCall
+		ifTrue: [
+			^ super breakLink
+				  control: #after;
+				  yourself ]
+		ifFalse: [ ^ super breakLink ]
 ]
 
 { #category : 'accessing' }
@@ -43,6 +47,18 @@ RequirementBreakpoint >> concernedRequirementSteps [
 RequirementBreakpoint >> concernedRequirementSteps: anObject [
 
 	concernedRequirementSteps := anObject
+]
+
+{ #category : 'links' }
+RequirementBreakpoint >> isAfterCall [
+
+	^ isAfterCall
+]
+
+{ #category : 'links' }
+RequirementBreakpoint >> isAfterCall: anObject [
+
+	isAfterCall := anObject
 ]
 
 { #category : 'testing' }
