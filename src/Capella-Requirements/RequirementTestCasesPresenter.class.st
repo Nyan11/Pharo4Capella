@@ -3,7 +3,7 @@ Class {
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'testCasePresenters',
-		'testCasesModel'
+		'testCasesReport'
 	],
 	#category : 'Capella-Requirements-User-Interfaces',
 	#package : 'Capella-Requirements',
@@ -27,12 +27,12 @@ RequirementTestCasesPresenter >> defaultTestCaseTable [
 	^ SpTablePresenter new
 		  addColumn: (SpStringTableColumn
 				   title: 'Step'
-				   evaluated: [ :step | step astBreakpointInstaller ]);
+				   evaluated: [ :report | report step astBreakpointInstaller ]);
 		  addColumn: (SpStringTableColumn
 				   title: 'Expected Results'
-				   evaluated: [ :step | step expectedResult ]);
+				   evaluated: [ :report | report step expectedResult ]);
 		  addColumn:
-			  ((SpImageTableColumn evaluated: [ :step | self iconForStep: step ])
+			  ((SpImageTableColumn evaluated: [ :report | report iconForRequirementTestCasesPresenter ])
 				   width: 24);
 		  yourself
 ]
@@ -58,13 +58,9 @@ RequirementTestCasesPresenter >> initializePresenters [
 { #category : 'accessing' }
 RequirementTestCasesPresenter >> makeTestCaseTableFor: aTestCase [
 
-	^ self defaultTestCaseTable items: aTestCase steps; yourself
-]
-
-{ #category : 'accessing' }
-RequirementTestCasesPresenter >> makeTestCasesTableFor: aTestCase [
-
-	^ self defaultTestCaseTable items: aTestCase steps; yourself
+	^ self defaultTestCaseTable
+		  items: aTestCase stepReports;
+		  yourself
 ]
 
 { #category : 'accessing' }
@@ -74,23 +70,24 @@ RequirementTestCasesPresenter >> testCasePresenters [
 ]
 
 { #category : 'accessing' }
-RequirementTestCasesPresenter >> testCasesModel [
+RequirementTestCasesPresenter >> testCasesReport [
 
-	^ testCasesModel
+	^ testCasesReport
 ]
 
 { #category : 'accessing' }
-RequirementTestCasesPresenter >> testCasesModel: anObject [
+RequirementTestCasesPresenter >> testCasesReport: anObject [
 
-	testCasesModel := anObject.
+	testCasesReport := anObject.
 	self updatePresenter
 ]
 
 { #category : 'accessing' }
 RequirementTestCasesPresenter >> updatePresenter [
 
-	self testCasesModel ifNil: [ ^ self ].
-	testCasePresenters := (self testCasesModel collect: [ :each |
-		self makeTestCaseTableFor: each ]).
+	self testCasesReport ifNil: [ ^ self ].
+
+	testCasePresenters := self testCasesReport collect: [ :each |
+		                      self makeTestCaseTableFor: each ].
 	self layout: self defaultLayout
 ]

@@ -22,30 +22,6 @@ RequirementTestCase >> addStep: aMethod withExpectedResult: aFullBlockClosure [
 	steps add: step
 ]
 
-{ #category : 'testing' }
-RequirementTestCase >> hasAllTestCaseStepSuccess [
-
-	^ self steps allSatisfy: [ :each | each isSuccess ]
-]
-
-{ #category : 'testing' }
-RequirementTestCase >> hasTestCaseStepFaillure [
-
-	^ self steps anySatisfy: [ :each | each isSuccess not ]
-]
-
-{ #category : 'testing' }
-RequirementTestCase >> hasTestCaseStepReady [
-
-	^ self steps anySatisfy: [ :each | each isReady ]
-]
-
-{ #category : 'testing' }
-RequirementTestCase >> hasTestCases [
-
-	^ self steps isNotEmpty
-]
-
 { #category : 'initialization' }
 RequirementTestCase >> initialize [
 
@@ -59,7 +35,7 @@ RequirementTestCase >> steps [
 	^ steps
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 RequirementTestCase >> verifies: aRequirement [
 
 	verifies := aRequirement 

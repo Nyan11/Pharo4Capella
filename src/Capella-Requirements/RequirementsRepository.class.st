@@ -12,10 +12,10 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'accessing' }
-RequirementsRepository >> allTestCaseSteps [
+{ #category : 'converting' }
+RequirementsRepository >> asReport [
 
-	^ self requirements flatCollect: [ :each | each allTestCaseSteps ].
+	^ RequirementsRepositoryReport new repository: self; yourself
 ]
 
 { #category : 'initialization' }
@@ -24,21 +24,6 @@ RequirementsRepository >> initialize [
 	"We do not need to initialize spaces dictionray or requirements collection. They will be created in #updateRequirements called in #pragmaSector:"
 	super initialize.
 	uuidGenerator := UUIDGenerator new
-]
-
-{ #category : 'breakpoints' }
-RequirementsRepository >> installAllBreakpoints [
-
-	| breakpoints |
-	installedBreakpoints ifNotNil: [
-		RequirementSecondTimeInstall signal:
-			'You cannot install twice the breakpoint.' ].
-	breakpoints := OrderedCollection new.
-	self reduceAstBreakpointInstaller keysAndValuesDo: [ :stepCondition :steps |
-		breakpoints add:
-			(stepCondition addRequirementDebugPointWithSteps: steps) ].
-	installedBreakpoints := breakpoints.
-	^ breakpoints
 ]
 
 { #category : 'accessing' }
@@ -61,28 +46,6 @@ RequirementsRepository >> pragmaSelector: anObject [
 RequirementsRepository >> randomUUID [
 
 	^ (UUID nonStandardUUIDWithGenerator: self uuidGenerator) printString
-]
-
-{ #category : 'breakpoints' }
-RequirementsRepository >> reduceAstBreakpointInstaller [
-
-	| steps dictionary |
-	dictionary := Dictionary new.
-	steps := self allTestCaseSteps.
-	steps do: [ :each |
-		dictionary
-			at: each astBreakpointInstaller
-			ifPresent: [ :col | col add: each ]
-			ifAbsentPut: [ OrderedCollection with: each ] ].
-	^ dictionary
-]
-
-{ #category : 'breakpoints' }
-RequirementsRepository >> removeAllBreakpoints [
-
-	installedBreakpoints ifNil: [ ^ self ].
-	installedBreakpoints do: [ :each | each remove ].
-	installedBreakpoints := nil.
 ]
 
 { #category : 'accessing' }
@@ -123,7 +86,7 @@ RequirementsRepository >> updateRequirements [
 
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'default values' }
 RequirementsRepository >> uuidGenerator [
 
 	^ uuidGenerator

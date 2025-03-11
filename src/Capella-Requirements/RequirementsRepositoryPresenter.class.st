@@ -3,7 +3,7 @@ Class {
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'requirementsTablePresenter',
-		'repositoryModel'
+		'repositoryReport'
 	],
 	#category : 'Capella-Requirements-User-Interfaces',
 	#package : 'Capella-Requirements',
@@ -22,28 +22,29 @@ RequirementsRepositoryPresenter >> initializePresenters [
 	requirementsTablePresenter := SpTablePresenter new
 		                              addColumn: (SpStringTableColumn
 				                               title: 'Defined Id'
-				                               evaluated: [ :r | r definedId ]);
+				                               evaluated: [ :report | report requirement definedId ]);
 		                              addColumn:
 			                              (SpStringTableColumn
 				                               title: 'Title'
-				                               evaluated: [ :r | r title ]);
+				                               evaluated: [ :report | report requirement title ]);
 		                              addColumn:
-			                              ((SpImageTableColumn evaluated: [ :r |
-					                                self requirementIcon: r ])
+			                              ((SpImageTableColumn evaluated: [ :report |
+					                                report
+						                                iconForRequirementRepositoryPresenter ])
 				                               width: 24);
 		                              yourself
 ]
 
 { #category : 'accessing' }
-RequirementsRepositoryPresenter >> repositoryModel [
+RequirementsRepositoryPresenter >> repositoryReport [
 
-	^ repositoryModel
+	^ repositoryReport
 ]
 
 { #category : 'accessing' }
-RequirementsRepositoryPresenter >> repositoryModel: anObject [
+RequirementsRepositoryPresenter >> repositoryReport: anObject [
 
-	repositoryModel := anObject.
+	repositoryReport := anObject.
 	self updatePresenter
 ]
 
@@ -70,8 +71,10 @@ RequirementsRepositoryPresenter >> requirementsTablePresenter [
 { #category : 'accessing' }
 RequirementsRepositoryPresenter >> updatePresenter [
 
-	self repositoryModel ifNil: [ ^ self ].
-	self requirementsTablePresenter items: self repositoryModel requirements
+	self repositoryReport ifNil: [ ^ self ].
+
+	self requirementsTablePresenter items:
+		self repositoryReport requirementReports
 ]
 
 { #category : 'initialization' }

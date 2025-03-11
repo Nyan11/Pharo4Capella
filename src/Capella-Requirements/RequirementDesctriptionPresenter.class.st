@@ -78,7 +78,7 @@ RequirementDesctriptionPresenter >> updatePresenter [
 	self descriptionTextPresenter text: self descriptionModel printString.
 	linkPresenters := self descriptionModel requirements collect: [ :each |
 		                  SpLinkPresenter new
-			                  label: each printAsDescription;
+			                  label: each prettyPrintDefinedId;
 			                  action: [ self whenLinkClickDo value: each ];
 			                  yourself ].
 	self layout: self defaultLayout

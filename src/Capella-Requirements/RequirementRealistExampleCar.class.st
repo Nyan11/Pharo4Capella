@@ -58,6 +58,14 @@ RequirementRealistExampleCar >> pressBreak [
 ]
 
 { #category : 'as yet unclassified' }
+RequirementRealistExampleCar >> startTheCar [
+
+	self insertKey.
+	self pressBreak.
+	self turnKey.
+]
+
+{ #category : 'as yet unclassified' }
 RequirementRealistExampleCar >> turnKey [
 
 	isStarted ifTrue: [ ^ self ].

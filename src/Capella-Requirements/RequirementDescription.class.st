@@ -28,7 +28,7 @@ RequirementDescription >> descriptionWithMacros: anObject [
 	descriptionWithMacros := anObject
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'correcting' }
 RequirementDescription >> fixWithRepository: aRepository [
 
 	self requirements: (self requirements collect: [ :requirement |
@@ -61,7 +61,7 @@ RequirementDescription >> printOn: aStream [
 						whileFalse: [ index := index * 10 + nextChar digitValue ] ].
 				nextChar == $>
 					ifTrue: [
-					(self requirements at: index) printAsDescriptionOn: aStream ]
+					(self requirements at: index) prettyPrintDefinedIdOn: aStream ]
 					ifFalse: [
 						aStream nextPut: char.
 						aStream nextPutAll: (readStream upTo: $>).

@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'expectedResult',
 		'previousStep',
-		'isSuccess',
 		'astBreakpointInstaller'
 	],
 	#category : 'Capella-Requirements-Model',
@@ -24,14 +23,6 @@ RequirementTestCaseStep >> astBreakpointInstaller: anObject [
 	astBreakpointInstaller := anObject
 ]
 
-{ #category : 'as yet unclassified' }
-RequirementTestCaseStep >> breakpointHitWithContext: aContext [
-
-	self isReady ifFalse: [ ^ self ].
-	self isSuccess ifTrue: [ ^ self ].
-	self isSuccess: (self expectedResult value: aContext receiver)
-]
-
 { #category : 'accessing' }
 RequirementTestCaseStep >> expectedResult [
 
@@ -42,32 +33,6 @@ RequirementTestCaseStep >> expectedResult [
 RequirementTestCaseStep >> expectedResult: anObject [
 
 	expectedResult := anObject
-]
-
-{ #category : 'initialization' }
-RequirementTestCaseStep >> initialize [
-
-	super initialize.
-	isSuccess := false
-]
-
-{ #category : 'testing' }
-RequirementTestCaseStep >> isReady [
-
-	self previousStep ifNil: [ ^ true ].
-	^ self previousStep isSuccess
-]
-
-{ #category : 'accessing' }
-RequirementTestCaseStep >> isSuccess [
-
-	^ isSuccess
-]
-
-{ #category : 'accessing' }
-RequirementTestCaseStep >> isSuccess: aBoolean [
-
-	isSuccess := aBoolean
 ]
 
 { #category : 'accessing' }

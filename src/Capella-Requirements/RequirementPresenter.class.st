@@ -5,7 +5,7 @@ Class {
 		'definedIdPresenter',
 		'titlePresenter',
 		'descriptionPresenter',
-		'requirementModel',
+		'requirementReport',
 		'testCasesPresenter'
 	],
 	#category : 'Capella-Requirements-User-Interfaces',
@@ -50,17 +50,15 @@ RequirementPresenter >> initializePresenters [
 ]
 
 { #category : 'as yet unclassified' }
-RequirementPresenter >> requirementModel [
+RequirementPresenter >> requirementReport [
 
-	^ requirementModel
-
-	
+	^ requirementReport
 ]
 
 { #category : 'as yet unclassified' }
-RequirementPresenter >> requirementModel: aRequirement [
+RequirementPresenter >> requirementReport: aRequirement [
 
-	requirementModel := aRequirement.
+	requirementReport := aRequirement.
 	self updatePresenter
 ]
 
@@ -79,11 +77,12 @@ RequirementPresenter >> titlePresenter [
 { #category : 'as yet unclassified' }
 RequirementPresenter >> updatePresenter [
 
-	self requirementModel ifNil: [ ^ self ].
+	self requirementReport ifNil: [ ^ self ].
 	self definedIdPresenter label:
-		self requirementModel printAsDescription.
-	self titlePresenter label: self requirementModel title.
+		self requirementReport requirement prettyPrintDefinedId.
+	self titlePresenter label: self requirementReport requirement title.
 	self descriptionPresenter descriptionModel:
-		self requirementModel description.
-	self testCasesPresenter testCasesModel: self requirementModel testCases 
+		self requirementReport requirement description.
+	self testCasesPresenter testCasesReport:
+		self requirementReport testCaseReports
 ]

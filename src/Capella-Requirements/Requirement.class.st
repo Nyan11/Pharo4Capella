@@ -22,11 +22,6 @@ Requirement >> addNewTestCase: aBlock [
 	testCases add: testCase.
 ]
 
-{ #category : 'as yet unclassified' }
-Requirement >> allTestCaseSteps [
-	^ self testCases flatCollect: [ :each | each steps ].
-]
-
 { #category : 'accessing' }
 Requirement >> definedId [
 
@@ -52,36 +47,6 @@ Requirement >> description: anObject [
 	description := anObject asRequirementDescription
 ]
 
-{ #category : 'testing' }
-Requirement >> hasAllTestCaseStepSuccess [
-
-	self testCases ifEmpty: [ ^ false ].
-	^ self testCases allSatisfy: [ :each |
-		  each hasAllTestCaseStepSuccess ]
-]
-
-{ #category : 'testing' }
-Requirement >> hasTestCaseStepFaillure [
-
-	self testCases ifEmpty: [ ^ false ].
-	^ self testCases anySatisfy: [ :each |
-		  each hasTestCaseStepFaillure ]
-]
-
-{ #category : 'testing' }
-Requirement >> hasTestCaseStepReady [
-
-	self testCases ifEmpty: [ ^ false ].
-	^ self testCases anySatisfy: [ :each | each hasTestCaseStepReady ]
-]
-
-{ #category : 'testing' }
-Requirement >> hasTestCases [
-
-	self testCases ifEmpty: [ ^ false ].
-	^ self testCases anySatisfy: [ :each | each hasTestCases ]
-]
-
 { #category : 'initialization' }
 Requirement >> initialize [
 
@@ -100,16 +65,16 @@ Requirement >> isSimilarTo: aRequirement [
 ]
 
 { #category : 'printing' }
-Requirement >> printAsDescription [
+Requirement >> prettyPrintDefinedId [
 
 	| stream |
 	stream := WriteStream on: String empty.
-	self printAsDescriptionOn: stream.
+	self prettyPrintDefinedIdOn: stream.
 	^ stream contents
 ]
 
 { #category : 'printing' }
-Requirement >> printAsDescriptionOn: aStream [
+Requirement >> prettyPrintDefinedIdOn: aStream [
 
 	aStream nextPut: $[.
 	aStream nextPutAll: (self definedId ifNil: [ 'Error: no defined ID' ]).
@@ -119,7 +84,7 @@ Requirement >> printAsDescriptionOn: aStream [
 { #category : 'printing' }
 Requirement >> printOn: aStream [
 
-	self printAsDescriptionOn: aStream.
+	self prettyPrintDefinedIdOn: aStream.
 	self title ifNil: [ ^ self ].
 	aStream nextPut: Character space.
 	aStream nextPutAll: self title.

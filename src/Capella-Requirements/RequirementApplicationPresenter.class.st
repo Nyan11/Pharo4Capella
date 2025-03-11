@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'repositoryPresenter',
 		'requirementPresenter',
-		'repositoryModel',
+		'repositoryReport',
 		'menuPresenter'
 	],
 	#category : 'Capella-Requirements-User-Interfaces',
@@ -20,7 +20,7 @@ RequirementApplicationPresenter class >> openOn: aSelector [
 		              pragmaSelector: aSelector;
 		              yourself.
 	application := self new
-		               repositoryModel: repository;
+		               repositoryReport: repository asReport;
 		               yourself.
 	window := application open.
 	window whenWillCloseDo: [ application ensureAllBreakpointAreRemoved ].
@@ -45,7 +45,7 @@ RequirementApplicationPresenter >> connectPresenters [
 
 	self repositoryPresenter requirementsTablePresenter
 		whenSelectedItemChangedDo: [ :r |
-		self requirementPresenter requirementModel: r ].
+		self requirementPresenter requirementReport: r ].
 	self requirementPresenter descriptionPresenter whenLinkClickDo: [
 		:req |
 		self repositoryPresenter requirementsTablePresenter selectItem: req scrollToSelection: true ]
@@ -65,7 +65,8 @@ RequirementApplicationPresenter >> defaultLayout [
 
 { #category : 'as yet unclassified' }
 RequirementApplicationPresenter >> ensureAllBreakpointAreRemoved [
-	self repositoryModel removeAllBreakpoints.
+
+	self repositoryReport removeAllBreakpoints
 ]
 
 { #category : 'initialization' }
@@ -75,21 +76,11 @@ RequirementApplicationPresenter >> initializeMenuPresenter [
 		                 group
 			                 addItem: [ :item |
 				                 item
-					                 name: 'Inspect all steps';
-					                 icon: (Smalltalk ui icons iconNamed: #inspect);
-					                 action: [
-						                 self repositoryModel allTestCaseSteps inspect ] ];
-			                 addItem: [ :item |
-				                 item
-					                 name: 'Inspect all interest points';
-					                 icon: (Smalltalk ui icons iconNamed: #inspect);
-					                 action: [
-						                 self repositoryModel reduceAstBreakpointInstaller inspect ] ];
-			                 addItem: [ :item |
-				                 item
-					                 name: 'Install all breakpoints';
+					                 name: 'Start';
 					                 icon: (Smalltalk ui icons iconNamed: #bug);
-					                 action: [ self installBreakpoints ] ] ]
+					                 action: [ self installBreakpoints ];
+					                 yourself ];
+			                 yourself ]
 ]
 
 { #category : 'initialization' }
@@ -103,7 +94,7 @@ RequirementApplicationPresenter >> initializePresenters [
 { #category : 'initialization' }
 RequirementApplicationPresenter >> installBreakpoints [
 
-	self repositoryModel installAllBreakpoints.
+	self repositoryReport installAllBreakpoints.
 	self updateTestIcons
 ]
 
@@ -114,22 +105,24 @@ RequirementApplicationPresenter >> menuPresenter [
 ]
 
 { #category : 'accessing' }
-RequirementApplicationPresenter >> repositoryModel [
-
-	^ repositoryModel
-]
-
-{ #category : 'accessing' }
-RequirementApplicationPresenter >> repositoryModel: anObject [
-
-	repositoryModel := anObject.
-	self repositoryPresenter repositoryModel: anObject
-]
-
-{ #category : 'accessing' }
 RequirementApplicationPresenter >> repositoryPresenter [
 
 	^ repositoryPresenter
+]
+
+{ #category : 'accessing' }
+RequirementApplicationPresenter >> repositoryReport [
+
+	^ repositoryReport
+]
+
+{ #category : 'accessing' }
+RequirementApplicationPresenter >> repositoryReport: anObject [
+
+	repositoryReport := anObject.
+	
+	self repositoryReport testCaseStepReportAnnoucers do: [ :each | each when: RequirementTestCaseStepReportChanged do: [ :evt | self updateTestIcons ] for: self ].
+	self repositoryPresenter repositoryReport: anObject.
 ]
 
 { #category : 'accessing' }
