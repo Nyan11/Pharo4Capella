@@ -30,6 +30,35 @@ RequirementRealistExample >> req1 [
 ]
 
 { #category : 'as yet unclassified' }
+RequirementRealistExample >> req2 [
+
+	<requirementRealistExample>
+	^ Requirement new
+		  title: 'Starting sequence';
+		  description:
+			  'To start a car, insert the key, press the break pedal, turn the key.';
+		  addNewTestCase: [ :testCase |
+			  testCase
+				  addStep:
+					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
+							   #initialize)
+				  withExpectedResult: [ :obj | obj isStarted not ];
+				  addStep:
+					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
+							   #insertKey)
+				  withExpectedResult: [ :obj | obj hasKey ];
+				  addStep:
+					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
+							   #pressBreak)
+				  withExpectedResult: [ :obj | obj isBreaking ];
+				  addStep:
+					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
+							   #turnKey)
+				  withExpectedResult: [ :obj | obj isStarted ] ];
+		  yourself
+]
+
+{ #category : 'as yet unclassified' }
 RequirementRealistExample >> requirementsRepository [
 
 	^ RequirementsRepository new

@@ -3,7 +3,6 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'pragmaSelector',
-		'spaces',
 		'requirements',
 		'uuidGenerator',
 		'installedBreakpoints'
@@ -13,28 +12,10 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'adding' }
-RequirementsRepository >> addRequirementDebugPoint [
-
-	^ self requirements flatCollect: [ :each | each addRequirementDebugPoint ]
-]
-
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 RequirementsRepository >> allTestCaseSteps [
 
 	^ self requirements flatCollect: [ :each | each allTestCaseSteps ].
-]
-
-{ #category : 'initialization' }
-RequirementsRepository >> defaultSpace [
-
-	^ self spaces at: nil ifAbsent: [ ^ {  } ]
-]
-
-{ #category : 'as yet unclassified' }
-RequirementsRepository >> findSimilarRequirements: aRequirement [
-
-	^ self requirements select: [ :each | each isSimilarTo: aRequirement ]
 ]
 
 { #category : 'initialization' }
@@ -45,19 +26,19 @@ RequirementsRepository >> initialize [
 	uuidGenerator := UUIDGenerator new
 ]
 
-{ #category : 'as yet unclassified' }
-RequirementsRepository >> inspectionRequirementsRepository [
-
-	<inspectorPresentationOrder: 0 title: 'Requirements Repository'>
-	^ RequirementsRepositoryPresenter new
-		  repositoryModel: self;
-		  yourself
-]
-
-{ #category : 'as yet unclassified' }
+{ #category : 'breakpoints' }
 RequirementsRepository >> installAllBreakpoints [
 
-	^ installedBreakpoints := self addRequirementDebugPoint.
+	| breakpoints |
+	installedBreakpoints ifNotNil: [
+		RequirementSecondTimeInstall signal:
+			'You cannot install twice the breakpoint.' ].
+	breakpoints := OrderedCollection new.
+	self reduceAstBreakpointInstaller keysAndValuesDo: [ :stepCondition :steps |
+		breakpoints add:
+			(stepCondition addRequirementDebugPointWithSteps: steps) ].
+	installedBreakpoints := breakpoints.
+	^ breakpoints
 ]
 
 { #category : 'accessing' }
@@ -76,10 +57,32 @@ RequirementsRepository >> pragmaSelector: anObject [
 	self updateRequirements
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'default values' }
 RequirementsRepository >> randomUUID [
 
 	^ (UUID nonStandardUUIDWithGenerator: self uuidGenerator) printString
+]
+
+{ #category : 'breakpoints' }
+RequirementsRepository >> reduceAstBreakpointInstaller [
+
+	| steps dictionary |
+	dictionary := Dictionary new.
+	steps := self allTestCaseSteps.
+	steps do: [ :each |
+		dictionary
+			at: each astBreakpointInstaller
+			ifPresent: [ :col | col add: each ]
+			ifAbsentPut: [ OrderedCollection with: each ] ].
+	^ dictionary
+]
+
+{ #category : 'breakpoints' }
+RequirementsRepository >> removeAllBreakpoints [
+
+	installedBreakpoints ifNil: [ ^ self ].
+	installedBreakpoints do: [ :each | each remove ].
+	installedBreakpoints := nil.
 ]
 
 { #category : 'accessing' }
@@ -89,23 +92,11 @@ RequirementsRepository >> requirements [
 ]
 
 { #category : 'initialization' }
-RequirementsRepository >> spaceNamed: aString [
-
-	^ self spaces at: aString
-]
-
-{ #category : 'accessing' }
-RequirementsRepository >> spaces [
-
-	^ spaces
-]
-
-{ #category : 'as yet unclassified' }
 RequirementsRepository >> updateRequirements [
 
-	| pragmas oldRequirement allDuplicatedRequirement descriptions |
-	"Collect requirements.""If ID is nil, provide a random ID"
-	oldRequirement := requirements.
+	| pragmas allDuplicatedRequirement descriptions |
+	"Collect requirements."
+	"If ID is nil, provide a random ID"
 	pragmas := Pragma allNamed: self pragmaSelector.
 	requirements := pragmas collect: [ :p |
 		                | requirement |
@@ -123,21 +114,13 @@ RequirementsRepository >> updateRequirements [
 	allDuplicatedRequirement ifNotEmpty: [ :col |
 		RequirementDuplicatedIdentifierError signal ].
 
-	"Make the space"
-	spaces := Dictionary new.
-	requirements do: [ :each |
-		spaces
-			at: each space
-			ifPresent: [ :col | col add: each ]
-			ifAbsentPut: [ OrderedCollection with: each ] ].
-
 	"Fix the description"
-	descriptions := requirements collect: [ :each | each description ] thenSelect: [ :each |
-		each isNotNil and: [ each requirements isNotEmpty ] ].
+	descriptions := requirements
+		                collect: [ :each | each description ]
+		                thenSelect: [ :each |
+		                each isNotNil and: [ each requirements isNotEmpty ] ].
 	descriptions do: [ :each | each fixWithRepository: self ].
 
-	oldRequirement ifNil: [ ^ requirements ].
-	^ requirements difference: oldRequirement
 ]
 
 { #category : 'as yet unclassified' }

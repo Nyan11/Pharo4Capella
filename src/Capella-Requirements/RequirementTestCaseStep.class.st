@@ -2,28 +2,34 @@ Class {
 	#name : 'RequirementTestCaseStep',
 	#superclass : 'Object',
 	#instVars : [
-		'testMethod',
 		'expectedResult',
-		'breakpoint'
+		'previousStep',
+		'isSuccess',
+		'astBreakpointInstaller'
 	],
 	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
 	#tag : 'Model'
 }
 
-{ #category : 'adding' }
-RequirementTestCaseStep >> addRequirementDebugPoint [
+{ #category : 'accessing' }
+RequirementTestCaseStep >> astBreakpointInstaller [
 
-	breakpoint ifNotNil: [ ^ self ].
-	^ breakpoint := self testMethod
-		                addRequirementDebugPointWithExpectedResult:
-		                self expectedResult
+	^ astBreakpointInstaller
 ]
 
-{ #category : 'adding' }
-RequirementTestCaseStep >> breakpoint [
+{ #category : 'accessing' }
+RequirementTestCaseStep >> astBreakpointInstaller: anObject [
 
-	^ breakpoint
+	astBreakpointInstaller := anObject
+]
+
+{ #category : 'as yet unclassified' }
+RequirementTestCaseStep >> breakpointHitWithContext: aContext [
+
+	self isReady ifFalse: [ ^ self ].
+	self isSuccess ifTrue: [ ^ self ].
+	self isSuccess: (self expectedResult value: aContext receiver)
 ]
 
 { #category : 'accessing' }
@@ -38,28 +44,40 @@ RequirementTestCaseStep >> expectedResult: anObject [
 	expectedResult := anObject
 ]
 
+{ #category : 'initialization' }
+RequirementTestCaseStep >> initialize [
+
+	super initialize.
+	isSuccess := false
+]
+
 { #category : 'testing' }
-RequirementTestCaseStep >> isBreakpointInstalled [
+RequirementTestCaseStep >> isReady [
 
-	^ self breakpoint isNotNil.
-]
-
-{ #category : 'removing' }
-RequirementTestCaseStep >> removeBreakpoint [
-
-	self breakpoint ifNil: [ ^ self ].
-	self breakpoint isInstalled ifFalse: [ ^ self ].
-	self breakpoint remove
+	self previousStep ifNil: [ ^ true ].
+	^ self previousStep isSuccess
 ]
 
 { #category : 'accessing' }
-RequirementTestCaseStep >> testMethod [
+RequirementTestCaseStep >> isSuccess [
 
-	^ testMethod
+	^ isSuccess
 ]
 
 { #category : 'accessing' }
-RequirementTestCaseStep >> testMethod: anObject [
+RequirementTestCaseStep >> isSuccess: aBoolean [
 
-	testMethod := anObject
+	isSuccess := aBoolean
+]
+
+{ #category : 'accessing' }
+RequirementTestCaseStep >> previousStep [
+
+	^ previousStep
+]
+
+{ #category : 'accessing' }
+RequirementTestCaseStep >> previousStep: anObject [
+
+	previousStep := anObject
 ]

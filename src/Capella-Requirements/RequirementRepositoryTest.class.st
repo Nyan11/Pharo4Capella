@@ -36,9 +36,8 @@ RequirementRepositoryTest >> mockRequirement3 [
 
 	<requirementTestCase1>
 	^ Requirement new
-	definedId: #m3;
+		  definedId: #m3;
 		  title: 'mock 3';
-		  space: 'custom';
 		  yourself
 ]
 
@@ -69,7 +68,4 @@ RequirementRepositoryTest >> testUpdateRequirements [
 		assertCollection: (requirementBuilder requirements collect: #title)
 		includesAll: { 'mock 1'. 'mock 2'. 'mock 3' }.
 
-	"Spaces are populated"
-	self assert: requirementBuilder defaultSpace size equals: 2.
-	self assert: (requirementBuilder spaceNamed: 'custom') size equals: 1
 ]

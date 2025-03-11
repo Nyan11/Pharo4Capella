@@ -2,11 +2,7 @@ Class {
 	#name : 'RequirementBreakpoint',
 	#superclass : 'Breakpoint',
 	#instVars : [
-		'expectedResultBlock',
-		'isSuccess',
-		'isFailure',
-		'requirementBreakpoints',
-		'announcer'
+		'concernedRequirementSteps'
 	],
 	#classInstVars : [
 		'requirementBreakpoints'
@@ -24,18 +20,9 @@ RequirementBreakpoint class >> all [
 ]
 
 { #category : 'api' }
-RequirementBreakpoint >> announcer [
-
-	^ announcer ifNil: [ announcer := Announcer new ]
-]
-
-{ #category : 'api' }
 RequirementBreakpoint >> breakInContext: aContext node: aNode [
 
-	(self expectedResultBlock value: aContext receiver)
-		ifTrue: [ isSuccess := true ]
-		ifFalse: [ isFailure := true ].
-	self announcer announce: (RequirementBreakpointHit new breakpoint: self; yourself).
+	self concernedRequirementSteps do: [ :each | each breakpointHitWithContext: aContext ]
 ]
 
 { #category : 'links' }
@@ -47,40 +34,19 @@ RequirementBreakpoint >> breakLink [
 ]
 
 { #category : 'accessing' }
-RequirementBreakpoint >> expectedResultBlock [
+RequirementBreakpoint >> concernedRequirementSteps [
 
-	^ expectedResultBlock
+	^ concernedRequirementSteps
 ]
 
 { #category : 'accessing' }
-RequirementBreakpoint >> expectedResultBlock: anObject [
+RequirementBreakpoint >> concernedRequirementSteps: anObject [
 
-	expectedResultBlock := anObject
-]
-
-{ #category : 'initialization' }
-RequirementBreakpoint >> initialize [
-
-	super initialize.
-	isFailure := false.
-	isSuccess := false.
-	announcer := Announcer new
-]
-
-{ #category : 'testing' }
-RequirementBreakpoint >> isFailure [
-
-	^ isFailure
+	concernedRequirementSteps := anObject
 ]
 
 { #category : 'testing' }
 RequirementBreakpoint >> isInstalled [
 
 	^ self class all includes: self
-]
-
-{ #category : 'testing' }
-RequirementBreakpoint >> isSuccess [
-
-	^ isSuccess
 ]

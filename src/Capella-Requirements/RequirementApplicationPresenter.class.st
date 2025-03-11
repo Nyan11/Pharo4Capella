@@ -65,7 +65,7 @@ RequirementApplicationPresenter >> defaultLayout [
 
 { #category : 'as yet unclassified' }
 RequirementApplicationPresenter >> ensureAllBreakpointAreRemoved [
-	self repositoryModel allTestCaseSteps do: [ :each | each removeBreakpoint ].
+	self repositoryModel removeAllBreakpoints.
 ]
 
 { #category : 'initialization' }
@@ -81,11 +81,15 @@ RequirementApplicationPresenter >> initializeMenuPresenter [
 						                 self repositoryModel allTestCaseSteps inspect ] ];
 			                 addItem: [ :item |
 				                 item
+					                 name: 'Inspect all interest points';
+					                 icon: (Smalltalk ui icons iconNamed: #inspect);
+					                 action: [
+						                 self repositoryModel reduceAstBreakpointInstaller inspect ] ];
+			                 addItem: [ :item |
+				                 item
 					                 name: 'Install all breakpoints';
 					                 icon: (Smalltalk ui icons iconNamed: #bug);
-					                 action: [
-						self installBreakpoints.
-						                 ] ] ]
+					                 action: [ self installBreakpoints ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -99,14 +103,8 @@ RequirementApplicationPresenter >> initializePresenters [
 { #category : 'initialization' }
 RequirementApplicationPresenter >> installBreakpoints [
 
-	| breakpoints |
-	breakpoints := self repositoryModel installAllBreakpoints.
-	breakpoints do: [ :each |
-		each announcer
-			when: RequirementBreakpointHit
-			do: [ self updateTestIcons ]
-			for: self ].
-		self updateTestIcons
+	self repositoryModel installAllBreakpoints.
+	self updateTestIcons
 ]
 
 { #category : 'layout' }

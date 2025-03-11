@@ -11,35 +11,33 @@ Class {
 }
 
 { #category : 'adding' }
-RequirementTestCase >> addRequirementDebugPoint [
+RequirementTestCase >> addStep: aMethod withExpectedResult: aFullBlockClosure [
 
-	^ self steps collect: [ :each | each addRequirementDebugPoint ]
-]
-
-{ #category : 'adding' }
-RequirementTestCase >> addStep: aMethod withExpectedResult: aFullBlockClosure [ 
-	
 	| step |
-	step := RequirementTestCaseStep new testMethod: aMethod; expectedResult: aFullBlockClosure; yourself.
-	steps add: step.
+	step := RequirementTestCaseStep new
+		        astBreakpointInstaller: aMethod;
+		        expectedResult: aFullBlockClosure;
+		        yourself.
+	steps ifNotEmpty: [ step previousStep: steps last ].
+	steps add: step
 ]
 
 { #category : 'testing' }
-RequirementTestCase >> hasAllTestCaseBreakpointsSuccess [
+RequirementTestCase >> hasAllTestCaseStepSuccess [
 
-	^ self steps allSatisfy: [ :each | each breakpoint isSuccess ]
+	^ self steps allSatisfy: [ :each | each isSuccess ]
 ]
 
 { #category : 'testing' }
-RequirementTestCase >> hasTestCaseBreakpointsFaillure [
+RequirementTestCase >> hasTestCaseStepFaillure [
 
-	^ self steps anySatisfy: [ :each | each breakpoint isFailure ]
+	^ self steps anySatisfy: [ :each | each isSuccess not ]
 ]
 
 { #category : 'testing' }
-RequirementTestCase >> hasTestCaseBreakpointsInstalled [
+RequirementTestCase >> hasTestCaseStepReady [
 
-	^ self steps anySatisfy: [ :each | each isBreakpointInstalled ]
+	^ self steps anySatisfy: [ :each | each isReady ]
 ]
 
 { #category : 'testing' }

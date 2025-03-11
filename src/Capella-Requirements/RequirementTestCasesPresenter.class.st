@@ -27,7 +27,7 @@ RequirementTestCasesPresenter >> defaultTestCaseTable [
 	^ SpTablePresenter new
 		  addColumn: (SpStringTableColumn
 				   title: 'Step'
-				   evaluated: [ :step | step testMethod ]);
+				   evaluated: [ :step | step astBreakpointInstaller ]);
 		  addColumn: (SpStringTableColumn
 				   title: 'Expected Results'
 				   evaluated: [ :step | step expectedResult ]);
@@ -40,11 +40,13 @@ RequirementTestCasesPresenter >> defaultTestCaseTable [
 { #category : 'accessing' }
 RequirementTestCasesPresenter >> iconForStep: aStep [
 
-	aStep isBreakpointInstalled ifFalse: [ ^ Smalltalk ui icons iconNamed: #testNotRun ].
-	aStep breakpoint isSuccess ifTrue: [ ^ Smalltalk ui icons iconNamed: #testGreen ].
-	aStep breakpoint isFailure ifTrue: [ ^ Smalltalk ui icons iconNamed: #testRed ].
+	aStep isReady ifFalse: [
+		^ Smalltalk ui icons iconNamed: #testNotRun ].
+	aStep isSuccess ifTrue: [
+		^ Smalltalk ui icons iconNamed: #testGreen ].
+	"aStep isFailure ifTrue: [
+		^ Smalltalk ui icons iconNamed: #testRed ]."
 	^ Smalltalk ui icons iconNamed: #testYellow
-	
 ]
 
 { #category : 'accessing' }

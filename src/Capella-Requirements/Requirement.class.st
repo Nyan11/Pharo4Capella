@@ -5,7 +5,6 @@ Class {
 		'definedId',
 		'title',
 		'description',
-		'space',
 		'repository',
 		'testCases'
 	],
@@ -23,12 +22,6 @@ Requirement >> addNewTestCase: aBlock [
 	testCases add: testCase.
 ]
 
-{ #category : 'adding' }
-Requirement >> addRequirementDebugPoint [
-
-	^ self testCases flatCollect: [ :each | each addRequirementDebugPoint ]
-]
-
 { #category : 'as yet unclassified' }
 Requirement >> allTestCaseSteps [
 	^ self testCases flatCollect: [ :each | each steps ].
@@ -43,10 +36,8 @@ Requirement >> definedId [
 { #category : 'accessing' }
 Requirement >> definedId: aString [
 
-	self definedId = aString ifTrue: [ ^ self ].
-	(self verifyDefinedIdIsUnique: aString) ifFalse: [ RequirementDuplicatedIdentifierError signal: 'Duplicated Id found in repository.'.
-		^ self ].
-	definedId := aString.
+	self definedId ifNotNil: [ RequirementImmutableObjectError signal ].
+	definedId := aString
 ]
 
 { #category : 'accessing' }
@@ -62,26 +53,26 @@ Requirement >> description: anObject [
 ]
 
 { #category : 'testing' }
-Requirement >> hasAllTestCaseBreakpointsSuccess [
+Requirement >> hasAllTestCaseStepSuccess [
 
 	self testCases ifEmpty: [ ^ false ].
 	^ self testCases allSatisfy: [ :each |
-		  each hasAllTestCaseBreakpointsSuccess ]
+		  each hasAllTestCaseStepSuccess ]
 ]
 
 { #category : 'testing' }
-Requirement >> hasTestCaseBreakpointsFaillure [
+Requirement >> hasTestCaseStepFaillure [
 
 	self testCases ifEmpty: [ ^ false ].
 	^ self testCases anySatisfy: [ :each |
-		  each hasTestCaseBreakpointsFaillure ]
+		  each hasTestCaseStepFaillure ]
 ]
 
 { #category : 'testing' }
-Requirement >> hasTestCaseBreakpointsInstalled [
+Requirement >> hasTestCaseStepReady [
 
 	self testCases ifEmpty: [ ^ false ].
-	^ self testCases anySatisfy: [ :each | each hasTestCaseBreakpointsInstalled ]
+	^ self testCases anySatisfy: [ :each | each hasTestCaseStepReady ]
 ]
 
 { #category : 'testing' }
@@ -96,13 +87,6 @@ Requirement >> initialize [
 
 	super initialize.
 	testCases := OrderedCollection new.
-]
-
-{ #category : 'as yet unclassified' }
-Requirement >> inspectionRequirement [
-
-	<inspectorPresentationOrder: 0 title: 'Requirement'>
-	^ RequirementPresenter new requirementModel: self; yourself.
 ]
 
 { #category : 'testing' }
@@ -153,18 +137,6 @@ Requirement >> repository: anObject [
 	repository := anObject
 ]
 
-{ #category : 'accessing' }
-Requirement >> space [
-
-	^ space
-]
-
-{ #category : 'accessing' }
-Requirement >> space: anObject [
-
-	space := anObject
-]
-
 { #category : 'adding' }
 Requirement >> testCases [
 
@@ -181,12 +153,4 @@ Requirement >> title [
 Requirement >> title: anObject [
 
 	title := anObject
-]
-
-{ #category : 'accessing' }
-Requirement >> verifyDefinedIdIsUnique: aString [
-
-	self repository ifNil: [ ^ true ].
-	^ (self repository requirements anySatisfy: [ :each |
-		   each definedId = aString and: [ (each == self) not ] ]) not
 ]

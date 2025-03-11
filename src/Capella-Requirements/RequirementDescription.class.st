@@ -31,8 +31,8 @@ RequirementDescription >> descriptionWithMacros: anObject [
 { #category : 'as yet unclassified' }
 RequirementDescription >> fixWithRepository: aRepository [
 
-	self requirements: (self requirements collect: [ :req |
-			 (aRepository findSimilarRequirements: req) first ])
+	self requirements: (self requirements collect: [ :requirement |
+			 (aRepository requirements select: [ :each | each isSimilarTo: requirement ]) first ])
 ]
 
 { #category : 'testing' }

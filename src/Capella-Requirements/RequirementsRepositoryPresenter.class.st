@@ -52,12 +52,12 @@ RequirementsRepositoryPresenter >> requirementIcon: aRequirement [
 
 	aRequirement hasTestCases ifFalse: [
 		^ Smalltalk ui icons iconNamed: #blank ].
-	aRequirement hasTestCaseBreakpointsInstalled ifFalse: [
+	aRequirement hasTestCaseStepReady ifFalse: [
 		^ Smalltalk ui icons iconNamed: #testNotRun ].
-	aRequirement hasTestCaseBreakpointsFaillure ifTrue: [
-		^ Smalltalk ui icons iconNamed: #testRed ].
-	aRequirement hasAllTestCaseBreakpointsSuccess ifTrue: [
+	aRequirement hasAllTestCaseStepSuccess ifTrue: [
 		^ Smalltalk ui icons iconNamed: #testGreen ].
+	"aRequirement hasTestCaseStepFaillure ifTrue: [
+		^ Smalltalk ui icons iconNamed: #testRed ]."
 	^ Smalltalk ui icons iconNamed: #testYellow
 ]
 
