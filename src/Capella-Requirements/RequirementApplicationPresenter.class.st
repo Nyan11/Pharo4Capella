@@ -5,7 +5,9 @@ Class {
 		'repositoryPresenter',
 		'requirementPresenter',
 		'repositoryReport',
-		'menuPresenter'
+		'menuPresenter',
+		'isUpdatingTestIcons',
+		'updaterProcess'
 	],
 	#category : 'Capella-Requirements-User-Interfaces',
 	#package : 'Capella-Requirements',
@@ -95,9 +97,10 @@ RequirementApplicationPresenter >> initializeMenuPresenter [
 { #category : 'initialization' }
 RequirementApplicationPresenter >> initializePresenters [
 
+	isUpdatingTestIcons := false.
 	self initializeMenuPresenter.
 	requirementPresenter := RequirementPresenter new.
-	repositoryPresenter := RequirementsRepositoryPresenter new.
+	repositoryPresenter := RequirementsRepositoryPresenter new
 ]
 
 { #category : 'initialization' }
@@ -105,6 +108,18 @@ RequirementApplicationPresenter >> installBreakpoints [
 
 	self repositoryReport installAllBreakpoints.
 	self updateTestIcons
+]
+
+{ #category : 'accessing' }
+RequirementApplicationPresenter >> isUpdatingTestIcons [
+
+	^ isUpdatingTestIcons
+]
+
+{ #category : 'accessing' }
+RequirementApplicationPresenter >> isUpdatingTestIcons: anObject [
+
+	isUpdatingTestIcons := anObject
 ]
 
 { #category : 'layout' }
@@ -129,9 +144,10 @@ RequirementApplicationPresenter >> repositoryReport [
 RequirementApplicationPresenter >> repositoryReport: anObject [
 
 	repositoryReport := anObject.
-	
-	self repositoryReport testCaseStepReportAnnoucers do: [ :each | each when: RequirementTestCaseStepReportChanged do: [ :evt | self updateTestIcons ] for: self ].
 	self repositoryPresenter repositoryReport: anObject.
+	self updatePresenter
+
+	
 ]
 
 { #category : 'accessing' }
@@ -140,8 +156,28 @@ RequirementApplicationPresenter >> requirementPresenter [
 	^ requirementPresenter
 ]
 
+{ #category : 'accessing' }
+RequirementApplicationPresenter >> updatePresenter [
+
+	self repositoryReport ifNil: [ ^ self ].
+	self repositoryReport testCaseStepReportAnnoucers do: [ :each |
+		each
+			when: RequirementTestCaseStepReportChanged
+			do: [ :evt | self updateTestIcons ]
+			for: self ].
+
+	
+]
+
 { #category : 'initialization' }
 RequirementApplicationPresenter >> updateTestIcons [
 
-	self repositoryPresenter updateTestIcons
+	self isUpdatingTestIcons ifTrue: [ ^ self ].
+	self isUpdatingTestIcons: true.
+	updaterProcess := [
+	self repositoryPresenter updateTestIcons.
+	(Delay forMilliseconds: 500) wait.
+	self isUpdatingTestIcons: false ]
+		forkAt: Processor userBackgroundPriority
+		named: 'Requirement Application update test icons'
 ]
