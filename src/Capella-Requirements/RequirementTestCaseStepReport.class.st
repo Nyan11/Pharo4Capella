@@ -5,7 +5,6 @@ Class {
 		'step',
 		'breakpoint',
 		'numberOfSuccess',
-		'numberOfFailure',
 		'testCaseReport',
 		'announcer'
 	],
@@ -34,11 +33,26 @@ RequirementTestCaseStepReport >> breakpoint: anObject [
 { #category : 'as yet unclassified' }
 RequirementTestCaseStepReport >> breakpointHitWithContext: aContext [
 
+	| testBlock argCount |
 	self shouldTestValueOfReceiver ifFalse: [ ^ self ].
-	(self step expectedResult value: aContext receiver)
-		ifTrue: [ numberOfSuccess := numberOfSuccess + 1 ]
-		ifFalse: [ numberOfFailure := numberOfFailure + 1 ].
-	announcer announce: RequirementTestCaseStepReportChanged new
+	testBlock := self step expectedResult.
+	argCount := testBlock argumentCount.
+	argCount = 0 ifTrue: [
+		self resultOfEvaluation: self step expectedResult value.
+		^ self ].
+	argCount = 1 ifTrue: [
+		self resultOfEvaluation:
+			(self step expectedResult value: aContext receiver).
+		^ self ].
+	argCount = 2 ifTrue: [
+		self resultOfEvaluation: (self step expectedResult
+				 value: aContext receiver
+				 value: aContext).
+		^ self ].
+	self resultOfEvaluation: (self step expectedResult
+			 value: aContext receiver
+			 value: aContext
+			 value: aContext arguments)
 ]
 
 { #category : 'testing' }
@@ -65,7 +79,6 @@ RequirementTestCaseStepReport >> initialize [
 
 	super initialize.
 	numberOfSuccess := 0.
-	numberOfFailure := 0.
 	announcer := Announcer new
 ]
 
@@ -82,12 +95,6 @@ RequirementTestCaseStepReport >> isSuccess [
 ]
 
 { #category : 'accessing' }
-RequirementTestCaseStepReport >> numberOfFailure [
-
-	^ numberOfFailure
-]
-
-{ #category : 'accessing' }
 RequirementTestCaseStepReport >> numberOfSuccess [
 
 	^ numberOfSuccess
@@ -98,6 +105,14 @@ RequirementTestCaseStepReport >> previousStep [
 
 	^ self testCaseReport stepReports at:
 		  (self testCaseReport stepReports indexOf: self) - 1
+]
+
+{ #category : 'as yet unclassified' }
+RequirementTestCaseStepReport >> resultOfEvaluation: aBoolean [
+
+	aBoolean ifFalse: [ ^ self ].
+	numberOfSuccess := numberOfSuccess + 1.
+	self announcer announce: RequirementTestCaseStepReportChanged new
 ]
 
 { #category : 'as yet unclassified' }

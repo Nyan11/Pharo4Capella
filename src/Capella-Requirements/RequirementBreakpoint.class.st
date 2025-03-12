@@ -23,7 +23,10 @@ RequirementBreakpoint class >> all [
 { #category : 'api' }
 RequirementBreakpoint >> breakInContext: aContext node: aNode [
 
-	self concernedRequirementSteps do: [ :each | each breakpointHitWithContext: aContext ]
+	self concernedRequirementSteps do: [ :each |
+		each breakpointHitWithContext: aContext ].
+	self concernedRequirementSteps removeAll:
+		(self concernedRequirementSteps select: [ :each | each isSuccess ])
 ]
 
 { #category : 'links' }

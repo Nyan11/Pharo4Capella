@@ -27,7 +27,7 @@ RequirementAstBreakpointInstaller >> addRequirementDebugPointWithSteps: aCollect
 	| ast breakpoint |
 	ast := self targetMethod ast.
 	breakpoint := RequirementBreakpoint new
-						 isAfterCall: self isAfterCall;
+		              isAfterCall: self isAfterCall;
 		              node: ast;
 		              concernedRequirementSteps:
 			              aCollectionOfRequirementTestCaseSteps;
@@ -54,7 +54,7 @@ RequirementAstBreakpointInstaller >> hash [
 RequirementAstBreakpointInstaller >> initialize [
 
 	super initialize.
-	isAfterCall := false.
+	isAfterCall := false
 ]
 
 { #category : 'as yet unclassified' }

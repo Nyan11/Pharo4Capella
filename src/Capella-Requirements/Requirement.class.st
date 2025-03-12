@@ -1,9 +1,7 @@
 Class {
 	#name : 'Requirement',
-	#superclass : 'Object',
+	#superclass : 'RequirementDefinedObject',
 	#instVars : [
-		'definedId',
-		'title',
 		'description',
 		'repository',
 		'testCases'
@@ -20,19 +18,6 @@ Requirement >> addNewTestCase: aBlock [
 	testCase := RequirementTestCase new verifies: self; yourself.
 	aBlock value: testCase.
 	testCases add: testCase.
-]
-
-{ #category : 'accessing' }
-Requirement >> definedId [
-
-	^ definedId
-]
-
-{ #category : 'accessing' }
-Requirement >> definedId: aString [
-
-	self definedId ifNotNil: [ RequirementImmutableObjectError signal ].
-	definedId := aString
 ]
 
 { #category : 'accessing' }
@@ -64,32 +49,6 @@ Requirement >> isSimilarTo: aRequirement [
 	^ self description isSimilarTo: aRequirement description
 ]
 
-{ #category : 'printing' }
-Requirement >> prettyPrintDefinedId [
-
-	| stream |
-	stream := WriteStream on: String empty.
-	self prettyPrintDefinedIdOn: stream.
-	^ stream contents
-]
-
-{ #category : 'printing' }
-Requirement >> prettyPrintDefinedIdOn: aStream [
-
-	aStream nextPut: $[.
-	aStream nextPutAll: (self definedId ifNil: [ 'Error: no defined ID' ]).
-	aStream nextPut: $]
-]
-
-{ #category : 'printing' }
-Requirement >> printOn: aStream [
-
-	self prettyPrintDefinedIdOn: aStream.
-	self title ifNil: [ ^ self ].
-	aStream nextPut: Character space.
-	aStream nextPutAll: self title.
-]
-
 { #category : 'accessing' }
 Requirement >> repository [
 
@@ -106,16 +65,4 @@ Requirement >> repository: anObject [
 Requirement >> testCases [
 
 	^ testCases
-]
-
-{ #category : 'accessing' }
-Requirement >> title [
-
-	^ title
-]
-
-{ #category : 'accessing' }
-Requirement >> title: anObject [
-
-	title := anObject
 ]

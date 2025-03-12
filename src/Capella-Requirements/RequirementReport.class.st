@@ -36,13 +36,18 @@ RequirementReport >> hasTestCaseReports [
 { #category : 'as yet unclassified' }
 RequirementReport >> iconForRequirementRepositoryPresenter [
 
+	self isSuccess ifTrue: [ ^ Smalltalk ui icons iconNamed: #testGreen ].
 	self hasTestCaseReports ifFalse: [
 		^ Smalltalk ui icons iconNamed: #blank ].
 	self hasBreakpointsInstalled ifFalse: [
 		^ Smalltalk ui icons iconNamed: #testNotRun ].
-	self hasTestCaseNotComplete ifTrue: [
-		^ Smalltalk ui icons iconNamed: #testYellow ].
-	^ Smalltalk ui icons iconNamed: #testGreen
+	^ Smalltalk ui icons iconNamed: #testYellow
+]
+
+{ #category : 'testing' }
+RequirementReport >> isSuccess [
+
+	^ self testCaseReports allSatisfy: [ :each | each isSuccess ]
 ]
 
 { #category : 'accessing' }

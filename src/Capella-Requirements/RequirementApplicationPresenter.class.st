@@ -48,7 +48,9 @@ RequirementApplicationPresenter >> connectPresenters [
 		self requirementPresenter requirementReport: r ].
 	self requirementPresenter descriptionPresenter whenLinkClickDo: [
 		:req |
-		self repositoryPresenter requirementsTablePresenter selectItem: req scrollToSelection: true ]
+		self repositoryPresenter requirementsTablePresenter
+			selectItem: (self repositoryReport reportForRequirement: req)
+			scrollToSelection: true ]
 ]
 
 { #category : 'layout' }
@@ -57,6 +59,7 @@ RequirementApplicationPresenter >> defaultLayout [
 	^ SpBoxLayout newVertical
 		  add: self menuPresenter expand: false;
 		  add: (SpPanedLayout newHorizontal
+				   positionOfSlider: 1 / 3;
 				   add: self repositoryPresenter;
 				   add: self requirementPresenter;
 				   yourself);
@@ -80,7 +83,13 @@ RequirementApplicationPresenter >> initializeMenuPresenter [
 					                 icon: (Smalltalk ui icons iconNamed: #bug);
 					                 action: [ self installBreakpoints ];
 					                 yourself ];
-			                 yourself ]
+							addItem: [ :item |
+				                 item
+					                 name: 'Inspect model';
+					                 icon: (Smalltalk ui icons iconNamed: #inspect);
+					                 action: [ self repositoryReport inspect ];
+					                 yourself ];
+			                 yourself ]; yourself
 ]
 
 { #category : 'initialization' }

@@ -3,7 +3,8 @@ Class {
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'testCasePresenters',
-		'testCasesReport'
+		'testCasesReport',
+		'expectedResultPresenter'
 	],
 	#category : 'Capella-Requirements-User-Interfaces',
 	#package : 'Capella-Requirements',
@@ -13,28 +14,26 @@ Class {
 { #category : 'accessing' }
 RequirementTestCasesPresenter >> defaultLayout [
 
-	| defaultLayout |
-	defaultLayout := SpBoxLayout newVertical
-		                 spacing: 4;
-		                 yourself.
-	self testCasePresenters do: [ :each | defaultLayout add: each ].
-	^ defaultLayout
+	| testCasesLayout |
+	testCasesLayout := SpBoxLayout newVertical
+		                   spacing: 4;
+		                   yourself.
+	self testCasePresenters do: [ :each |
+		testCasesLayout
+			add: each
+			height: each expectedHeight ].
+	^ SpPanedLayout newVertical
+		  add: (SpScrollableLayout new
+				   child: testCasesLayout;
+				   yourself);
+		  add: self expectedResultPresenter;
+		  yourself
 ]
 
 { #category : 'accessing' }
-RequirementTestCasesPresenter >> defaultTestCaseTable [
+RequirementTestCasesPresenter >> expectedResultPresenter [
 
-	^ SpTablePresenter new
-		  addColumn: (SpStringTableColumn
-				   title: 'Step'
-				   evaluated: [ :report | report step astBreakpointInstaller ]);
-		  addColumn: (SpStringTableColumn
-				   title: 'Expected Results'
-				   evaluated: [ :report | report step expectedResult ]);
-		  addColumn:
-			  ((SpImageTableColumn evaluated: [ :report | report iconForRequirementTestCasesPresenter ])
-				   width: 24);
-		  yourself
+	^ expectedResultPresenter
 ]
 
 { #category : 'accessing' }
@@ -52,15 +51,19 @@ RequirementTestCasesPresenter >> iconForStep: aStep [
 { #category : 'accessing' }
 RequirementTestCasesPresenter >> initializePresenters [
 
-	testCasePresenters := {  }
+	testCasePresenters := {  }.
+	expectedResultPresenter := SpCodePresenter new
 ]
 
 { #category : 'accessing' }
-RequirementTestCasesPresenter >> makeTestCaseTableFor: aTestCase [
+RequirementTestCasesPresenter >> makeTestCaseTableFor: aTestCaseReport [
 
-	^ self defaultTestCaseTable
-		  items: aTestCase stepReports;
-		  yourself
+	| testCasePresenter |
+	testCasePresenter := RequirementSingleTestCasePresenter new.
+	testCasePresenter testCaseReport: aTestCaseReport.
+	testCasePresenter whenSelectedItemChangedDo: [ :item |
+		self updateSelectedItem: item fromTable: testCasePresenter ].
+	^ testCasePresenter
 ]
 
 { #category : 'accessing' }
@@ -86,8 +89,31 @@ RequirementTestCasesPresenter >> testCasesReport: anObject [
 RequirementTestCasesPresenter >> updatePresenter [
 
 	self testCasesReport ifNil: [ ^ self ].
-
+	self expectedResultPresenter text: ''.
 	testCasePresenters := self testCasesReport collect: [ :each |
 		                      self makeTestCaseTableFor: each ].
 	self layout: self defaultLayout
+]
+
+{ #category : 'accessing' }
+RequirementTestCasesPresenter >> updateSelectedItem: aReport fromTable: aOriginalTable [
+
+	| resultBlockNode interval |
+	aReport ifNil: [ ^ self ].
+	self testCasePresenters do: [ :table |
+		table == aOriginalTable ifFalse: [ table unselectAll ] ].
+	resultBlockNode := aReport step expectedResult sourceNode.
+	interval := (resultBlockNode source first:
+		             resultBlockNode sourceInterval first
+		             + resultBlockNode sourceInterval last // 2) lines size
+	            / resultBlockNode source lines size.
+	self expectedResultPresenter
+		beForMethod: resultBlockNode methodNode;
+		text:
+			(resultBlockNode source ifNil: [ resultBlockNode formattedCode ]);
+		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+				 interval: (resultBlockNode sourceInterval first to:
+						  resultBlockNode sourceInterval last + 1);
+				 yourself);
+		scrollValue: 0 @ interval
 ]

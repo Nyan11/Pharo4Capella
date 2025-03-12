@@ -1,6 +1,6 @@
 Class {
 	#name : 'RequirementTestCase',
-	#superclass : 'Object',
+	#superclass : 'RequirementDefinedObject',
 	#instVars : [
 		'verifies',
 		'steps'

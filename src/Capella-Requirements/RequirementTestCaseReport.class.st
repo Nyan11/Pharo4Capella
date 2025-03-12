@@ -16,7 +16,7 @@ RequirementTestCaseReport >> hasBreakpointsInstalled [
 ]
 
 { #category : 'testing' }
-RequirementTestCaseReport >> isComplete [
+RequirementTestCaseReport >> isSuccess [
 
 	^ self stepReports last isSuccess
 ]

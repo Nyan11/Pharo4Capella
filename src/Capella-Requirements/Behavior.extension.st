@@ -18,3 +18,15 @@ Behavior >> requirementVerifiedBeforeCall: aSelector [
 		  targetMethod: (self lookupSelector: aSelector);
 		  yourself
 ]
+
+{ #category : '*Capella-Requirements' }
+Behavior >> rvac: aSelector [
+
+	^ self requirementVerifiedAfterCall: aSelector
+]
+
+{ #category : '*Capella-Requirements' }
+Behavior >> rvbc: aSelector [
+
+	^ self requirementVerifiedBeforeCall: aSelector
+]

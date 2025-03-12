@@ -59,6 +59,12 @@ RequirementsRepositoryReport >> removeAllBreakpoints [
 	installedBreakpoints := nil
 ]
 
+{ #category : 'as yet unclassified' }
+RequirementsRepositoryReport >> reportForRequirement: aRequirement [
+
+	^ (self requirementReports select: [ :each | each requirement == aRequirement ]) first
+]
+
 { #category : 'accessing' }
 RequirementsRepositoryReport >> repository [
 

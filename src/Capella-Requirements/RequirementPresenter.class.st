@@ -20,8 +20,10 @@ RequirementPresenter >> defaultLayout [
 		  spacing: 4;
 		  add: self definedIdPresenter expand: false;
 		  add: self titlePresenter expand: false;
-		  add: self descriptionPresenter expand: true;
-		  add: self testCasesPresenter expand: true;
+		  add: (SpPanedLayout newHorizontal
+				   add: self descriptionPresenter;
+				   add: self testCasesPresenter;
+				   yourself);
 		  yourself
 ]
 

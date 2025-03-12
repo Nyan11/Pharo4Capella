@@ -58,8 +58,7 @@ RequirementsRepository >> requirements [
 RequirementsRepository >> updateRequirements [
 
 	| pragmas allDuplicatedRequirement descriptions |
-	"Collect requirements."
-	"If ID is nil, provide a random ID"
+	"Collect requirements.""If ID is nil, provide a random ID"
 	pragmas := Pragma allNamed: self pragmaSelector.
 	requirements := pragmas collect: [ :p |
 		                | requirement |
@@ -68,6 +67,8 @@ RequirementsRepository >> updateRequirements [
 		                requirement definedId ifNil: [
 			                requirement definedId: self randomUUID ].
 		                requirement repository: self.
+							requirement testCases do: [ :tc | tc definedId ifNil: [
+			                tc definedId: self randomUUID ] ].
 		                requirement ].
 
 	"Verify that all requirements have a unique ID."
@@ -82,8 +83,7 @@ RequirementsRepository >> updateRequirements [
 		                collect: [ :each | each description ]
 		                thenSelect: [ :each |
 		                each isNotNil and: [ each requirements isNotEmpty ] ].
-	descriptions do: [ :each | each fixWithRepository: self ].
-
+	descriptions do: [ :each | each fixWithRepository: self ]
 ]
 
 { #category : 'default values' }
