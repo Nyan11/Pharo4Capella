@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Breakpoint',
 	#instVars : [
 		'concernedRequirementSteps',
-		'isAfterCall'
+		'isAfterCall',
+		'stepConditionBlock'
 	],
 	#classInstVars : [
 		'requirementBreakpoints'
@@ -23,10 +24,17 @@ RequirementBreakpoint class >> all [
 { #category : 'api' }
 RequirementBreakpoint >> breakInContext: aContext node: aNode [
 
-	self concernedRequirementSteps do: [ :each |
-		each breakpointHitWithContext: aContext ].
-	self concernedRequirementSteps removeAll:
-		(self concernedRequirementSteps select: [ :each | each isSuccess ])
+	| stepsToRemove |
+
+	"If nothing do not bother"
+	self concernedRequirementSteps ifEmpty: [ ^ self ].
+	
+	"Evaluate the condition"
+	(self evaluateStepConditionWithContext: aContext) ifFalse: [ ^ self ].
+	
+	"Evaluate expected result of each step and remove unascessary steps"
+	stepsToRemove := self concernedRequirementSteps select: [ :step | self evaluateStepExpectedResult: step withContext: aContext ].
+	self concernedRequirementSteps removeAll: stepsToRemove
 ]
 
 { #category : 'links' }
@@ -52,6 +60,38 @@ RequirementBreakpoint >> concernedRequirementSteps: anObject [
 	concernedRequirementSteps := anObject
 ]
 
+{ #category : 'api' }
+RequirementBreakpoint >> evaluateBlock: aFullBlockClosure withContext: aContext [
+
+	| argCount |
+	argCount := aFullBlockClosure argumentCount.
+	argCount = 0 ifTrue: [ ^ aFullBlockClosure value ].
+	argCount = 1 ifTrue: [ ^ aFullBlockClosure value: aContext receiver ].
+	argCount = 2 ifTrue: [ ^ aFullBlockClosure value: aContext receiver value: aContext].
+	^ aFullBlockClosure
+			 value: aContext receiver
+			 value: aContext
+			 value: aContext arguments
+]
+
+{ #category : 'api' }
+RequirementBreakpoint >> evaluateStepConditionWithContext: aContext [
+
+	^ self evaluateBlock: self stepConditionBlock withContext: aContext
+]
+
+{ #category : 'api' }
+RequirementBreakpoint >> evaluateStepExpectedResult: aStep withContext: aContext [
+
+	| result |
+	aStep isStarted ifFalse: [ ^ false ].
+	result := self
+		          evaluateBlock: aStep expectedResult
+		          withContext: aContext.
+	aStep resultOfEvaluation: result.
+	^ result
+]
+
 { #category : 'links' }
 RequirementBreakpoint >> isAfterCall [
 
@@ -68,4 +108,16 @@ RequirementBreakpoint >> isAfterCall: anObject [
 RequirementBreakpoint >> isInstalled [
 
 	^ self class all includes: self
+]
+
+{ #category : 'accessing' }
+RequirementBreakpoint >> stepConditionBlock [
+
+	^ stepConditionBlock
+]
+
+{ #category : 'accessing' }
+RequirementBreakpoint >> stepConditionBlock: anObject [
+
+	stepConditionBlock := anObject
 ]

@@ -3,34 +3,55 @@ Class {
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'requirementsTablePresenter',
-		'repositoryReport'
+		'repositoryReport',
+		'requirementPresenter'
 	],
-	#category : 'Capella-Requirements-User-Interfaces',
+	#category : 'Capella-Requirements-UI-Requirements',
 	#package : 'Capella-Requirements',
-	#tag : 'User-Interfaces'
+	#tag : 'UI-Requirements'
 }
+
+{ #category : 'initialization' }
+RequirementsRepositoryPresenter >> connectPresenters [
+
+	self requirementsTablePresenter
+		whenSelectedItemChangedDo: [ :r |
+		self requirementPresenter requirementReport: r ].
+	self requirementPresenter descriptionPresenter whenLinkClickDo: [
+		:req |
+		self requirementsTablePresenter
+			selectItem: (self repositoryReport reportForRequirement: req)
+			scrollToSelection: true ]
+]
 
 { #category : 'initialization' }
 RequirementsRepositoryPresenter >> defaultLayout [
 
-	^ SpBoxLayout newVertical add: self requirementsTablePresenter; yourself.
+	^ SpPanedLayout newHorizontal
+		  positionOfSlider: 1 / 4;
+		  add: self requirementsTablePresenter;
+		  add: self requirementPresenter;
+		  yourself
 ]
 
 { #category : 'initialization' }
 RequirementsRepositoryPresenter >> initializePresenters [
 
+	requirementPresenter := RequirementPresenter new.
 	requirementsTablePresenter := SpTablePresenter new
+		                              beResizable;
 		                              addColumn: (SpStringTableColumn
 				                               title: 'Defined Id'
-				                               evaluated: [ :report | report requirement definedId ]);
-		                              addColumn:
-			                              (SpStringTableColumn
+				                               evaluated: [ :report |
+					                               report requirement definedId ]);
+		                              addColumn: (SpStringTableColumn
 				                               title: 'Title'
-				                               evaluated: [ :report | report requirement title ]);
+				                               evaluated: [ :report |
+					                               report requirement title ]);
 		                              addColumn:
-			                              ((SpImageTableColumn evaluated: [ :report |
-					                                report
-						                                iconForRequirementRepositoryPresenter ])
+			                              ((SpImageTableColumn evaluated: [
+					                                :report |
+					                                report iconForReportStatus ])
 				                               width: 24);
 		                              yourself
 ]
@@ -63,6 +84,12 @@ RequirementsRepositoryPresenter >> requirementIcon: aRequirement [
 ]
 
 { #category : 'accessing' }
+RequirementsRepositoryPresenter >> requirementPresenter [
+
+	^ requirementPresenter
+]
+
+{ #category : 'accessing' }
 RequirementsRepositoryPresenter >> requirementsTablePresenter [
 
 	^ requirementsTablePresenter
@@ -74,12 +101,14 @@ RequirementsRepositoryPresenter >> updatePresenter [
 	self repositoryReport ifNil: [ ^ self ].
 
 	self requirementsTablePresenter items:
-		self repositoryReport requirementReports
+		self repositoryReport requirementReports.
+	self requirementsTablePresenter selectFirst
 ]
 
 { #category : 'initialization' }
 RequirementsRepositoryPresenter >> updateTestIcons [
 
 	self requirementsTablePresenter updateItemsKeepingSelection:
-		self requirementsTablePresenter items
+		self requirementsTablePresenter items.
+
 ]

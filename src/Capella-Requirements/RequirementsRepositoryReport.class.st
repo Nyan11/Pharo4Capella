@@ -1,6 +1,6 @@
 Class {
 	#name : 'RequirementsRepositoryReport',
-	#superclass : 'Object',
+	#superclass : 'RequirementAbstractReport',
 	#instVars : [
 		'repository',
 		'requirementReports',
@@ -28,13 +28,19 @@ RequirementsRepositoryReport >> installAllBreakpoints [
 	breakpoints := OrderedCollection new.
 	self reduceAstBreakpointInstaller keysAndValuesDo: [
 		:stepCondition
-		:steps |
+		:stepReports |
 		| breakpoint |
-		breakpoint := stepCondition addRequirementDebugPointWithSteps: steps.
+		breakpoint := stepCondition addRequirementDebugPointWithStepReports: stepReports.
 		breakpoints add: breakpoint.
-		steps do: [ :step | step breakpoint: breakpoint ].
+		stepReports do: [ :report | report breakpoint: breakpoint ].
 		breakpoint ].
 	installedBreakpoints := breakpoints
+]
+
+{ #category : 'testing' }
+RequirementsRepositoryReport >> isSuccess [
+
+	^ self requirementReports allSatisfy: [ :each | each isSuccess ]
 ]
 
 { #category : 'breakpoints' }

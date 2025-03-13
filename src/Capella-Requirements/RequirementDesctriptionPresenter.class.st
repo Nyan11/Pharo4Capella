@@ -7,9 +7,9 @@ Class {
 		'descriptionModel',
 		'whenLinkClickDo'
 	],
-	#category : 'Capella-Requirements-User-Interfaces',
+	#category : 'Capella-Requirements-UI-Requirements',
 	#package : 'Capella-Requirements',
-	#tag : 'User-Interfaces'
+	#tag : 'UI-Requirements'
 }
 
 { #category : 'layout' }

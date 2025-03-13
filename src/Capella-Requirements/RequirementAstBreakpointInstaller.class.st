@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'targetClass',
 		'targetMethod',
-		'isAfterCall'
+		'isAfterCall',
+		'condition'
 	],
 	#category : 'Capella-Requirements-Technical',
 	#package : 'Capella-Requirements',
@@ -18,11 +19,14 @@ RequirementAstBreakpointInstaller >> = anObject [
 	anObject == self ifTrue: [ ^ true ].
 	anObject class = self class ifFalse: [ ^ false ].
 	^ self targetClass = anObject targetClass and: [
-		  self targetMethod = anObject targetMethod and: [ self isAfterCall = anObject isAfterCall ]]
+		  self targetMethod = anObject targetMethod and: [
+			  self isAfterCall = anObject isAfterCall and: [
+				  self condition sourceNode formattedCode
+				  = anObject condition sourceNode formattedCode ] ] ]
 ]
 
 { #category : 'adding' }
-RequirementAstBreakpointInstaller >> addRequirementDebugPointWithSteps: aCollectionOfRequirementTestCaseSteps [
+RequirementAstBreakpointInstaller >> addRequirementDebugPointWithStepReports: aCollectionOfRequirementTestCaseSteps [
 
 	| ast breakpoint |
 	ast := self targetMethod ast.
@@ -31,6 +35,7 @@ RequirementAstBreakpointInstaller >> addRequirementDebugPointWithSteps: aCollect
 		              node: ast;
 		              concernedRequirementSteps:
 			              aCollectionOfRequirementTestCaseSteps;
+		              stepConditionBlock: self condition;
 		              yourself.
 	breakpoint condition: (breakpoint generateConditionBlockFrom:
 			 ('self class = <1s>' expandMacrosWith: self targetClass name)).
@@ -42,6 +47,18 @@ RequirementAstBreakpointInstaller >> addRequirementDebugPointWithSteps: aCollect
 RequirementAstBreakpointInstaller >> beAfterCall [
 
 	isAfterCall := true.
+]
+
+{ #category : 'accessing' }
+RequirementAstBreakpointInstaller >> condition [
+
+	^ condition
+]
+
+{ #category : 'accessing' }
+RequirementAstBreakpointInstaller >> condition: anObject [
+
+	condition := anObject
 ]
 
 { #category : 'comparing' }

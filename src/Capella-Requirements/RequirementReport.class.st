@@ -1,6 +1,6 @@
 Class {
 	#name : 'RequirementReport',
-	#superclass : 'Object',
+	#superclass : 'RequirementAbstractReport',
 	#instVars : [
 		'requirement',
 		'testCaseReports'
@@ -45,6 +45,12 @@ RequirementReport >> iconForRequirementRepositoryPresenter [
 ]
 
 { #category : 'testing' }
+RequirementReport >> isStarted [
+
+	^ self testCaseReports anySatisfy: [ :each | each isStarted  ]
+]
+
+{ #category : 'testing' }
 RequirementReport >> isSuccess [
 
 	^ self testCaseReports allSatisfy: [ :each | each isSuccess ]
@@ -60,7 +66,23 @@ RequirementReport >> requirement [
 RequirementReport >> requirement: anObject [
 
 	requirement := anObject.
-	testCaseReports := requirement testCases collect: [ :testCase | RequirementTestCaseReport new testCase: testCase; yourself ].
+	testCaseReports := requirement testCases collect: [ :testCase |
+		                   RequirementTestCaseReport new
+			                   testCase: testCase;
+			                   requirementReport: self;
+			                   yourself ]
+]
+
+{ #category : 'as yet unclassified' }
+RequirementReport >> requirementMethod [
+
+	| pragmaSelector allPragmaSimilar |
+	pragmaSelector := self requirement repository pragmaSelector.
+	allPragmaSimilar := (Pragma allNamed: pragmaSelector) select: [ :p |
+		(p method valueWithReceiver: p methodClass instanceSide basicNew)
+			isSimilarTo: self requirement ].
+	allPragmaSimilar ifEmpty: [ ^ nil ].
+	^ allPragmaSimilar first method
 ]
 
 { #category : 'accessing' }

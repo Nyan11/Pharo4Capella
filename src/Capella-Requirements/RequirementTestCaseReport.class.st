@@ -1,9 +1,10 @@
 Class {
 	#name : 'RequirementTestCaseReport',
-	#superclass : 'Object',
+	#superclass : 'RequirementAbstractReport',
 	#instVars : [
 		'testCase',
-		'stepReports'
+		'stepReports',
+		'requirementReport'
 	],
 	#category : 'Capella-Requirements-Model-Report',
 	#package : 'Capella-Requirements',
@@ -15,10 +16,46 @@ RequirementTestCaseReport >> hasBreakpointsInstalled [
 	^ self stepReports anySatisfy: [ :each | each hasBreakpointsInstalled ].
 ]
 
+{ #category : 'as yet unclassified' }
+RequirementTestCaseReport >> iconForReportType [
+
+	^ Smalltalk ui icons iconNamed: #testRunner
+]
+
+{ #category : 'testing' }
+RequirementTestCaseReport >> isStarted [
+
+	^ self stepReports anySatisfy: [ :each | each isStarted ]
+]
+
 { #category : 'testing' }
 RequirementTestCaseReport >> isSuccess [
 
 	^ self stepReports last isSuccess
+]
+
+{ #category : 'testing' }
+RequirementTestCaseReport >> isTestCase [ 
+
+	^ true
+]
+
+{ #category : 'as yet unclassified' }
+RequirementTestCaseReport >> requirementMethod [
+
+	^ self requirementReport requirementMethod
+]
+
+{ #category : 'as yet unclassified' }
+RequirementTestCaseReport >> requirementReport [
+
+	^ requirementReport
+]
+
+{ #category : 'as yet unclassified' }
+RequirementTestCaseReport >> requirementReport: anObject [
+
+	requirementReport := anObject
 ]
 
 { #category : 'accessing' }

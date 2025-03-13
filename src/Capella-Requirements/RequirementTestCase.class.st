@@ -11,15 +11,25 @@ Class {
 }
 
 { #category : 'adding' }
-RequirementTestCase >> addStep: aMethod withExpectedResult: aFullBlockClosure [
+RequirementTestCase >> addStep: anAstBreakpointInstaller withCondition: aConditionBlock withExpectedResult: aExpectedResultBlock [
 
 	| step |
+	anAstBreakpointInstaller condition: aConditionBlock.
 	step := RequirementTestCaseStep new
-		        astBreakpointInstaller: aMethod;
-		        expectedResult: aFullBlockClosure;
+		        astBreakpointInstaller: anAstBreakpointInstaller;
+		        expectedResult: aExpectedResultBlock;
 		        yourself.
 	steps ifNotEmpty: [ step previousStep: steps last ].
 	steps add: step
+]
+
+{ #category : 'adding' }
+RequirementTestCase >> addStep: anAstBreakpointInstaller withExpectedResult: aExpectedResultBlock [
+
+	self
+		addStep: anAstBreakpointInstaller
+		withCondition: [ true ]
+		withExpectedResult: aExpectedResultBlock
 ]
 
 { #category : 'initialization' }

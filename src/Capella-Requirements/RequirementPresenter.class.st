@@ -8,9 +8,9 @@ Class {
 		'requirementReport',
 		'testCasesPresenter'
 	],
-	#category : 'Capella-Requirements-User-Interfaces',
+	#category : 'Capella-Requirements-UI-Requirements',
 	#package : 'Capella-Requirements',
-	#tag : 'User-Interfaces'
+	#tag : 'UI-Requirements'
 }
 
 { #category : 'layout' }
@@ -21,6 +21,7 @@ RequirementPresenter >> defaultLayout [
 		  add: self definedIdPresenter expand: false;
 		  add: self titlePresenter expand: false;
 		  add: (SpPanedLayout newHorizontal
+				   positionOfSlider: 1 / 3;
 				   add: self descriptionPresenter;
 				   add: self testCasesPresenter;
 				   yourself);
@@ -48,7 +49,8 @@ RequirementPresenter >> initializePresenters [
 		                      yourself.
 	titlePresenter := SpLabelPresenter new.
 	descriptionPresenter := RequirementDesctriptionPresenter new.
-	testCasesPresenter := RequirementTestCasesPresenter new
+	"testCasesPresenter := RequirementTestCasesPresenter new"
+	testCasesPresenter := RequirementTestCasesAndStepsPresenter new
 ]
 
 { #category : 'as yet unclassified' }
@@ -85,6 +87,6 @@ RequirementPresenter >> updatePresenter [
 	self titlePresenter label: self requirementReport requirement title.
 	self descriptionPresenter descriptionModel:
 		self requirementReport requirement description.
-	self testCasesPresenter testCasesReport:
+	self testCasesPresenter testCaseReports:
 		self requirementReport testCaseReports
 ]

@@ -3,15 +3,14 @@ Class {
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'repositoryPresenter',
-		'requirementPresenter',
+		'notebookPresenter',
 		'repositoryReport',
 		'menuPresenter',
-		'isUpdatingTestIcons',
-		'updaterProcess'
+		'isUpdatingTestIcons'
 	],
-	#category : 'Capella-Requirements-User-Interfaces',
+	#category : 'Capella-Requirements-UI-Application',
 	#package : 'Capella-Requirements',
-	#tag : 'User-Interfaces'
+	#tag : 'UI-Application'
 }
 
 { #category : 'instance creation' }
@@ -42,29 +41,12 @@ RequirementApplicationPresenter class >> openOnTest [
 	
 ]
 
-{ #category : 'initialization' }
-RequirementApplicationPresenter >> connectPresenters [
-
-	self repositoryPresenter requirementsTablePresenter
-		whenSelectedItemChangedDo: [ :r |
-		self requirementPresenter requirementReport: r ].
-	self requirementPresenter descriptionPresenter whenLinkClickDo: [
-		:req |
-		self repositoryPresenter requirementsTablePresenter
-			selectItem: (self repositoryReport reportForRequirement: req)
-			scrollToSelection: true ]
-]
-
 { #category : 'layout' }
 RequirementApplicationPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: self menuPresenter expand: false;
-		  add: (SpPanedLayout newHorizontal
-				   positionOfSlider: 1 / 3;
-				   add: self repositoryPresenter;
-				   add: self requirementPresenter;
-				   yourself);
+		  add: self notebookPresenter;
 		  yourself
 ]
 
@@ -99,8 +81,9 @@ RequirementApplicationPresenter >> initializePresenters [
 
 	isUpdatingTestIcons := false.
 	self initializeMenuPresenter.
-	requirementPresenter := RequirementPresenter new.
-	repositoryPresenter := RequirementsRepositoryPresenter new
+	repositoryPresenter := RequirementsRepositoryPresenter new.
+	notebookPresenter := SpNotebookPresenter new.
+	notebookPresenter addPage: (SpNotebookPage title: 'Requirements' icon: (Smalltalk ui icons iconNamed: #table) provider: [ self repositoryPresenter ])
 ]
 
 { #category : 'initialization' }
@@ -128,6 +111,12 @@ RequirementApplicationPresenter >> menuPresenter [
 	^ menuPresenter
 ]
 
+{ #category : 'layout' }
+RequirementApplicationPresenter >> notebookPresenter [
+
+^ notebookPresenter
+]
+
 { #category : 'accessing' }
 RequirementApplicationPresenter >> repositoryPresenter [
 
@@ -151,12 +140,6 @@ RequirementApplicationPresenter >> repositoryReport: anObject [
 ]
 
 { #category : 'accessing' }
-RequirementApplicationPresenter >> requirementPresenter [
-
-	^ requirementPresenter
-]
-
-{ #category : 'accessing' }
 RequirementApplicationPresenter >> updatePresenter [
 
 	self repositoryReport ifNil: [ ^ self ].
@@ -174,10 +157,10 @@ RequirementApplicationPresenter >> updateTestIcons [
 
 	self isUpdatingTestIcons ifTrue: [ ^ self ].
 	self isUpdatingTestIcons: true.
-	updaterProcess := [
-	self repositoryPresenter updateTestIcons.
-	(Delay forMilliseconds: 500) wait.
-	self isUpdatingTestIcons: false ]
-		forkAt: Processor userBackgroundPriority
-		named: 'Requirement Application update test icons'
+	[
+	                  self repositoryPresenter updateTestIcons.
+	                  (Delay forMilliseconds: 500) wait.
+	                  self isUpdatingTestIcons: false ]
+		                  forkAt: Processor userBackgroundPriority
+		                  named: 'Requirement Application update test icons'
 ]

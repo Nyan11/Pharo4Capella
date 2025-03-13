@@ -25,7 +25,7 @@ RequirementRealistExample >> req1 [
 				  addStep:
 					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
 							   #initialize)
-				  withExpectedResult: [ :obj | obj wheels size = 4 ] ];
+				  withExpectedResult: [ :obj | self halt. obj wheels size = 4 ] ];
 		  yourself
 ]
 

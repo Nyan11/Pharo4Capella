@@ -1,6 +1,6 @@
 Class {
 	#name : 'RequirementTestCaseStepReport',
-	#superclass : 'Object',
+	#superclass : 'RequirementAbstractReport',
 	#instVars : [
 		'step',
 		'breakpoint',
@@ -34,7 +34,7 @@ RequirementTestCaseStepReport >> breakpoint: anObject [
 RequirementTestCaseStepReport >> breakpointHitWithContext: aContext [
 
 	| testBlock argCount |
-	self shouldTestValueOfReceiver ifFalse: [ ^ self ].
+	self isStarted ifFalse: [ ^ self ].
 	testBlock := self step expectedResult.
 	argCount := testBlock argumentCount.
 	argCount = 0 ifTrue: [
@@ -45,9 +45,8 @@ RequirementTestCaseStepReport >> breakpointHitWithContext: aContext [
 			(self step expectedResult value: aContext receiver).
 		^ self ].
 	argCount = 2 ifTrue: [
-		self resultOfEvaluation: (self step expectedResult
-				 value: aContext receiver
-				 value: aContext).
+		self resultOfEvaluation:
+			(self step expectedResult value: aContext receiver value: aContext).
 		^ self ].
 	self resultOfEvaluation: (self step expectedResult
 			 value: aContext receiver
@@ -55,23 +54,18 @@ RequirementTestCaseStepReport >> breakpointHitWithContext: aContext [
 			 value: aContext arguments)
 ]
 
-{ #category : 'testing' }
-RequirementTestCaseStepReport >> hasBreakpointsInstalled [
-	self breakpoint ifNil: [ ^ false ].
-	^ self breakpoint isInstalled
+{ #category : 'accessing' }
+RequirementTestCaseStepReport >> expectedResult [
+
+	^ self step expectedResult
 ]
 
 { #category : 'as yet unclassified' }
-RequirementTestCaseStepReport >> iconForRequirementTestCasesPresenter [
+RequirementTestCaseStepReport >> iconForReportType [
 
-	self breakpoint ifNil: [ ^ Smalltalk ui icons iconNamed: #testNotRun ].
-	self breakpoint isInstalled ifFalse: [
-		^ Smalltalk ui icons iconNamed: #testNotRun ].
-	self shouldTestValueOfReceiver ifFalse: [
-		^ Smalltalk ui icons iconNamed: #testNotRun ].
-	self isSuccess ifTrue: [
-		^ Smalltalk ui icons iconNamed: #testGreen ].
-	^ Smalltalk ui icons iconNamed: #testYellow
+	self step astBreakpointInstaller isAfterCall ifTrue: [
+		^ Smalltalk ui icons iconNamed: #right ].
+	^ Smalltalk ui icons iconNamed: #left
 ]
 
 { #category : 'initialization' }
@@ -89,9 +83,26 @@ RequirementTestCaseStepReport >> isFirstStep [
 ]
 
 { #category : 'as yet unclassified' }
+RequirementTestCaseStepReport >> isStarted [
+
+	self breakpoint ifNil: [ ^ false ].
+	self breakpoint isInstalled ifFalse: [
+		^ false ].
+	self shouldTestValueOfReceiver ifFalse: [
+		^ false ].
+	^ true
+]
+
+{ #category : 'as yet unclassified' }
 RequirementTestCaseStepReport >> isSuccess [
 
 	^ self numberOfSuccess > 0
+]
+
+{ #category : 'testing' }
+RequirementTestCaseStepReport >> isTestCase [
+
+	^ false
 ]
 
 { #category : 'accessing' }
