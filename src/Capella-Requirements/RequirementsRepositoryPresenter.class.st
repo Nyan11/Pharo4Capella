@@ -108,7 +108,6 @@ RequirementsRepositoryPresenter >> updatePresenter [
 { #category : 'initialization' }
 RequirementsRepositoryPresenter >> updateTestIcons [
 
-	self requirementsTablePresenter updateItemsKeepingSelection:
-		self requirementsTablePresenter items.
-
+	self requirementsTablePresenter refresh.
+	self requirementPresenter updateTestIcons
 ]

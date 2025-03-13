@@ -90,3 +90,9 @@ RequirementPresenter >> updatePresenter [
 	self testCasesPresenter testCaseReports:
 		self requirementReport testCaseReports
 ]
+
+{ #category : 'initialization' }
+RequirementPresenter >> updateTestIcons [
+
+	self testCasesPresenter updateTestIcons
+]

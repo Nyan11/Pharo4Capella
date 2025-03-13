@@ -147,3 +147,9 @@ RequirementTestCasesAndStepsPresenter >> updateSelectedTestCase: aTestCaseReport
 		text: method sourceCode;
 		scrollValue: 0 @ 0
 ]
+
+{ #category : 'initialization' }
+RequirementTestCasesAndStepsPresenter >> updateTestIcons [
+
+	self treeTable refresh
+]
