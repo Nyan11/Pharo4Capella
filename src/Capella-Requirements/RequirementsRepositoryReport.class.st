@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'repository',
 		'requirementReports',
-		'installedBreakpoints'
+		'installedBreakpoints',
+		'stepReportsGroup'
 	],
 	#category : 'Capella-Requirements-Model-Report',
 	#package : 'Capella-Requirements',
@@ -21,20 +22,23 @@ RequirementsRepositoryReport >> allTestCaseStepReports [
 { #category : 'breakpoints' }
 RequirementsRepositoryReport >> installAllBreakpoints [
 
-	| breakpoints |
 	installedBreakpoints ifNotNil: [
 		RequirementSecondTimeInstall signal:
 			'You cannot install twice the breakpoint.' ].
-	breakpoints := OrderedCollection new.
-	self reduceAstBreakpointInstaller keysAndValuesDo: [
-		:stepCondition
-		:stepReports |
+	installedBreakpoints := self stepReportsGroup collect: [ :each |
 		| breakpoint |
-		breakpoint := stepCondition addRequirementDebugPointWithStepReports: stepReports.
-		breakpoints add: breakpoint.
-		stepReports do: [ :report | report breakpoint: breakpoint ].
-		breakpoint ].
-	installedBreakpoints := breakpoints
+		each addRequirementDebugPoint.
+		breakpoint := each astBreakpointInstaller
+			              addRequirementDebugPointWithStepReports:
+			              each stepReports.
+		each stepReports do: [ :report | report breakpoint: breakpoint ].
+		breakpoint ]
+]
+
+{ #category : 'testing' }
+RequirementsRepositoryReport >> isStarted [
+
+	^ self requirementReports anySatisfy: [ :each | each isStarted ]
 ]
 
 { #category : 'testing' }
@@ -81,13 +85,26 @@ RequirementsRepositoryReport >> repository [
 RequirementsRepositoryReport >> repository: anObject [
 
 	repository := anObject.
-	requirementReports := repository requirements collect: [ :each | RequirementReport new requirement: each; yourself ].
+	requirementReports := repository requirements collect: [ :each |
+		                      RequirementReport new
+			                      requirement: each;
+			                      yourself ].
+	stepReportsGroup := self reduceAstBreakpointInstaller associations collect: [ :asso |
+		RequirementStepReportsGroup new
+			astBreakpointInstaller: asso key;
+			stepReports: asso value ]
 ]
 
 { #category : 'accessing' }
 RequirementsRepositoryReport >> requirementReports [
 
 	^ requirementReports
+]
+
+{ #category : 'accessing' }
+RequirementsRepositoryReport >> stepReportsGroup [
+
+	^ stepReportsGroup
 ]
 
 { #category : 'tests' }

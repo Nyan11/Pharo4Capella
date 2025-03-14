@@ -6,9 +6,9 @@ Class {
 		'repositoryReport',
 		'requirementPresenter'
 	],
-	#category : 'Capella-Requirements-UI-Requirements',
+	#category : 'Capella-Requirements-UI-Repository',
 	#package : 'Capella-Requirements',
-	#tag : 'UI-Requirements'
+	#tag : 'UI-Repository'
 }
 
 { #category : 'initialization' }
@@ -40,18 +40,42 @@ RequirementsRepositoryPresenter >> initializePresenters [
 	requirementPresenter := RequirementPresenter new.
 	requirementsTablePresenter := SpTablePresenter new
 		                              beResizable;
-		                              addColumn: (SpStringTableColumn
-				                               title: 'Defined Id'
-				                               evaluated: [ :report |
-					                               report requirement definedId ]);
+		                              contextMenu: (SpMenuPresenter new
+				                               addItem: [ :item |
+					                               item
+						                               name: 'Inspect';
+						                               action: [
+							                               requirementsTablePresenter
+								                               selectedItem inspect ];
+						                               icon: [
+							                               Smalltalk ui icons iconNamed:
+									                               #inspect ];
+						                               yourself ];
+				                               addItem: [ :item |
+					                               item
+						                               name: 'Browse';
+						                               action: [
+							                               requirementsTablePresenter
+								                               selectedItem requirementMethod
+								                               browse ];
+						                               icon: [
+							                               Smalltalk ui icons iconNamed:
+									                               #nautilus ];
+						                               yourself ];
+				                               yourself);
+		                              addColumn: ((SpStringTableColumn
+				                                title: 'Defined Id'
+				                                evaluated: [ :report |
+				                                report requirement definedId ])
+				                               width: 120);
 		                              addColumn: (SpStringTableColumn
 				                               title: 'Title'
 				                               evaluated: [ :report |
-					                               report requirement title ]);
+				                               report requirement title ]);
 		                              addColumn:
 			                              ((SpImageTableColumn evaluated: [
-					                                :report |
-					                                report iconForReportStatus ])
+				                                :report |
+				                                report iconForReportStatus ])
 				                               width: 24);
 		                              yourself
 ]

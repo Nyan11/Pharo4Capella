@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'pragmaSelector',
 		'requirements',
-		'uuidGenerator',
-		'installedBreakpoints'
+		'installedBreakpoints',
+		'numberGenerator'
 	],
 	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
@@ -20,10 +20,17 @@ RequirementsRepository >> asReport [
 
 { #category : 'initialization' }
 RequirementsRepository >> initialize [
-
 	"We do not need to initialize spaces dictionray or requirements collection. They will be created in #updateRequirements called in #pragmaSector:"
+
 	super initialize.
-	uuidGenerator := UUIDGenerator new
+	"le Central Randomizer de Hoole est un LCG définit par le triplet <9301, 49297, 233280>"
+	numberGenerator := Generator on: [ :generator |
+		                   | randomSeed |
+		                   randomSeed := 492972135.
+		                   [ | value |
+		                   randomSeed := randomSeed + 1111.
+								value := (randomSeed printString last: 8) shuffleBy: (Random seed: 42).
+		                   generator yield: value ] repeat ]
 ]
 
 { #category : 'accessing' }
@@ -45,7 +52,7 @@ RequirementsRepository >> pragmaSelector: anObject [
 { #category : 'default values' }
 RequirementsRepository >> randomUUID [
 
-	^ (UUID nonStandardUUIDWithGenerator: self uuidGenerator) printString
+	^ numberGenerator next
 ]
 
 { #category : 'accessing' }
@@ -65,10 +72,11 @@ RequirementsRepository >> updateRequirements [
 		                requirement := p method valueWithReceiver:
 			                               p methodClass instanceSide basicNew.
 		                requirement definedId ifNil: [
-			                requirement definedId: self randomUUID ].
+			                requirement definedId: 'req_' , self randomUUID ].
 		                requirement repository: self.
-							requirement testCases do: [ :tc | tc definedId ifNil: [
-			                tc definedId: self randomUUID ] ].
+		                requirement testCases do: [ :tc |
+			                tc definedId ifNil: [
+				                tc definedId: 'tc_' , self randomUUID ] ].
 		                requirement ].
 
 	"Verify that all requirements have a unique ID."
@@ -84,10 +92,4 @@ RequirementsRepository >> updateRequirements [
 		                thenSelect: [ :each |
 		                each isNotNil and: [ each requirements isNotEmpty ] ].
 	descriptions do: [ :each | each fixWithRepository: self ]
-]
-
-{ #category : 'default values' }
-RequirementsRepository >> uuidGenerator [
-
-	^ uuidGenerator
 ]

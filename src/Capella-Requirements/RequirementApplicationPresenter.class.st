@@ -3,6 +3,7 @@ Class {
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'repositoryPresenter',
+		'stepsPresenter',
 		'notebookPresenter',
 		'repositoryReport',
 		'menuPresenter',
@@ -82,8 +83,16 @@ RequirementApplicationPresenter >> initializePresenters [
 	isUpdatingTestIcons := false.
 	self initializeMenuPresenter.
 	repositoryPresenter := RequirementsRepositoryPresenter new.
+	stepsPresenter := RequirementStepsPresenter new.
 	notebookPresenter := SpNotebookPresenter new.
-	notebookPresenter addPage: (SpNotebookPage title: 'Requirements' icon: (Smalltalk ui icons iconNamed: #table) provider: [ self repositoryPresenter ])
+	notebookPresenter addPage: (SpNotebookPage
+			 title: 'Requirements'
+			 icon: (Smalltalk ui icons iconNamed: #table)
+			 provider: [ self repositoryPresenter ]).
+	notebookPresenter addPage: (SpNotebookPage
+			 title: 'Steps'
+			 icon: (Smalltalk ui icons iconNamed: #branch)
+			 provider: [ self stepsPresenter ])
 ]
 
 { #category : 'initialization' }
@@ -134,9 +143,14 @@ RequirementApplicationPresenter >> repositoryReport: anObject [
 
 	repositoryReport := anObject.
 	self repositoryPresenter repositoryReport: anObject.
+	self stepsPresenter repositoryReport: anObject.
 	self updatePresenter
+]
 
-	
+{ #category : 'initialization' }
+RequirementApplicationPresenter >> stepsPresenter [
+
+	^ stepsPresenter
 ]
 
 { #category : 'accessing' }

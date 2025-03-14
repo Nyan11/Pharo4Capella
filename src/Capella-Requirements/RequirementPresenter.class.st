@@ -8,9 +8,9 @@ Class {
 		'requirementReport',
 		'testCasesPresenter'
 	],
-	#category : 'Capella-Requirements-UI-Requirements',
+	#category : 'Capella-Requirements-UI-Repository',
 	#package : 'Capella-Requirements',
-	#tag : 'UI-Requirements'
+	#tag : 'UI-Repository'
 }
 
 { #category : 'layout' }
@@ -21,7 +21,7 @@ RequirementPresenter >> defaultLayout [
 		  add: self definedIdPresenter expand: false;
 		  add: self titlePresenter expand: false;
 		  add: (SpPanedLayout newHorizontal
-				   positionOfSlider: 1 / 3;
+				   positionOfSlider: 1 / 5;
 				   add: self descriptionPresenter;
 				   add: self testCasesPresenter;
 				   yourself);

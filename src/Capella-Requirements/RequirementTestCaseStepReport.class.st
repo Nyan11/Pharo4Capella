@@ -6,12 +6,19 @@ Class {
 		'breakpoint',
 		'numberOfSuccess',
 		'testCaseReport',
-		'announcer'
+		'announcer',
+		'stepReportsGroup'
 	],
 	#category : 'Capella-Requirements-Model-Report',
 	#package : 'Capella-Requirements',
 	#tag : 'Model-Report'
 }
+
+{ #category : 'adding' }
+RequirementTestCaseStepReport >> addStepReportsGroup: anObject [
+
+	self stepReportsGroup add: anObject
+]
 
 { #category : 'initialization' }
 RequirementTestCaseStepReport >> announcer [
@@ -73,7 +80,8 @@ RequirementTestCaseStepReport >> initialize [
 
 	super initialize.
 	numberOfSuccess := 0.
-	announcer := Announcer new
+	announcer := Announcer new.
+	stepReportsGroup := OrderedCollection new
 ]
 
 { #category : 'as yet unclassified' }
@@ -119,6 +127,12 @@ RequirementTestCaseStepReport >> previousStep [
 ]
 
 { #category : 'as yet unclassified' }
+RequirementTestCaseStepReport >> requirementReport [
+
+	^ self testCaseReport requirementReport
+]
+
+{ #category : 'as yet unclassified' }
 RequirementTestCaseStepReport >> resultOfEvaluation: aBoolean [
 
 	aBoolean ifFalse: [ ^ self ].
@@ -143,6 +157,18 @@ RequirementTestCaseStepReport >> step [
 RequirementTestCaseStepReport >> step: anObject [
 
 	step := anObject
+]
+
+{ #category : 'accessing' }
+RequirementTestCaseStepReport >> stepReportsGroup [
+
+	^ stepReportsGroup
+]
+
+{ #category : 'accessing' }
+RequirementTestCaseStepReport >> stepReportsGroup: anObject [
+
+	stepReportsGroup := anObject
 ]
 
 { #category : 'accessing' }

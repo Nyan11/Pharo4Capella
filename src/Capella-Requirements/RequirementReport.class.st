@@ -16,35 +16,6 @@ RequirementReport >> definedIdString [
 ]
 
 { #category : 'testing' }
-RequirementReport >> hasBreakpointsInstalled [
-
-	^ self testCaseReports anySatisfy: [ :each |
-		each hasBreakpointsInstalled ]
-]
-
-{ #category : 'testing' }
-RequirementReport >> hasTestCaseNotComplete [
-
-	^ self testCaseReports anySatisfy: [ :each | each isComplete not ]
-]
-
-{ #category : 'testing' }
-RequirementReport >> hasTestCaseReports [
-	^ self testCaseReports isNotEmpty.
-]
-
-{ #category : 'as yet unclassified' }
-RequirementReport >> iconForRequirementRepositoryPresenter [
-
-	self isSuccess ifTrue: [ ^ Smalltalk ui icons iconNamed: #testGreen ].
-	self hasTestCaseReports ifFalse: [
-		^ Smalltalk ui icons iconNamed: #blank ].
-	self hasBreakpointsInstalled ifFalse: [
-		^ Smalltalk ui icons iconNamed: #testNotRun ].
-	^ Smalltalk ui icons iconNamed: #testYellow
-]
-
-{ #category : 'testing' }
 RequirementReport >> isStarted [
 
 	^ self testCaseReports anySatisfy: [ :each | each isStarted  ]

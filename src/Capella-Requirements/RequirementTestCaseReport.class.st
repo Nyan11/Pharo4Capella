@@ -11,11 +11,6 @@ Class {
 	#tag : 'Model-Report'
 }
 
-{ #category : 'testing' }
-RequirementTestCaseReport >> hasBreakpointsInstalled [
-	^ self stepReports anySatisfy: [ :each | each hasBreakpointsInstalled ].
-]
-
 { #category : 'as yet unclassified' }
 RequirementTestCaseReport >> iconForReportType [
 
