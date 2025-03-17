@@ -19,6 +19,12 @@ RequirementsRepositoryReport >> allTestCaseStepReports [
 
 ]
 
+{ #category : 'as yet unclassified' }
+RequirementsRepositoryReport >> filterRequirementReportOn: aRequirementsFilterOnClass [ 
+
+	^ aRequirementsFilterOnClass filterRequirementReports: self requirementReports.
+]
+
 { #category : 'breakpoints' }
 RequirementsRepositoryReport >> installAllBreakpoints [
 
