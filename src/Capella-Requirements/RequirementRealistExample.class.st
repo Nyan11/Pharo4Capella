@@ -14,6 +14,14 @@ RequirementRealistExample >> inspectExample [
 ]
 
 { #category : 'as yet unclassified' }
+RequirementRealistExample >> openOnExample [
+
+	<script:
+	'RequirementApplicationPresenter openOn: #requirementRealistExample'>
+	
+]
+
+{ #category : 'as yet unclassified' }
 RequirementRealistExample >> req1 [
 
 	<requirementRealistExample>
@@ -22,10 +30,18 @@ RequirementRealistExample >> req1 [
 		  description: 'A car have 4 wheels.';
 		  addNewTestCase: [ :testCase |
 			  testCase
+				  haltWhenFalse;
+				  addStep:
+					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
+							   #wheels)
+				  withExpectedResult: [ :obj | obj wheels size = 4 ] ];
+		  addNewTestCase: [ :testCase |
+			  testCase
+				  haltWhenFalse;
 				  addStep:
 					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
 							   #initialize)
-				  withExpectedResult: [ :obj | self halt. obj wheels size = 4 ] ];
+				  withExpectedResult: [ :obj | obj wheels size = 4 ] ];
 		  yourself
 ]
 
@@ -58,6 +74,32 @@ RequirementRealistExample >> req2 [
 				  addStep:
 					  (RequirementRealistExampleCar requirementVerifiedAfterCall:
 							   #turnKey)
+				  withExpectedResult: [ :obj | obj isStarted ] ];
+		  yourself
+]
+
+{ #category : 'as yet unclassified' }
+RequirementRealistExample >> req3 [
+
+	<requirementRealistExample>
+	^ Requirement new
+		  title: 'UI - Simulate the starting sequence of the car';
+		  description:
+			  'The UI must have a button to simulate the starting of the car.';
+		  addNewTestCase: [ :testCase |
+			  testCase
+				  haltWhenFalse;
+				  addStep:
+					  (RequirementRealistExampleUI requirementVerifiedAfterCall:
+							   #open)
+				  withExpectedResult: [ :obj |
+					  obj buttonSimulation isVisible and: [
+							  obj buttonSimulation id = #buttonSimulation ] ];
+				  addStep: (ToClickableActionEventHandler rvbc: #handleEvent:)
+				  withCondition: [ :obj :context :args |
+					  args first currentTarget id = #buttonSimulation ]
+				  withExpectedResult: [ true ];
+				  addStep: (RequirementRealistExampleCar rvac: #startTheCar)
 				  withExpectedResult: [ :obj | obj isStarted ] ];
 		  yourself
 ]

@@ -26,7 +26,7 @@ RequirementRealistExampleCar >> initialize [
 	isBreaking := false.
 	isStarted := false.
 	wheels := {
-		          RequirementRealistExampleWheel new.
+					 RequirementRealistExampleWheel new.
 		          RequirementRealistExampleWheel new.
 		          RequirementRealistExampleWheel new.
 		          RequirementRealistExampleWheel new }

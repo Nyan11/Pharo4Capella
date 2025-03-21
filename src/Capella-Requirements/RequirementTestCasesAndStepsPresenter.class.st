@@ -110,7 +110,10 @@ RequirementTestCasesAndStepsPresenter >> stringForSecondColumn: report [
 RequirementTestCasesAndStepsPresenter >> stringForThirdColumn: report [
 
 	report isTestCase
-		ifTrue: [ ^ '' ]
+		ifTrue: [
+			report isSuccess
+				ifFalse: [ ^ '' ]
+				ifTrue: [ ^ report msToResolve printString , ' ms' ] ]
 		ifFalse: [
 		^ report step astBreakpointInstaller condition printString ]
 ]

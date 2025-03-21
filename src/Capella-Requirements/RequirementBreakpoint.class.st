@@ -85,10 +85,13 @@ RequirementBreakpoint >> evaluateStepExpectedResult: aStep withContext: aContext
 
 	| result |
 	aStep isStarted ifFalse: [ ^ false ].
+	aStep isEvaluating ifTrue: [ ^ false ].
+	aStep isEvaluating: true.
 	result := self
 		          evaluateBlock: aStep expectedResult
 		          withContext: aContext.
 	aStep resultOfEvaluation: result.
+	aStep isEvaluating: false.
 	^ result
 ]
 

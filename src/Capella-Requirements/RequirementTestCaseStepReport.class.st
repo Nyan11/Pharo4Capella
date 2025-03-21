@@ -7,7 +7,9 @@ Class {
 		'numberOfSuccess',
 		'testCaseReport',
 		'announcer',
-		'stepReportsGroup'
+		'stepReportsGroup',
+		'timestamp',
+		'isEvaluating'
 	],
 	#category : 'Capella-Requirements-Model-Report',
 	#package : 'Capella-Requirements',
@@ -37,51 +39,30 @@ RequirementTestCaseStepReport >> breakpoint: anObject [
 	breakpoint := anObject
 ]
 
-{ #category : 'as yet unclassified' }
-RequirementTestCaseStepReport >> breakpointHitWithContext: aContext [
-
-	| testBlock argCount |
-	self isStarted ifFalse: [ ^ self ].
-	testBlock := self step expectedResult.
-	argCount := testBlock argumentCount.
-	argCount = 0 ifTrue: [
-		self resultOfEvaluation: self step expectedResult value.
-		^ self ].
-	argCount = 1 ifTrue: [
-		self resultOfEvaluation:
-			(self step expectedResult value: aContext receiver).
-		^ self ].
-	argCount = 2 ifTrue: [
-		self resultOfEvaluation:
-			(self step expectedResult value: aContext receiver value: aContext).
-		^ self ].
-	self resultOfEvaluation: (self step expectedResult
-			 value: aContext receiver
-			 value: aContext
-			 value: aContext arguments)
-]
-
 { #category : 'accessing' }
 RequirementTestCaseStepReport >> expectedResult [
 
 	^ self step expectedResult
 ]
 
-{ #category : 'as yet unclassified' }
-RequirementTestCaseStepReport >> iconForReportType [
-
-	self step astBreakpointInstaller isAfterCall ifTrue: [
-		^ Smalltalk ui icons iconNamed: #right ].
-	^ Smalltalk ui icons iconNamed: #left
-]
-
 { #category : 'initialization' }
 RequirementTestCaseStepReport >> initialize [
 
 	super initialize.
+	isEvaluating := false.
 	numberOfSuccess := 0.
 	announcer := Announcer new.
 	stepReportsGroup := OrderedCollection new
+]
+
+{ #category : 'accessing' }
+RequirementTestCaseStepReport >> isEvaluating [
+	^ isEvaluating
+]
+
+{ #category : 'accessing' }
+RequirementTestCaseStepReport >> isEvaluating: aBoolean [ 
+	isEvaluating := aBoolean
 ]
 
 { #category : 'as yet unclassified' }
@@ -135,8 +116,12 @@ RequirementTestCaseStepReport >> requirementReport [
 { #category : 'as yet unclassified' }
 RequirementTestCaseStepReport >> resultOfEvaluation: aBoolean [
 
-	aBoolean ifFalse: [ ^ self ].
+	aBoolean ifFalse: [
+		self testCaseReport testCase shouldHaltOnFailure ifTrue: [
+			self halt ].
+		^ self ].
 	numberOfSuccess := numberOfSuccess + 1.
+	timestamp := Time now.
 	self announcer announce: RequirementTestCaseStepReportChanged new
 ]
 
@@ -181,4 +166,10 @@ RequirementTestCaseStepReport >> testCaseReport [
 RequirementTestCaseStepReport >> testCaseReport: anObject [
 
 	testCaseReport := anObject
+]
+
+{ #category : 'accessing' }
+RequirementTestCaseStepReport >> timestamp [
+
+	^  timestamp
 ]

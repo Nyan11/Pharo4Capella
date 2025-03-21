@@ -4,7 +4,6 @@ Class {
 	#instVars : [
 		'pragmaSelector',
 		'requirements',
-		'installedBreakpoints',
 		'numberGenerator'
 	],
 	#category : 'Capella-Requirements-Model',

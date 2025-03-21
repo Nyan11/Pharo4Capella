@@ -36,6 +36,17 @@ RequirementTestCaseReport >> isTestCase [
 ]
 
 { #category : 'as yet unclassified' }
+RequirementTestCaseReport >> msToResolve [
+
+	self isSuccess ifFalse: [ ^ -1 ].
+	self stepReports size = 0 ifTrue: [ ^ -2 ].
+	self stepReports size = 1 ifTrue: [ ^ 0 ].
+	^ Time
+		  milliseconds: self stepReports last timestamp asMilliSeconds
+		  since: self stepReports first timestamp asMilliSeconds
+]
+
+{ #category : 'as yet unclassified' }
 RequirementTestCaseReport >> requirementMethod [
 
 	^ self requirementReport requirementMethod

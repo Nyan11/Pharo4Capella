@@ -3,7 +3,8 @@ Class {
 	#superclass : 'RequirementDefinedObject',
 	#instVars : [
 		'verifies',
-		'steps'
+		'steps',
+		'shouldHaltOnFailure'
 	],
 	#category : 'Capella-Requirements-Model',
 	#package : 'Capella-Requirements',
@@ -33,10 +34,23 @@ RequirementTestCase >> addStep: anAstBreakpointInstaller withExpectedResult: aEx
 ]
 
 { #category : 'initialization' }
+RequirementTestCase >> haltWhenFalse [
+
+	shouldHaltOnFailure := true.
+]
+
+{ #category : 'initialization' }
 RequirementTestCase >> initialize [
 
 	super initialize.
+	shouldHaltOnFailure := false.
 	steps := OrderedCollection new
+]
+
+{ #category : 'accessing' }
+RequirementTestCase >> shouldHaltOnFailure [
+
+	^ shouldHaltOnFailure
 ]
 
 { #category : 'adding' }
