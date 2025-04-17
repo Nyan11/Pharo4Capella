@@ -67,6 +67,12 @@ CapellaSimpleObject >> initialize [
 	implementations := OrderedCollection new.
 ]
 
+{ #category : 'accessing' }
+CapellaSimpleObject >> name [
+
+	^ self capellaObject attributeAt: 'name'
+]
+
 { #category : 'testing' }
 CapellaSimpleObject >> privateGeneralization [
 
