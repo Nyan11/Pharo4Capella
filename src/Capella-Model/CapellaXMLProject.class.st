@@ -55,3 +55,23 @@ CapellaXMLProject >> root: anObject [
 	root := anObject.
 	allObjects := anObject flattenObject.
 ]
+
+{ #category : 'as yet unclassified' }
+CapellaXMLProject >> selectAllObjectRelativeToId: aString [
+
+	| targetElement allTargets linkedObjects |
+	targetElement := self allObjects select: [ :each |
+		                 each
+			                 attributeAt: #id
+			                 ifPresent: [ :id | id = aString ]
+			                 ifAbsent: [ false ] ].
+	targetElement ifEmpty: [ ^ Error signal: 'No object found.' ].
+	targetElement size > 1 ifTrue: [
+		^ Error signal: 'Too many objects found.' ].
+	targetElement := targetElement first.
+	allTargets := targetElement flattenObject.
+	linkedObjects := self allObjects select: [ :obj |
+		                 obj attributes flattened anySatisfy: [ :attr |
+			                 allTargets includes: attr ] ].
+	^ (allTargets , linkedObjects) asSet asArray
+]

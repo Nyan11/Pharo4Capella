@@ -47,6 +47,10 @@ CapellaPartsGroup class >> privateMakeAllGroups: aCappellaXMLProject [
 			            ifAbsent: [ false ] ].
 	allTypes := allParts collect: [ :each |
 		            each attributeAt: 'abstractType' ].
+	
+	allGroups := OrderedCollection new.
+	
+	"Multi items:"
 	allAssociations := allTypes
 		                   select: [ :each |
 			                   each
@@ -58,13 +62,22 @@ CapellaPartsGroup class >> privateMakeAllGroups: aCappellaXMLProject [
 			                   ->
 				                   ((each elementsAt: 'ownedComponentRealizations')
 					                    first attributeAt: 'targetElement') ].
-	allGroups := OrderedCollection new.
+	
 	allAssociations do: [ :asso |
 		(allGroups select: [ :grp | grp includes: asso value ])
 			ifEmpty: [
 			allGroups add: (OrderedCollection with: asso value with: asso key) ]
 			ifNotEmpty: [ :col | col first add: asso key ] ].
+	
+	"Solo items:"
+	allGroups addAll: 
+	(allTypes select: [ :each |
+			                   each
+				                   elementsAt: 'ownedComponentRealizations'
+				                   ifPresent: [ false ]
+				                   ifAbsent: [ true ] ] thenCollect: [ :each | { each } ]).
 
+	"restore with parts"
 	allGroupsWithParts := allGroups collect: [ :grp |
 		                      grp flatCollect: [ :each |
 			                      aCappellaXMLProject allObjects select: [ :obj |

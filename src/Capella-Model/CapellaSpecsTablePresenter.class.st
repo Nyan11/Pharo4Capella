@@ -85,8 +85,9 @@ CapellaSpecsTablePresenter >> initializePresenter [
 { #category : 'instance creation' }
 CapellaSpecsTablePresenter >> initializeTable [
 
-	table := SpTablePresenter new
+	table := SpTreeTablePresenter new
 		         beMultipleSelection;
+		         children: [ :each | each children ];
 		         addColumn:
 			         ((SpCompositeTableColumn title: 'Name' withAll: {
 						           (SpImageTableColumn evaluated: [ :each |

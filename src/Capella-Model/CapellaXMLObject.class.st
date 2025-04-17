@@ -92,6 +92,11 @@ CapellaXMLObject >> elementDictionary: aDictionary [
 ]
 
 { #category : 'accessing' }
+CapellaXMLObject >> elements [
+	^ xmlElements
+]
+
+{ #category : 'accessing' }
 CapellaXMLObject >> elementsAt: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3 [ 
 	^ xmlElements at: aString ifPresent: aConstantBlockClosure ifAbsent: aConstantBlockClosure3
 ]
