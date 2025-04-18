@@ -6,8 +6,9 @@ Class {
 		'model',
 		'workers'
 	],
-	#category : 'Capella',
-	#package : 'Capella'
+	#category : 'Capella-import',
+	#package : 'Capella',
+	#tag : 'import'
 }
 
 { #category : 'instance creation' }
@@ -31,8 +32,10 @@ CapellaImporter class >> fromXMLDocument: aXMLDocument [
 { #category : 'building' }
 CapellaImporter >> build [
 
-	self workers do: [ :each | each extractModelFrom: self document into: self model ].
-
+	self workers do: [ :each |
+		each
+			extractModelFrom: self document
+			into: self model ]
 ]
 
 { #category : 'accessing' }
@@ -53,9 +56,29 @@ CapellaImporter >> initialize [
 	super initialize.
 	model := CapellaModel new.
 	workers := {
-		           CapellaImporterWorkerEntities new.
-		           CapellaImporterWorkerCapabilities new.
-		           CapellaImporterWorkerOperationalActivities new }.
+		           CapellaImportWorkerOperationalEntities new.
+		           CapellaImportWorkerOperationalCapabilities new.
+		           CapellaImportWorkerOperationalActivities new.
+		           CapellaImportWorkerOperationalActivityExchanges new.
+		           CapellaImportWorkerOperationalActivityAllocations new.
+		           CapellaImportWorkerOperationalActivityScenarios new.
+		           CapellaImportWorkerOperationalFunctionalChains new.
+		           CapellaImportWorkerSystemComponents new.
+		           CapellaImportWorkerSystemMissions new.
+		           CapellaImportWorkerSystemCapabilities new.
+		           CapellaImportWorkerSystemFunctions new.
+		           CapellaImportWorkerSystemScenarios new.
+		           CapellaImportWorkerSystemFunctionalChains new.
+		           CapellaImportWorkerLogicalComponents new.
+		           CapellaImportWorkerPhysicalComponents new.
+		           CapellaImportWorkerLogicalFunctions new.
+		           CapellaImportWorkerLogicalFunctionalChains new.
+		           CapellaImportWorkerLogicalCapabilities new.
+		           CapellaImportWorkerLogicalScenarios new.
+		           CapellaImportWorkerPhysicalFunctions new.
+		           CapellaImportWorkerPhysicalFunctionalChains new.
+		           CapellaImportWorkerPhysicalCapabilities new.
+		           CapellaImportWorkerPhysicalScenarios new }
 ]
 
 { #category : 'accessing' }

@@ -13,6 +13,8 @@ BaselineOfCapella >> baseline: spec [
 		self dependency: spec.
 
 		spec package: #Capella with: [ spec requires: #( 'XPath' ) ].
+		spec package: #'Capella-Molecule' with: [ spec requires: #( 'Capella' ) ].
+		spec package: #'Capella-Model' with: [ spec requires: #( 'Capella' ) ].
 		spec package: #'Capella-Tests' with: [ spec requires: #( 'Capella' ) ] ]
 ]
 
