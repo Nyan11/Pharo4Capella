@@ -5,7 +5,8 @@ Class {
 		'project',
 		'simpleComponents',
 		'simpleFunctions',
-		'simpleExchanges'
+		'simpleExchanges',
+		'filteredFunctions'
 	],
 	#category : 'Capella-Model-Simplified',
 	#package : 'Capella-Model',
@@ -13,38 +14,56 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
+CapellaSimpleProject class >> componentShape: simple [
+
+	^ RSBox new
+		  size: 15;
+		  model: simple;
+		  color: Color blue;
+		  @ (RSPopup text: [ :each | each name ]);
+		  draggable;
+		  withBorder;
+		  yourself
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSimpleProject class >> exchangeShape: simple [
+
+	^ RSBox new
+		  size: 5;
+		  model: simple;
+		  color: Color red;
+		  @ (RSPopup text: [ :each | each name ]);
+		  draggable;
+		  withBorder;
+		  yourself
+]
+
+{ #category : 'as yet unclassified' }
+CapellaSimpleProject class >> functionShape: simple [
+
+	^ RSBox new
+		  size: 10;
+		  model: simple;
+		  color: Color green;
+		  @ (RSPopup text: [ :each | each name ]);
+		  draggable;
+		  withBorder;
+		  yourself
+]
+
+{ #category : 'as yet unclassified' }
 CapellaSimpleProject class >> roassalGraph: aProject [
 
 	| canvas shapeComponents shapeFunctions shapeExchanges stepping |
 	canvas := RSCanvas new.
 	shapeComponents := aProject simpleComponents collect: [ :simple |
-		                   RSBox new
-			                   size: 20;
-			                   model: simple;
-			                   color: Color blue;
-			                   popup;
-			                   draggable;
-			                   withBorder;
-			                   yourself ].
+		                   self componentShape: simple ].
 	shapeFunctions := aProject simpleFunctions collect: [ :simple |
-		                  RSBox new
-			                  size: 10;
-			                  model: simple;
-			                  color: Color green;
-			                  popup;
-			                  draggable;
-			                  withBorder;
-			                  yourself ].
+		                  self functionShape: simple ].
 	shapeExchanges := aProject simpleExchanges collect: [ :simple |
-		                  RSBox new
-			                  size: 5;
-			                  model: simple;
-			                  color: Color red;
-			                  popup;
-			                  draggable;
-			                  withBorder;
-			                  yourself ].
-	RSLineBuilder line
+		                  self exchangeShape: simple ].
+	"RSLineBuilder line
 		shapes: shapeComponents;
 		canvas: canvas;
 		connectFrom: [ :n | n parentSimpleComponent ].
@@ -52,7 +71,7 @@ CapellaSimpleProject class >> roassalGraph: aProject [
 	RSLineBuilder line
 		shapes: shapeFunctions;
 		canvas: canvas;
-		connectFrom: [ :n | n parentSimpleFunction ].
+		connectFrom: [ :n | n parentSimpleFunction ]."
 
 	RSLineBuilder line
 		fromShapes: shapeComponents;
@@ -60,7 +79,7 @@ CapellaSimpleProject class >> roassalGraph: aProject [
 		canvas: canvas;
 		connectToAll: [ :n | n functions ].
 
-	RSLineBuilder arrowedLine 
+	RSLineBuilder arrowedLine
 		shapes: shapeFunctions , shapeExchanges;
 		withBorderAttachPoint;
 		canvas: canvas;
@@ -71,6 +90,8 @@ CapellaSimpleProject class >> roassalGraph: aProject [
 
 
 	canvas addAll: shapeComponents , shapeFunctions , shapeExchanges.
+	aProject filteredFunctions do: [ :each | (canvas shapeFromModel: each) color: Color yellow ].
+
 
 	stepping := RSForceLayoutSteppingInteraction new.
 	stepping layout
@@ -183,19 +204,35 @@ CapellaSimpleProject >> cleanUpExchanges [
 CapellaSimpleProject >> filterFunctionsOnIds: aCollectionOfIds [
 
 	| targetedFunctions targetedFunctionAndLinkedFunctions functionsToRemove |
-
 	targetedFunctions := self simpleFunctions select: [ :each |
 		                     aCollectionOfIds includes: each id ].
-	targetedFunctionAndLinkedFunctions := ((targetedFunctions flatCollect: #linkedFunctions) , targetedFunctions) asSet asArray.
-	
-	functionsToRemove := self simpleFunctions difference: targetedFunctionAndLinkedFunctions.
+	self filteredFunctions: targetedFunctions.
+	targetedFunctionAndLinkedFunctions := ((targetedFunctions
+		                                        flatCollect:
+		                                        #linkedFunctions)
+	                                       , targetedFunctions) asSet
+		                                      asArray.
+
+	functionsToRemove := self simpleFunctions difference:
+		                     targetedFunctionAndLinkedFunctions.
 	functionsToRemove do: #removeFromComponent.
-	
+
 	self cleanUpComponents.
 	self cleanUpExchanges.
-	
-	self simpleFunctions: targetedFunctionAndLinkedFunctions
 
+	self simpleFunctions: targetedFunctionAndLinkedFunctions
+]
+
+{ #category : 'accessing' }
+CapellaSimpleProject >> filteredFunctions [
+
+	^ filteredFunctions
+]
+
+{ #category : 'accessing' }
+CapellaSimpleProject >> filteredFunctions: anObject [
+
+	filteredFunctions := anObject
 ]
 
 { #category : 'accessing' }
